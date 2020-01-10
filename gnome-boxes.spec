@@ -31,7 +31,7 @@ ExclusiveArch: x86_64
 
 Name:		gnome-boxes
 Version:	3.28.5
-Release:	2%{?dist}
+Release:	4%{?dist}
 Summary:	A simple GNOME 3 application to access remote or virtual systems
 
 License:	LGPLv2+
@@ -51,6 +51,12 @@ Patch3:		gnome-boxes-libgovirt-tracker.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1595754
 Patch4: 	revert-use-virtio-video-adapter.patch
+
+# https://bugzilla.redhat.com/1656448
+Patch5:     gnome-boxes-hardcode-recommended-oses.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1713005
+Patch6:     gnome-boxes-update-rhel-logo.patch
 
 BuildRequires:	gettext >= 0.19.8
 BuildRequires:	meson
@@ -124,6 +130,8 @@ gnome-boxes lets you easily create, setup, access, and use:
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 %meson \
@@ -177,6 +185,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/metainfo/org.gnome.Boxes.appdata.xml
 
 %changelog
+* Wed May 22 2019 Fabiano Fidêncio <fidencio@redhat.com> - 3.28.5-4
+- Add rhel-8 logo & update rhel logo
+- Resolves: #1713005
+
+* Wed Dec 05 2018 Felipe Borges <feborges@redhat.com> - 3.28.5-3
+- Pick our recommended downloads
+- Related #1656448
+
 * Mon Jul 16 2018 Felipe Borges <feborges@redhat.com> - 3.28.5-2
 - Revert using VIRTIO video adapter by default for new VMs
 - Resolves: #1595754

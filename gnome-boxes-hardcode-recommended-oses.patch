@@ -1,0 +1,332 @@
+From b874d9355644eb686a8af9df03884a0a19513059 Mon Sep 17 00:00:00 2001
+From: Felipe Borges <felipeborges@gnome.org>
+Date: Tue, 13 Nov 2018 14:26:12 +0100
+Subject: [PATCH] wizard-downloads: Load recommended downloads from an XML file
+
+This way downstreams (vendors, distros) could easily tweak the
+list and offer the Osinfo downloads that they prefer, with the
+sorting they want.
+
+Cherry-picked from eb3af034b5cda6ce1fa6812624b531ea53f90f72
+---
+ data/gnome-boxes.gresource.xml |  1 +
+ data/recommended-downloads.xml | 18 +++++++
+ data/ui/wizard-source.ui       |  1 -
+ src/util-app.vala              | 80 ++++++++++++++++++++++++++++
+ src/wizard-downloads-page.vala | 95 ++++++++++++++++++++++++++++++++++
+ src/wizard-source.vala         | 33 ++++--------
+ 6 files changed, 204 insertions(+), 24 deletions(-)
+ create mode 100644 data/recommended-downloads.xml
+ create mode 100644 src/wizard-downloads-page.vala
+
+diff --git a/data/gnome-boxes.gresource.xml b/data/gnome-boxes.gresource.xml
+index 01c72d59..8a9b8b95 100644
+--- a/data/gnome-boxes.gresource.xml
++++ b/data/gnome-boxes.gresource.xml
+@@ -3,6 +3,7 @@
+   <gresource prefix="/org/gnome/Boxes">
+     <file>gtk-style.css</file>
+     <file preprocess="xml-stripblanks" alias="gtk/menus.ui">ui/menus.ui</file>
++    <file preprocess="xml-stripblanks">recommended-downloads.xml</file>
+     <file>icons/boxes-arrow.svg</file>
+     <file>icons/boxes-create.png</file>
+     <file>icons/empty-boxes.png</file>
+diff --git a/data/recommended-downloads.xml b/data/recommended-downloads.xml
+new file mode 100644
+index 00000000..b389e945
+--- /dev/null
++++ b/data/recommended-downloads.xml
+@@ -0,0 +1,18 @@
++<?xml version="1.0" encoding="utf-8" ?>
++<!--
++  These are OSes listed in the recommended section of the "Download an OS" page.
++
++  This list is powered by libosinfo, therefore the URLs are unique identifiers
++  for each OS in osinfo-db.
++
++  Downstreams are encouraged to tweak the list as they wish. Sorting is also
++  available.
++ -->
++<list>
++  <os_id>http://redhat.com/rhel/7.6</os_id>
++  <os_id>http://fedoraproject.org/fedora/29</os_id>
++  <os_id>http://fedoraproject.org/silverblue/29</os_id>
++  <os_id>http://ubuntu.com/ubuntu/18.10</os_id>
++  <os_id>http://opensuse.org/opensuse/15.0</os_id>
++  <os_id>http://debian.org/debian/9</os_id>
++</list>
+diff --git a/data/ui/wizard-source.ui b/data/ui/wizard-source.ui
+index b59fccfc..6762d2d6 100644
+--- a/data/ui/wizard-source.ui
++++ b/data/ui/wizard-source.ui
+@@ -49,7 +49,6 @@
+         <child>
+           <object class="BoxesWizardScrolled" id="downloads_scrolled">
+             <property name="visible">False</property>
+-            <signal name="show" handler="on_downloads_scrolled_shown"/>
+           </object>
+         </child>
+ 
+diff --git a/src/util-app.vala b/src/util-app.vala
+index aba87cfd..253d1b74 100644
+--- a/src/util-app.vala
++++ b/src/util-app.vala
+@@ -102,6 +102,86 @@ public void fetch_os_logo (Gtk.Image image, Osinfo.Os os, int size) {
+         }
+     }
+ 
++    public string serialize_os_title (Osinfo.Media media) {
++        var title = "unknown";
++
++        /* Libosinfo lacks some OS variant names, so we do some
++           parsing here to compose a unique human-readable media
++           identifier. */
++        var variant = "";
++        var variants = media.get_os_variants ();
++        if (variants.get_length () > 0)
++            variant = (variants.get_nth (0) as Osinfo.OsVariant).get_name ();
++        else if ((media.os as Osinfo.Product).name != null) {
++            variant = (media.os as Osinfo.Product).name;
++            if (media.url != null && media.url.contains ("server"))
++                variant += " Server";
++        } else {
++            var file = File.new_for_uri (media.url);
++
++            title = file.get_basename ().replace ("_", "");
++        }
++
++        var subvariant = "";
++
++        if (media.url != null) {
++            if (media.url.contains ("netinst"))
++                subvariant = "(netinst)";
++            else if (media.url.contains ("minimal"))
++                subvariant = "(minimal)";
++            else if (media.url.contains ("dvd"))
++                subvariant = "(DVD)";
++        }
++
++        var is_live = media.live ? " (" + _("Live") + ")" : "";
++
++        title = @"$variant $(media.architecture) $subvariant $is_live";
++
++        /* Strip consequent whitespaces */
++        return title.replace ("  ", "");
++    }
++
++    public async GLib.List<Osinfo.Media>? get_recommended_downloads () {
++        uint8[] contents;
++
++        try {
++            File file = File.new_for_uri ("resource:///org/gnome/Boxes/recommended-downloads.xml");
++
++            file.load_contents (null, out contents, null);
++        } catch (GLib.Error e) {
++            warning ("Failed to load recommended downloads file: %s", e.message);
++
++            return null;
++        }
++
++        Xml.Doc* doc = Xml.Parser.parse_doc ((string)contents);
++        if (doc == null)
++            return null;
++
++        Xml.Node* root = doc->get_root_element ();
++        if (root == null || root->name != "list") {
++            warning ("Failed to parse recommended downloads");
++
++            return null;
++        }
++
++        GLib.List<Osinfo.Media> list = new GLib.List<Osinfo.Media> ();
++        var os_db = MediaManager.get_instance ().os_db;
++        for (Xml.Node* iter = root->children; iter != null; iter = iter->next) {
++            var os_id = iter->get_content ();
++            try {
++                var os = yield os_db.get_os_by_id (os_id);
++                var media = os.get_media_list ().get_nth (0) as Osinfo.Media;
++
++                list.append (media);
++            } catch (OSDatabaseError error) {
++                warning ("Failed to find OS with id: '%s': %s", os_id, error.message);
++            }
++        }
++
++        return list;
++    }
++
+     public async GVir.StoragePool ensure_storage_pool (GVir.Connection connection) throws GLib.Error {
+         var pool = get_storage_pool (connection);
+         if (pool == null) {
+diff --git a/src/wizard-downloads-page.vala b/src/wizard-downloads-page.vala
+new file mode 100644
+index 00000000..0b77a9cb
+--- /dev/null
++++ b/src/wizard-downloads-page.vala
+@@ -0,0 +1,95 @@
++// This file is part of GNOME Boxes. License: LGPLv2+
++
++public enum WizardDownloadsPageView {
++    RECOMMENDED,
++    SEARCH_RESULTS,
++    NO_RESULTS,
++}
++
++public delegate void Boxes.DownloadChosenFunc (Boxes.WizardDownloadableEntry entry);
++
++[GtkTemplate (ui = "/org/gnome/Boxes/ui/wizard-downloads-page.ui")]
++public class Boxes.WizardDownloadsPage : Gtk.Stack {
++    private OSDatabase os_db = new OSDatabase ();
++    public DownloadsSearch search { private set; get; }
++
++    public DownloadChosenFunc download_chosen_func;
++
++    [GtkChild]
++    private Gtk.ListBox listbox;
++    [GtkChild]
++    private Gtk.ListBox recommended_listbox;
++
++    private GLib.ListStore recommended_model;
++
++    private WizardDownloadsPageView _page;
++    public WizardDownloadsPageView page {
++        get { return _page; }
++        set {
++            _page = value;
++
++            switch (_page) {
++                case WizardDownloadsPageView.SEARCH_RESULTS:
++                    visible_child_name = "search-results";
++                    break;
++                case WizardDownloadsPageView.NO_RESULTS:
++                    visible_child_name = "no-results";
++                    break;
++                case WizardDownloadsPageView.RECOMMENDED:
++                default:
++                    visible_child_name = "recommended";
++                    break;
++            }
++        }
++    }
++
++    construct {
++        os_db.load.begin ();
++
++        search = new DownloadsSearch ();
++
++        recommended_model = new GLib.ListStore (typeof (Osinfo.Media));
++        recommended_listbox.bind_model (recommended_model, create_downloads_entry);
++        populate_recommended_list.begin ();
++
++        listbox.bind_model (search.model, create_downloads_entry);
++
++        search.search_changed.connect (set_visible_view);
++    }
++
++    private void set_visible_view () {
++        if (search.text.length == 0) {
++            page = WizardDownloadsPageView.RECOMMENDED;
++        } else if (search.model.get_n_items () == 0) {
++            page = WizardDownloadsPageView.NO_RESULTS;
++        } else {
++            page = WizardDownloadsPageView.SEARCH_RESULTS;
++        }
++    }
++
++    private async void populate_recommended_list () {
++        foreach (var media in yield get_recommended_downloads ()) {
++            recommended_model.append (media);
++        }
++    }
++
++    private Gtk.Widget create_downloads_entry (Object item) {
++        var media = item as Osinfo.Media;
++
++        return new WizardDownloadableEntry (media);
++    }
++
++    [GtkCallback]
++    private void on_listbox_row_activated (Gtk.ListBoxRow row) {
++        var entry = row as WizardDownloadableEntry;
++
++        download_chosen_func (entry);
++    }
++
++    [GtkCallback]
++    private void on_show_more_button_clicked () {
++        search.show_all ();
++
++        page = WizardDownloadsPageView.SEARCH_RESULTS;
++    }
++}
+diff --git a/src/wizard-source.vala b/src/wizard-source.vala
+index 9ea0a9b1..494c5561 100644
+--- a/src/wizard-source.vala
++++ b/src/wizard-source.vala
+@@ -310,6 +310,7 @@ private void on_notify_estimated_load_progress () {
+ 
+     private Gtk.ListBox media_vbox;
+     private Gtk.ListBox downloads_vbox;
++    private GLib.ListStore downloads_model;
+     private Osinfo.Os rhel_os;
+ 
+     private Cancellable? rhel_cancellable;
+@@ -318,12 +319,6 @@ private void on_notify_estimated_load_progress () {
+ 
+     public string filename { get; set; }
+ 
+-    private string[] recommended_downloads = {
+-        "http://ubuntu.com/ubuntu/16.04",
+-        "http://opensuse.org/opensuse/42.2",
+-        "http://fedoraproject.org/fedora/27",
+-    };
+-
+     public bool download_required {
+         get {
+             string scheme = Uri.parse_scheme (uri);
+@@ -409,6 +404,8 @@ private void on_notify_estimated_load_progress () {
+             }
+         });
+ 
++        downloads_model = new GLib.ListStore (typeof (Osinfo.Media));
++
+         rhel_web_view.view.decide_policy.connect (on_rhel_web_view_decide_policy);
+     }
+ 
+@@ -425,26 +422,16 @@ public void setup_ui (AppWindow window) {
+         assert (window != null);
+ 
+         this.window = window;
++
++        downloads_vbox.bind_model (downloads_model, create_downloadable_entry);
++
++        populate_recommended_downloads.begin ();
+     }
+ 
+-    [GtkCallback]
+-    private void on_downloads_scrolled_shown () {
++    private async void populate_recommended_downloads () {
+         var os_db = media_manager.os_db;
+-        foreach (var os_id in recommended_downloads) {
+-            os_db.get_os_by_id.begin (os_id, (obj, res) => {
+-                try {
+-                    var os = os_db.get_os_by_id.end (res);
+-
+-                    // TODO: Select the desktop/workstation variant.
+-                    var media = os.get_media_list ().get_nth (0) as Osinfo.Media;
+-                    var entry = create_downloadable_entry (media);
+-
+-                    downloads_vbox.insert (entry, -1);
+-                } catch (OSDatabaseError error) {
+-                    warning ("Failed to find OS with ID '%s': %s", os_id, error.message);
+-                    return;
+-                }
+-            });
++        foreach (var media in yield get_recommended_downloads ()) {
++            downloads_model.append (media);
+         }
+     }
+ 
+-- 
+2.19.2
+

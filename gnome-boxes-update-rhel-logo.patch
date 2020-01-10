@@ -1,0 +1,56 @@
+diff --git a/data/osinfo/meson.build b/data/osinfo/meson.build
+index 0f4982f..c7c6017 100644
+--- a/data/osinfo/meson.build
++++ b/data/osinfo/meson.build
+@@ -10,7 +10,8 @@ osinfo_db = [
+   ['rhel-4.0.xml', 'gnome-boxes/osinfo/os/redhat.com'],
+   ['rhel-5.0.xml', 'gnome-boxes/osinfo/os/redhat.com'],
+   ['rhel-6.0.xml', 'gnome-boxes/osinfo/os/redhat.com'],
+-  ['rhel-7.0.xml', 'gnome-boxes/osinfo/os/redhat.com']
++  ['rhel-7.0.xml', 'gnome-boxes/osinfo/os/redhat.com'],
++  ['rhel-8.0.xml', 'gnome-boxes/osinfo/os/redhat.com']
+ ]
+ 
+ foreach os: osinfo_db
+diff --git a/data/osinfo/rhel-4.0.xml b/data/osinfo/rhel-4.0.xml
+index 2839687..318544e 100644
+--- a/data/osinfo/rhel-4.0.xml
++++ b/data/osinfo/rhel-4.0.xml
+@@ -3,7 +3,7 @@
+   <!-- Please read README.logos for any questions about usage of product logos in Boxes. !-->
+ 
+   <os id="http://redhat.com/rhel/4.0">
+-    <logo>https://people.gnome.org/~zeeshanak/logos/shadownman-pill.svg</logo>
++    <logo>https://gitlab.gnome.org/GNOME/gnome-boxes-logos/raw/master/logos/shadownman-pill.svg</logo>
+   </os>
+ 
+ </libosinfo>
+diff --git a/data/osinfo/rhel-8.0.xml b/data/osinfo/rhel-8.0.xml
+new file mode 100644
+index 0000000..ad7a785
+--- /dev/null
++++ b/data/osinfo/rhel-8.0.xml
+@@ -0,0 +1,9 @@
++<libosinfo version="0.0.1">
++
++  <!-- Please read README.logos for any questions about usage of product logos in Boxes. !-->
++
++  <os id="http://redhat.com/rhel/8.0">
++    <logo>https://gitlab.gnome.org/GNOME/gnome-boxes-logos/raw/master/logos/shadownman-pill.svg</logo>
++  </os>
++
++</libosinfo>
+diff --git a/data/recommended-downloads.xml b/data/recommended-downloads.xml
+index b389e94..f4772d7 100644
+--- a/data/recommended-downloads.xml
++++ b/data/recommended-downloads.xml
+@@ -9,7 +9,8 @@
+   available.
+  -->
+ <list>
+-  <os_id>http://redhat.com/rhel/7.6</os_id>
++  <os_id>http://redhat.com/rhel/8.0</os_id>
++  <os_id>http://redhat.com/rhel/7.7</os_id>
+   <os_id>http://fedoraproject.org/fedora/29</os_id>
+   <os_id>http://fedoraproject.org/silverblue/29</os_id>
+   <os_id>http://ubuntu.com/ubuntu/18.10</os_id>
