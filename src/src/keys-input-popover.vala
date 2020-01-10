@@ -3,9 +3,11 @@
 private class Boxes.KeysInputPopover: Gtk.Popover {
     private const GLib.ActionEntry[] action_entries = {
         {"ctrl+alt+backspace", ctrl_alt_backspace_activated},
+        {"ctrl+alt+del", ctrl_alt_del_activated},
 
         {"ctrl+alt+f1", ctrl_alt_fn_activated},
         {"ctrl+alt+f2", ctrl_alt_fn_activated},
+        {"ctrl+alt+f3", ctrl_alt_fn_activated},
         {"ctrl+alt+f7", ctrl_alt_fn_activated},
     };
 
@@ -22,11 +24,13 @@ private class Boxes.KeysInputPopover: Gtk.Popover {
         var menu = new GLib.Menu ();
 
         menu.append (_("Ctrl + Alt + Backspace"), "key.ctrl+alt+backspace");
+        menu.append (_("Ctrl + Alt + Del"), "key.ctrl+alt+del");
 
         // New section
         var section = new GLib.Menu ();
         section.append (_("Ctrl + Alt + F1"), "key.ctrl+alt+f1");
         section.append (_("Ctrl + Alt + F2"), "key.ctrl+alt+f2");
+        section.append (_("Ctrl + Alt + F3"), "key.ctrl+alt+f2");
         section.append (_("Ctrl + Alt + F7"), "key.ctrl+alt+f7");
         menu.append_section (null, section);
 
@@ -45,6 +49,12 @@ private class Boxes.KeysInputPopover: Gtk.Popover {
         send_keys (keyvals);
     }
 
+    private void ctrl_alt_del_activated () {
+        uint[] keyvals = { Gdk.Key.Control_L, Gdk.Key.Alt_L, Gdk.Key.Delete };
+
+        send_keys (keyvals);
+    }
+
     private void ctrl_alt_fn_activated (GLib.SimpleAction action) {
         uint[] keyvals = { Gdk.Key.Control_L, Gdk.Key.Alt_L, 0 };
 
@@ -52,6 +62,8 @@ private class Boxes.KeysInputPopover: Gtk.Popover {
             keyvals[2] = Gdk.Key.F1;
         else if (action.name[action.name.length - 1] == '2')
             keyvals[2] = Gdk.Key.F2;
+        else if (action.name[action.name.length - 1] == '3')
+            keyvals[3] = Gdk.Key.F3;
         else if (action.name[action.name.length - 1] == '7')
             keyvals[2] = Gdk.Key.F7;
         else {

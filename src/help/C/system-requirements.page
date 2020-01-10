@@ -29,6 +29,8 @@
     </credit>
 
     <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
 
   <title>Get started with virtual machines</title>
@@ -59,6 +61,11 @@
     <p><app>Boxes</app> performs best if your computer processor supports
     hardware <link xref="virtualization">virtualization extensions</link> and
     these are enabled in the system BIOS.</p>
-  </note>
+   </note>
+   <note style="advanced">
+    <p>It is also recommended that you have at least 8GB RAM and 20GB of free
+    disk space on your computer to efficiently run <app>Boxes</app>.</p>
+   </note>
+
 
 </page>

@@ -4,12 +4,14 @@ private class Boxes.ActionsPopover: Gtk.Popover {
     private const GLib.ActionEntry[] action_entries = {
         {"open-in-new-win", open_in_new_win_activated},
         {"favorite",        favorite_activated},
-        {"pause",           pause_activated},
+        {"take_screenshot", take_screenshot_activated},
         {"force_shutdown",  force_shutdown_activated},
         {"delete",          delete_activated},
         {"clone",           clone_activated},
         {"properties",      properties_activated},
-        {"restart",         restart_activated}
+        {"restart",         restart_activated},
+        {"send_file",       send_file_activated}
+
     };
 
     private AppWindow window;
@@ -42,6 +44,14 @@ private class Boxes.ActionsPopover: Gtk.Popover {
             section.append (_("Open in New Window"), "box.open-in-new-win");
             var action = action_group.lookup_action ("open-in-new-win") as GLib.SimpleAction;
             action.set_enabled (!importing);
+        } else {
+            // Send files
+            section.append (_("Send File…"), "box.send_file");
+            var action = action_group.lookup_action ("send_file") as GLib.SimpleAction;
+            action.set_enabled (machine.display.can_transfer_files);
+
+            // Take Screenshot
+            section.append (_("Take Screenshot"), "box.take_screenshot");
         }
 
         // Favorite
@@ -51,7 +61,7 @@ private class Boxes.ActionsPopover: Gtk.Popover {
             section.append (_("Add to Favorites"), "box.favorite");
         menu.append_section (null, section);
 
-        // New section for force shutdown, pause and delete
+        // New section for force shutdown and delete
         section = new GLib.Menu ();
 
         if (machine is LibvirtMachine) {
@@ -61,14 +71,9 @@ private class Boxes.ActionsPopover: Gtk.Popover {
         }
 
         if (window.ui_state != UIState.DISPLAY) {
-            // Pause
-            section.append (_("Pause"), "box.pause");
-            var action = action_group.lookup_action ("pause") as GLib.SimpleAction;
-            action.set_enabled (machine.can_save);
-
             // Clone
             section.append (_("Clone"), "box.clone");
-            action = action_group.lookup_action ("clone") as GLib.SimpleAction;
+            var action = action_group.lookup_action ("clone") as GLib.SimpleAction;
             action.set_enabled (machine.can_clone);
 
             // Delete
@@ -104,15 +109,32 @@ private class Boxes.ActionsPopover: Gtk.Popover {
         machine.config.set_category ("favorite", enabled);
     }
 
-    private void pause_activated () {
-        var machine = window.current_item as Machine;
+    private string get_screenshot_filename () {
+        var now = new GLib.DateTime.now_local ();
+        var timestamp = now.format ("%Y-%m-%d %H-%M-%S");
 
-        machine.save.begin ((obj, result) => {
-            try {
-                machine.save.end (result);
-            } catch (GLib.Error e) {
-                window.notificationbar.display_error (_("Pausing '%s' failed").printf (machine.name));
-            }
+        // Translators: %s => the timestamp of when the screenshot was taken.
+        var filename =_("Screenshot from %s").printf (timestamp);
+
+        return Path.build_filename (GLib.Environment.get_user_special_dir (GLib.UserDirectory.PICTURES),
+                                    filename);
+    }
+
+    private void take_screenshot_activated () {
+        var machine = window.current_item as Machine;
+        try {
+            Gdk.Pixbuf pixbuf = machine.display.get_pixbuf (0);
+            pixbuf.save (get_screenshot_filename () + ".png", "png");
+        } catch (GLib.Error error) {
+            warning (error.message);
+        }
+
+        var ctx = window.below_bin.get_style_context ();
+        ctx.add_class ("flash");
+        Timeout.add (200, () => {
+            ctx.remove_class ("flash");
+
+            return false;
         });
     }
 
@@ -138,6 +160,11 @@ private class Boxes.ActionsPopover: Gtk.Popover {
     private void clone_activated () {
         (window.current_item as Machine).clone.begin ();
     }
+
+    private void send_file_activated () {
+        window.show_send_file ();
+    }
+
 
     private void properties_activated () {
         window.show_properties ();

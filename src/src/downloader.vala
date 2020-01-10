@@ -23,6 +23,11 @@ private class Boxes.Downloader : GLib.Object {
     public signal void downloaded (Download download);
     public signal void download_failed (Download download, GLib.Error error);
 
+    public static string[] supported_schemes = {
+        "http",
+        "https",
+    };
+
     public static Downloader get_instance () {
         if (downloader == null)
             downloader = new Downloader ();
@@ -30,7 +35,7 @@ private class Boxes.Downloader : GLib.Object {
         return downloader;
     }
 
-    private static string fetch_os_logo_url (Osinfo.Os os) {
+    public static string fetch_os_logo_url (Osinfo.Os os) {
         if (os.logo != null)
             return os.logo;
 
@@ -53,17 +58,19 @@ private class Boxes.Downloader : GLib.Object {
         downloads = new GLib.HashTable <string,Download> (str_hash, str_equal);
 
         session = new Soup.Session ();
-        session.add_feature_by_type (typeof (Soup.ProxyResolverDefault));
         if (Environment.get_variable ("SOUP_DEBUG") != null)
             session.add_feature (new Soup.Logger (Soup.LoggerLogLevel.HEADERS, -1));
+
+        var user_agent = get_user_agent ();
+        session.user_agent = user_agent;
     }
 
     /**
      * Downloads the given file.
      *
      * @param remote_file The remote file to download.
-     * @param cached_paths Array of cache directories. The file will be saved in the directory the
-     *                     first element points to.
+     * @param cached_paths Array of possible cache locations. If not found, the file will be saved
+     *                     to the location specified by the first element.
      * @param progress The ActivityProgress object to report progress to.
      * @param cancellable The Cancellable object for cancellation.
      *
@@ -92,7 +99,7 @@ private class Boxes.Downloader : GLib.Object {
         downloads.set (uri, download);
 
         try {
-            if (remote_file.has_uri_scheme ("http") || remote_file.has_uri_scheme ("https"))
+            if (remote_file.get_uri_scheme () in supported_schemes)
                 yield download_from_http (download, cancellable);
             else
                 yield download_from_filesystem (download, cancellable);
@@ -119,10 +126,11 @@ private class Boxes.Downloader : GLib.Object {
         msg.response_body.set_accumulate (false);
         var address = msg.get_address ();
         var connectable = new NetworkAddress (address.name, (uint16) address.port);
+#if !FLATPAK
         var network_monitor = NetworkMonitor.get_default ();
         if (!(yield network_monitor.can_reach_async (connectable)))
             throw new Boxes.Error.INVALID ("Failed to reach host '%s' on port '%d'", address.name, address.port);
-
+#endif
         GLib.Error? err = null;
         ulong cancelled_id = 0;
         if (cancellable != null)
@@ -206,10 +214,18 @@ private class Boxes.Downloader : GLib.Object {
     }
 
     public static async string fetch_media (string           uri,
+                                            string?          filename = null,
                                             ActivityProgress progress = new ActivityProgress (),
                                             Cancellable?     cancellable = null) throws GLib.Error {
         var file = File.new_for_uri (uri);
-        var basename = file.get_basename ();
+        string? basename = null;
+
+        if (filename == null) {
+            basename = file.get_basename ();
+        } else {
+            basename = filename;
+        }
+
         return_val_if_fail (basename != null && basename != "" && basename != "/", null);
 
         var downloader = Downloader.get_instance ();

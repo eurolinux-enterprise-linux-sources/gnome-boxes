@@ -12,7 +12,6 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
 
     private Gtk.SizeGroup size_group;
 
-    private GLib.List<CollectionItem> hidden_items;
     private HashTable<CollectionItem, ItemConnections> items_connections;
 
     private AppWindow window;
@@ -53,10 +52,8 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
     }
 
     construct {
-        hidden_items = new GLib.List<CollectionItem> ();
         items_connections = new HashTable<CollectionItem, ItemConnections> (direct_hash, direct_equal);
 
-        setup_list_box ();
 
         size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.VERTICAL);
         filter = new CollectionFilter ();
@@ -66,6 +63,7 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
         filter.filter_func_changed.connect (() => {
             list_box.invalidate_filter ();
         });
+        setup_list_box ();
 
         notify["ui-state"].connect (ui_state_changed);
     }
@@ -83,75 +81,18 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
         context_popover = new Boxes.ActionsPopover (window);
     }
 
-    public void add_item (CollectionItem item) {
+    private void add_row (Gtk.Widget row) {
+        var item = row as CollectionItem;
         var machine = item as Machine;
 
-        if (machine == null) {
-            warning ("Cannot add item %p".printf (&item));
-
-            return;
-        }
-
-        var window = machine.window;
-        if (window.ui_state == UIState.WIZARD) {
-            // Don't show newly created items until user is out of wizard
-            hidden_items.append (item);
-
-            ulong ui_state_id = 0;
-
-            ui_state_id = window.notify["ui-state"].connect (() => {
-                if (window.ui_state == UIState.WIZARD)
-                    return;
-
-                if (hidden_items.find (item) != null) {
-                    add_item (item);
-                    hidden_items.remove (item);
-                }
-                window.disconnect (ui_state_id);
-            });
-
-            return;
-        }
-
-        add_row (item);
         items_connections[item] = new ItemConnections (this, machine);
-
-        item.set_state (window.ui_state);
     }
 
-    private void add_row (CollectionItem item) {
-        var box_row = new Gtk.ListBoxRow ();
-        size_group.add_widget (box_row);
-        var view_row = new ListViewRow (item);
-
-        view_row.notify["selected"].connect (() => {
-            propagate_view_row_selection (view_row);
-        });
-
-        box_row.visible = true;
-        view_row.visible = true;
-
-        box_row.add (view_row);
-        list_box.add (box_row);
-    }
-
-    public void remove_item (CollectionItem item) {
-        hidden_items.remove (item);
+    private void remove_row (Gtk.Widget row) {
+        var item = row as CollectionItem;
         items_connections.remove (item);
-        remove_row (item);
-    }
 
-    private void remove_row (CollectionItem item) {
-        foreach_row ((box_row) => {
-            var view_row = box_row.get_child () as ListViewRow;
-            if (view_row == null)
-                return;
-
-            if (view_row.item == item) {
-                list_box.remove (box_row);
-                size_group.remove_widget (box_row);
-            }
-        });
+        size_group.remove_widget (row);
     }
 
     public void select_by_criteria (SelectionCriteria criteria) {
@@ -205,8 +146,22 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
     }
 
     private void setup_list_box () {
+        list_box.bind_model (App.app.collection.items, (item) => {
+            var box_row = new Gtk.ListBoxRow ();
+            size_group.add_widget (box_row);
+            var view_row = new ListViewRow (item as CollectionItem);
+            box_row.add (view_row);
+
+            view_row.notify["selected"].connect (() => {
+                propagate_view_row_selection (view_row);
+            });
+
+            box_row.visible = true;
+            view_row.visible = true;
+
+            return box_row;
+        });
         list_box.selection_mode = Gtk.SelectionMode.NONE;
-        list_box.set_sort_func (model_sort);
         list_box.set_filter_func (model_filter);
 
         list_box.row_activated.connect ((box_row) => {
@@ -220,7 +175,8 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
             window.select_item (item);
         });
 
-        update_selection_mode ();
+        (list_box as Gtk.Container).add.connect (add_row);
+        (list_box as Gtk.Container).remove.connect (remove_row);
     }
 
     private CollectionItem? get_item_for_row (Gtk.ListBoxRow box_row) {
@@ -239,18 +195,6 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
 
             func (box_row);
         });
-    }
-
-    private int model_sort (Gtk.ListBoxRow box_row1, Gtk.ListBoxRow box_row2) {
-        var view_row1 = box_row1.get_child () as ListViewRow;
-        var view_row2 = box_row2.get_child () as ListViewRow;
-        var item1 = view_row1.item;
-        var item2 = view_row2.item;
-
-        if (item1 == null || item2 == null)
-            return 0;
-
-        return item1.compare (item2);
     }
 
     private bool model_filter (Gtk.ListBoxRow box_row) {
@@ -379,6 +323,22 @@ private class Boxes.ListView: Gtk.ScrolledWindow, Boxes.ICollectionView, Boxes.U
         list_box.unselect_row (box_row);
         if (view_row.selected)
             view_row.selected = false;
+
+        App.app.notify_property ("selected-items");
+    }
+
+    public void select_all () {
+        list_box.select_all ();
+
+        foreach_row (select_row);
+
+        App.app.notify_property ("selected-items");
+    }
+
+    public void unselect_all () {
+        list_box.unselect_all ();
+
+        foreach_row (unselect_row);
 
         App.app.notify_property ("selected-items");
     }

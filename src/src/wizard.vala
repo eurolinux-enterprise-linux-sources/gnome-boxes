@@ -83,6 +83,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                     break;
 
                 case WizardPage.PREPARATION:
+                    installer_image.set_from_icon_name ("media-optical", 0); // Reset
                     if (!prepare (create_preparation_progress ()))
                         return;
                     break;
@@ -111,6 +112,11 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                        if (create.end (result)) {
                           window.set_state (UIState.COLLECTION);
                           wizard_source.page = SourcePage.MAIN;
+
+                          if (machine != null && machine is RemoteMachine) {
+                            window.connect_to (machine);
+                            machine = null;
+                          }
                        } else {
                           window.notificationbar.display_error (_("Box creation failed"));
                        }
@@ -118,6 +124,14 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                     return;
                 }
             } else {
+                switch (value) {
+                case WizardPage.SOURCE:
+                    if (wizard_source.page == SourcePage.RHEL_WEB_VIEW ||
+                        wizard_source.page == SourcePage.DOWNLOADS)
+                        wizard_source.page = SourcePage.MAIN;
+                    break;
+                }
+
                 switch (page) {
                 case WizardPage.REVIEW:
                     create_button.visible = false;
@@ -132,12 +146,12 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                 return;
 
             _page = value;
-            back_button.sensitive = (value != WizardPage.SOURCE);
+            update_back_button_sensitivity ();
             wizard_window.topbar.set_title_for_page (value);
             visible_child_name = page_names[value];
 
             if (value == WizardPage.SOURCE)
-                wizard_source_update_next ();
+                wizard_source_update_buttons ();
         }
     }
 
@@ -152,7 +166,8 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         return progress;
     }
 
-    private void wizard_source_update_next () {
+    private void wizard_source_update_buttons () {
+        update_back_button_sensitivity ();
         if (page != WizardPage.SOURCE)
             return;
 
@@ -164,13 +179,21 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             source = null;
             break;
 
+        case Boxes.SourcePage.RHEL_WEB_VIEW:
+            next_button.sensitive = false;
+            break;
+
+        case Boxes.SourcePage.DOWNLOADS:
+            next_button.sensitive = false;
+            break;
+
         case Boxes.SourcePage.URL:
             next_button.sensitive = false;
             if (wizard_source.uri.length == 0)
                 return;
 
             try {
-                prepare_for_location (wizard_source.uri, true);
+                prepare_for_location (wizard_source.uri, null, true);
 
                 next_button.sensitive = true;
             } catch (GLib.Error error) {
@@ -185,19 +208,22 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         }
     }
 
+    private void update_back_button_sensitivity () {
+        var disable_back_button = page == WizardPage.SOURCE &&
+                                  (wizard_source.page == SourcePage.MAIN || wizard_source.page == SourcePage.URL);
+        back_button.sensitive = !disable_back_button;
+    }
+
     construct {
         media_manager = MediaManager.get_instance ();
-        wizard_source.notify["page"].connect(wizard_source_update_next);
-        wizard_source.notify["selected"].connect(wizard_source_update_next);
-        wizard_source.url_entry.changed.connect (wizard_source_update_next);
+        wizard_source.notify["page"].connect(wizard_source_update_buttons);
+        wizard_source.notify["selected"].connect(wizard_source_update_buttons);
+        wizard_source.url_entry.changed.connect (wizard_source_update_buttons);
         notify["ui-state"].connect (ui_state_changed);
 
         wizard_source.activated.connect(() => {
             page = WizardPage.PREPARATION;
         });
-
-        // FIXME: Why this won't work from .ui file?
-        transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
     }
 
     public void cleanup () {
@@ -250,6 +276,10 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         } else if (source != null) {
             source.save ();
             App.app.add_collection_source.begin (source);
+
+            if (machine is RemoteMachine) {
+                return true;
+            }
         } else if (wizard_source.libvirt_sys_import) {
             wizard_source.libvirt_sys_importer.import.begin ();
         } else {
@@ -261,6 +291,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
     }
 
     private void prepare_for_location (string            location,
+                                       string?           filename,
                                        bool              probing,
                                        ActivityProgress? progress = null)
                                        throws GLib.Error
@@ -301,17 +332,23 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             return;
         }
 
-        prepare_for_uri (file.get_uri ());
+        prepare_for_uri (file.get_uri (), filename);
     }
 
-    private void prepare_for_uri (string uri_as_text) throws Boxes.Error {
+    private void prepare_for_uri (string uri_as_text, string? filename = null) throws Boxes.Error {
         var uri = Xml.URI.parse (uri_as_text);
         if (uri == null || uri.scheme == null)
             throw new Boxes.Error.INVALID (_("Invalid URL"));
 
         if (wizard_source.download_required) {
-            var file = File.new_for_uri (uri_as_text);
-            var basename = file.get_basename ();
+            string? basename = null;
+
+            if (filename == null) {
+                var file = File.new_for_uri (uri_as_text);
+                basename = file.get_basename ();
+            } else {
+                basename = filename;
+            }
 
             if (basename == null || basename == "" || basename == "/")
                 throw new Boxes.Error.INVALID (_("Invalid URL"));
@@ -332,14 +369,15 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         } else if (App.app.has_broker_for_source_type (uri.scheme)) {
             source.source_type = uri.scheme;
         } else
-            throw new Boxes.Error.INVALID (_("Unsupported protocol '%s'").printf (uri.scheme));
+            throw new Boxes.Error.INVALID (_("Unsupported protocol “%s”").printf (uri.scheme));
     }
 
     private void prepare_for_installer (string path, ActivityProgress progress) throws GLib.Error {
         next_button.sensitive = false;
 
         prep_media_label.label = _("Unknown installer media");
-        prep_status_label.label = _("Analyzing…"); // Translators: Analyzing installer media
+        // Translators: Analyzing installer media
+        prep_status_label.label = _("Analyzing…");
 
         media_manager.create_installer_media_for_path.begin (path, null, (obj, res) => {
             on_installer_media_instantiated (res, progress);
@@ -388,7 +426,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
 
         try {
             // Validate URI
-            prepare_for_location (wizard_source.uri, true);
+            prepare_for_location (wizard_source.uri, wizard_source.filename, true);
         } catch (GLib.Error error) {
             window.notificationbar.display_error (error.message);
 
@@ -399,12 +437,16 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
 
         if (wizard_source.download_required) {
             continue_button.sensitive = false;
-            download_media.begin (wizard_source.uri, progress);
+            download_media.begin (wizard_source.uri, wizard_source.filename, progress);
+
+            var os = wizard_window.get_os_from_uri (wizard_source.uri);
+            if (os == null)
+                debug ("Failed to find Osinfo.Os for %s", wizard_source.uri);
+            else
+                Downloader.fetch_os_logo.begin (installer_image, os, 128);
 
             return true;
         }
-
-        installer_image.set_from_icon_name ("media-optical", 0); // Reset
 
         if (this.wizard_source.install_media != null) {
             prep_media_label.label = _("Unknown installer media");
@@ -415,7 +457,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         }
 
         try {
-            prepare_for_location (wizard_source.uri, false, progress);
+            prepare_for_location (wizard_source.uri, null, false, progress);
         } catch (GLib.Error error) {
             window.notificationbar.display_error (error.message);
 
@@ -595,12 +637,12 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         return false;
     }
 
-    private async void download_media (string uri, ActivityProgress progress) {
+    private async void download_media (string uri, string? filename, ActivityProgress progress) {
         var download_progress = progress.add_child_activity (DOWNLOAD_PROGRESS_SCALE);
         prep_status_label.label = _("Downloading media…");
 
         try {
-            var cache_path = yield Downloader.fetch_media (uri, download_progress, prepare_cancellable);
+            var cache_path = yield Downloader.fetch_media (uri, filename, download_progress, prepare_cancellable);
             prepare_downloaded_media (cache_path, progress);
         } catch (GLib.IOError.CANCELLED e) {
             debug ("Cancelled downloading media '%s'!", uri);
@@ -628,9 +670,15 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         cancel_button.clicked.connect (cancel);
         back_button = wizard_window.topbar.back_btn;
         back_button.clicked.connect (() => {
-            prepare_cancellable.cancel ();
-
-            page = page - 1;
+            if (page == WizardPage.SOURCE) {
+                return_if_fail (wizard_source.page == SourcePage.RHEL_WEB_VIEW ||
+                                wizard_source.page == SourcePage.DOWNLOADS);
+                wizard_source.page = SourcePage.MAIN;
+                wizard_source.cleanup ();
+            } else {
+                prepare_cancellable.cancel ();
+                page = page - 1;
+            }
         });
         continue_button = wizard_window.topbar.continue_btn;
         continue_button.clicked.connect (() => {
@@ -716,7 +764,9 @@ private class Boxes.WizardSummary: Gtk.Grid {
             return;
 
         var button = new Gtk.Button.with_mnemonic (_("C_ustomize…"));
-        attach (button, 2, current_row - 1, 1, 1);
+        button.hexpand = true;
+        button.margin_top = 20;
+        attach (button, 0, current_row, 2, 1);
         button.show ();
 
         button.clicked.connect (() => { customize_func (); });

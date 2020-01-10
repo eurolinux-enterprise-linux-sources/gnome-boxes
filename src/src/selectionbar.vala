@@ -57,7 +57,7 @@ private class Boxes.Selectionbar: Gtk.Revealer {
                 try {
                     machine.save.end (result);
                 } catch (GLib.Error e) {
-                    window.notificationbar.display_error (_("Pausing '%s' failed").printf (machine.name));
+                    window.notificationbar.display_error (_("Pausing “%s” failed").printf (machine.name));
                 }
             });
         }
@@ -107,7 +107,7 @@ private class Boxes.Selectionbar: Gtk.Revealer {
                 continue;
 
             var machine = item as Machine;
-            if (machine.can_save) {
+            if (machine.can_save && machine.is_running) {
                 sensitive = true;
 
                 break;
@@ -118,13 +118,13 @@ private class Boxes.Selectionbar: Gtk.Revealer {
     }
 
     private void update_delete_btn () {
-        foreach (var item in App.app.collection.items.data) {
+        App.app.collection.foreach_item ((item) => {
             var can_delete_id = item.get_data<ulong> ("can_delete_id");
             if (can_delete_id > 0) {
                     item.disconnect (can_delete_id);
                     item.set_data<ulong> ("can_delete_id", 0);
             }
-        }
+        });
 
         var sensitive = App.app.selected_items.length () > 0;
         foreach (var item in App.app.selected_items) {
@@ -144,13 +144,13 @@ private class Boxes.Selectionbar: Gtk.Revealer {
     }
 
     private void update_open_btn () {
-        foreach (var item in App.app.collection.items.data) {
+        App.app.collection.foreach_item ((item) => {
             var importing_id = item.get_data<ulong> ("importing_id");
             if (importing_id > 0) {
                 item.disconnect (importing_id);
                 item.set_data<ulong> ("importing_id", 0);
             }
-        }
+        });
 
         var items = App.app.selected_items.length ();
         var sensitive = items > 0;
@@ -168,8 +168,8 @@ private class Boxes.Selectionbar: Gtk.Revealer {
         }
         open_btn.sensitive = sensitive;
 
-        // Translators: This is a button to open box(es) in new window(s)
         if (items == 0)
+            // Translators: This is a button to open box(es) in new window(s)
             open_btn.label = C_("0 items selected", "_Open in new window");
         else
             open_btn.label = ngettext ("_Open in new window", "_Open in %u new windows", items).printf (items);

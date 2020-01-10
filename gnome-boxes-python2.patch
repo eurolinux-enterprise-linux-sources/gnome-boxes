@@ -1,0 +1,8 @@
+--- gnome-boxes-3.28.4/build-aux/post_install.py.python2	2018-05-09 11:48:19.000000000 +0200
++++ gnome-boxes-3.28.4/build-aux/post_install.py	2018-05-23 22:13:53.921343405 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/python2
+ 
+ import os
+ import subprocess

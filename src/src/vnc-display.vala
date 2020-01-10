@@ -40,6 +40,9 @@ private class Boxes.VncDisplay: Boxes.Display {
 
         display.vnc_auth_failure.connect (() => {
             debug ("auth failure");
+
+            need_password = (password != null);
+            need_username = (username != null);
         });
         display.vnc_auth_unsupported.connect (() => {
             debug ("auth unsupported");
@@ -69,6 +72,8 @@ private class Boxes.VncDisplay: Boxes.Display {
 
             display.close ();
         });
+
+        display.size_allocate.connect (scale);
     }
 
     public VncDisplay (BoxConfig config, string host, int port) {
@@ -136,20 +141,32 @@ private class Boxes.VncDisplay: Boxes.Display {
     public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page) {
         var list = new List<Boxes.Property> ();
 
-        switch (page) {
-        case PropertiesPage.GENERAL:
-            var toggle = new Gtk.Switch ();
-            toggle.halign = Gtk.Align.START;
-            display.bind_property ("read-only", toggle, "active",
-                                   BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
-            add_property (ref list, _("Read-only"), toggle);
-            break;
-        }
-
         return list;
     }
 
     public override void send_keys (uint[] keyvals) {
         display.send_keys (keyvals);
+    }
+
+    public void scale () {
+        if (!display.is_open ())
+            return;
+
+        // Get the allocated size of the parent container
+        Gtk.Allocation alloc;
+        display.get_parent ().get_allocation (out alloc);
+
+        double parent_aspect = (double) alloc.width / (double) alloc.height;
+        double display_aspect = (double) display.get_width () / (double) display.get_height ();
+        Gtk.Allocation scaled = alloc;
+        if (parent_aspect > display_aspect) {
+            scaled.width = (int) (alloc.height * display_aspect);
+            scaled.x += (alloc.width - scaled.width) / 2;
+        } else {
+            scaled.height = (int) (alloc.width / display_aspect);
+            scaled.y += (alloc.height - scaled.height) / 2;
+        }
+
+        display.size_allocate (scaled);
     }
 }

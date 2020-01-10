@@ -29,8 +29,15 @@ namespace Boxes {
         return Path.build_filename (get_pkgdata (), "sources", file_name);
     }
 
-    public string get_logos_db () {
-        return get_pkgdata ("gnome-boxes-logos-db.xml");
+    public string get_custom_osinfo_db () {
+        return get_pkgdata ("osinfo");
+    }
+
+    public string get_user_agent () {
+        var user_agent = Config.DISTRIBUTOR_NAME + "/" + Config.DISTRIBUTOR_VERSION + " " +
+                         Config.PACKAGE_TARNAME + "/" + Config.PACKAGE_VERSION;
+
+        return user_agent;
     }
 
     public string get_user_unattended (string? file_name = null) {
@@ -117,7 +124,7 @@ namespace Boxes {
     }
 
     public string get_cache (string cache_name, string? file_name = null) {
-        var dir = Path.build_filename (get_user_pkgcache (), cache_name);
+        var dir = get_user_pkgcache (cache_name);
 
         ensure_directory (dir);
 

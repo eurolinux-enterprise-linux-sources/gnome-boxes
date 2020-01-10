@@ -80,10 +80,42 @@
                 <property name="visible">True</property>
                 <property name="show-hidden">False</property>
                 <property name="local-only">False</property>
+                <property name="filter">supported_files_filter</property>
               </object>
 
               <packing>
                 <property name="name">file_chooser</property>
+              </packing>
+            </child>
+
+            <!-- Download an OS page -->
+            <child>
+              <object class="GtkBox" id="download_an_os_page">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="border-width">20</property>
+                        <property name="margin-start">20</property>
+                        <property name="margin-end">20</property>
+
+                        <child>
+                          <object class="GtkListBox" id="downloads_list">
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">downloads</property>
               </packing>
             </child>
 
@@ -99,4 +131,10 @@
       </object>
     </child>
   </template>
+
+  <object class="GtkFileFilter" id="supported_files_filter">
+    <mime-types>
+      <mime-type>application/x-cd-image</mime-type>
+    </mime-types>
+  </object>
 </interface>

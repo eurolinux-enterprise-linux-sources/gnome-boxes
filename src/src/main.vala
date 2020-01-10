@@ -23,7 +23,7 @@ private static void parse_local_args (ref unowned string[] args) {
     }
 
     if (version) {
-        GLib.stdout.printf ("%s\n", Config.VERSION);
+        GLib.stdout.printf ("%s\n", Config.PACKAGE_VERSION);
         exit (0);
     }
 
@@ -66,7 +66,7 @@ private async void run_checks () {
 }
 
 public int main (string[] args) {
-    Intl.bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+    Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
     Intl.textdomain (GETTEXT_PACKAGE);
     GLib.Environment.set_application_name (_("Boxes"));

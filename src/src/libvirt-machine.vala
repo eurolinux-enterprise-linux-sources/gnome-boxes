@@ -42,7 +42,7 @@ private class Boxes.LibvirtMachine: Boxes.Machine {
             return (base.should_autosave &&
                     connection == App.app.default_connection &&
                     !run_in_bg &&
-                    (vm_creator == null || !vm_creator.express_install));
+                    vm_creator == null);
         }
     }
 
@@ -634,7 +634,7 @@ private class Boxes.LibvirtMachine: Boxes.Machine {
 
         stay_on_display = true;
         ulong state_id = 0;
-        Gd.Notification notification = null;
+        Boxes.Notification notification = null;
         debug ("Rebooting '%s'..", name);
 
         state_id = notify["state"].connect (() => {
@@ -668,7 +668,7 @@ private class Boxes.LibvirtMachine: Boxes.Machine {
                 force_shutdown ();
             };
 
-            var message = _("Restart of '%s' is taking too long. Force it to shutdown?").printf (name);
+            var message = _("Restart of “%s” is taking too long. Force it to shutdown?").printf (name);
             notification = window.notificationbar.display_for_action (message,
                                                                        _("_Shutdown"),
                                                                        (owned) really_force_shutdown,

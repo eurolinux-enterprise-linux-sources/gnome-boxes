@@ -1,0 +1,38 @@
+From 92fb1b57abc9fa7b582a82c8e5d58451cdbffad7 Mon Sep 17 00:00:00 2001
+From: Debarshi Ray <debarshir@gnome.org>
+Date: Fri, 8 Jun 2018 13:45:52 +0200
+Subject: [PATCH] build: Revert to using Tracker 1.0.x, and fix the libgovirt
+ version
+
+RHEL 7.6 doesn't have Tracker 2.0.x; and libgovirt-0.3.1 is enough.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1569793
+---
+ src/meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/meson.build b/src/meson.build
+index ac79b7fc2677..89727ca44d11 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -129,7 +129,7 @@ dependencies = [
+   dependency ('libvirt-gobject-1.0', version: '>= 0.2.0'),
+   dependency ('libxml-2.0', version: '>= 2.7.8'),
+   dependency ('spice-client-gtk-3.0', version: '>= 0.32'),
+-  dependency ('tracker-sparql-2.0'),
++  dependency ('tracker-sparql-1.0'),
+   dependency ('webkit2gtk-4.0'),
+   valac.find_library ('gio-2.0-workaround', dirs: vapi_dir),
+   valac.find_library ('linux'),
+@@ -153,7 +153,7 @@ else
+     vala_args += '--define=HAVE_OVIRT'
+ 
+     dependencies += [
+-      dependency ('govirt-1.0', version: '>= 0.3.4'),
++      dependency ('govirt-1.0', version: '>= 0.3.1'),
+       valac.find_library ('rest-0.7')
+     ]
+   endif
+-- 
+2.14.4
+

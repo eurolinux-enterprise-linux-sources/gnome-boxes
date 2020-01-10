@@ -10,55 +10,73 @@ ExclusiveArch: x86_64
 # The following qemu_kvm_arches/with_qemu_kvm defines come from
 # libvirt.spec
 %if 0%{?fedora}
-    %define qemu_kvm_arches %{ix86} x86_64 %{power64} s390x %{arm} aarch64
+    %global qemu_kvm_arches %{ix86} x86_64 %{power64} s390x %{arm} aarch64
+    %global distributor_name fedora
+    %global distributor_version %{fedora}
 %endif
 
 %if 0%{?rhel} >= 7
-    %define qemu_kvm_arches    x86_64 %{power64}
+    %global qemu_kvm_arches    x86_64 %{power64}
+    %global distributor_name rhel
+    %global distributor_version %{rhel}
 %endif
 
 %ifarch %{qemu_kvm_arches}
-    %define with_qemu_kvm      1
+    %global with_qemu_kvm      1
 %else
-    %define with_qemu_kvm      0
+    %global with_qemu_kvm      0
 %endif
 
 %global url_ver	%%(echo %{version}|cut -d. -f1,2)
 
 Name:		gnome-boxes
-Version:	3.22.4
-Release:	4%{?dist}
+Version:	3.28.5
+Release:	2%{?dist}
 Summary:	A simple GNOME 3 application to access remote or virtual systems
 
 License:	LGPLv2+
 URL:		https://wiki.gnome.org/Apps/Boxes
 Source0:	http://download.gnome.org/sources/%{name}/%{url_ver}/%{name}-%{version}.tar.xz
 
-BuildRequires:  libgovirt-devel
-BuildRequires:	intltool
-BuildRequires:	vala-devel
-BuildRequires:	vala
+# https://gitlab.gnome.org/GNOME/gnome-boxes/issues/217
+Patch0:		gnome-boxes-unbreak-the-icon-installation.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1449922
+Patch1:		use-ps2-bus-by-default.patch
+
+Patch2:		gnome-boxes-python2.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1569793
+Patch3:		gnome-boxes-libgovirt-tracker.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1595754
+Patch4: 	revert-use-virtio-video-adapter.patch
+
+BuildRequires:	gettext >= 0.19.8
+BuildRequires:	meson
+BuildRequires:	vala >= 0.36.0
 BuildRequires:	yelp-tools
 BuildRequires:	pkgconfig(clutter-gtk-1.0)
-BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(glib-2.0) >= 2.52
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
-BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(govirt-1.0)
+BuildRequires:	pkgconfig(gtk+-3.0) >= 3.22.20
 BuildRequires:	pkgconfig(gtk-vnc-2.0)
 BuildRequires:	pkgconfig(libarchive)
+BuildRequires:	pkgconfig(json-glib-1.0)
 BuildRequires:	pkgconfig(libsecret-1)
 BuildRequires:	pkgconfig(libvirt-gobject-1.0)
 BuildRequires:	pkgconfig(libvirt-gconfig-1.0)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(gudev-1.0)
-BuildRequires:	pkgconfig(libosinfo-1.0)
-BuildRequires:	pkgconfig(libsoup-2.4)
+BuildRequires:	pkgconfig(libosinfo-1.0) >= 1.1.0
+BuildRequires:	pkgconfig(libsoup-2.4) >= 2.44
 BuildRequires:	pkgconfig(libusb-1.0)
+BuildRequires:	pkgconfig(tracker-sparql-1.0)
+BuildRequires:	pkgconfig(webkit2gtk-4.0)
 BuildRequires:	spice-gtk3-vala
 BuildRequires:	libosinfo-vala
 BuildRequires:	desktop-file-utils
-BuildRequires:	tracker-devel
-BuildRequires:	libuuid-devel
-#BuildRequires: autoconf automake libtool
 
 # Pulls in libvirtd + KVM, but no NAT / firewall configs
 %if %{with_qemu_kvm}
@@ -67,20 +85,29 @@ Requires:	libvirt-daemon-kvm
 Requires:	libvirt-daemon-qemu
 %endif
 
-Patch0: use-ps2-bus-by-default.patch
-
-# Pulls in libvirtd NAT based networking
-# https://bugzilla.redhat.com/show_bug.cgi?id=1081762
+# Pulls in the libvirtd NAT 'default' network
+# Original request: https://bugzilla.redhat.com/show_bug.cgi?id=1081762
+#
+# However, the 'default' network does not mix well with the Fedora livecd
+# when it is run inside a VM. The whole saga is documented here:
+#
+#   boxes: https://bugzilla.redhat.com/show_bug.cgi?id=1164492
+#   libvirt: https://bugzilla.redhat.com/show_bug.cgi?id=1146232
+#
+# Until a workable solution has been determined and implemented, this
+# dependency should stay disabled in rawhide and fedora development
+# branches so it does not end up on the livecd. Once a Fedora GA is
+# released, a gnome-boxes update can be pushed with this dependency
+# re-enabled. crobinso will handle this process, see:
+#
+#    https://bugzilla.redhat.com/show_bug.cgi?id=1164492#c71
 Requires:	libvirt-daemon-config-network
 
 # Needed for unattended installations
 Requires:	mtools
 Requires:	genisoimage
 
-# gnome-boxes uses a dark theme
 Requires:	adwaita-icon-theme
-Requires:	gnome-themes-standard
-Requires:	dconf
 
 %description
 gnome-boxes lets you easily create, setup, access, and use:
@@ -90,27 +117,31 @@ gnome-boxes lets you easily create, setup, access, and use:
   * When technology permits, set up access for applications on
     local virtual machines
 
-
 %prep
 %setup -q
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1449922
-%patch0 -p1 -b .use-ps2-bus-by-default
+%patch0 -p1
+%patch1 -p1 -b .use-ps2-bus-by-default
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
-%configure --enable-vala
-make %{?_smp_mflags} V=1
+%meson \
+%if %{?distributor_name:1}%{!?distributor_name:0}
+    -D distributor_name=%{distributor_name} \
+%endif
+%if 0%{?distributor_version}
+    -D distributor_version=%{distributor_version} \
+%endif
 
+%meson_build
 
 %install
-make vala-clean
-%make_install
+%meson_install
 %find_lang %{name} --with-gnome
-
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Boxes.desktop
-
 
 %post
 update-desktop-database &> /dev/null || :
@@ -128,25 +159,34 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
-
 %files -f %{name}.lang
 %license COPYING
 %doc AUTHORS README NEWS TODO
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
-%{_datadir}/appdata/org.gnome.Boxes.appdata.xml
 %{_datadir}/applications/org.gnome.Boxes.desktop
 %{_datadir}/glib-2.0/schemas/org.gnome.boxes.gschema.xml
-%{_datadir}/icons/hicolor/*/apps/gnome-boxes.*
-%{_datadir}/icons/hicolor/symbolic/apps/gnome-boxes-symbolic.svg
+%{_datadir}/icons/hicolor/*/apps/org.gnome.Boxes.png
+%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Boxes-symbolic.svg
 %{_libexecdir}/gnome-boxes-search-provider
 %{_datadir}/dbus-1/services/org.gnome.Boxes.SearchProvider.service
 %{_datadir}/dbus-1/services/org.gnome.Boxes.service
 %dir %{_datadir}/gnome-shell
 %dir %{_datadir}/gnome-shell/search-providers
 %{_datadir}/gnome-shell/search-providers/gnome-boxes-search-provider.ini
+%{_datadir}/metainfo/org.gnome.Boxes.appdata.xml
 
 %changelog
+* Mon Jul 16 2018 Felipe Borges <feborges@redhat.com> - 3.28.5-2
+- Revert using VIRTIO video adapter by default for new VMs
+- Resolves: #1595754
+
+* Fri Jun 08 2018 Debarshi Ray <rishi@fedoraproject.org> - 3.28.5-1
+- Update to 3.28.5
+- Fix the libgovirt requirement
+- Revert to using Python 2 and Tracker 1.0
+- Resolves: #1567399
+
 * Thu Jun 08 2017 Felipe Borges <feborges@redhat.com> - 3.22.4-4
 - Use PS2 bus by default
 - Related: #1449922

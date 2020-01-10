@@ -31,7 +31,7 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
         }
     }
 
-    private string collect_logs () {
+    public string collect_logs () {
         var builder = new StringBuilder ();
 
         builder.append_printf ("Broker URL: %s\n", machine.source.uri);
@@ -217,9 +217,9 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
                         empty = false;
                     } catch (GLib.Error e) {
                         var path_basename = get_utf8_basename (path);
-                        // Translators: First '%s' is filename of ISO or CD/DVD device that user selected and
-                        //              Second '%s' is name of the box.
-                        var msg = _("Insertion of '%s' as a CD/DVD into '%s' failed");
+                        // Translators: First “%s” is filename of ISO or CD/DVD device that user selected and
+                        //              Second “%s” is name of the box.
+                        var msg = _("Insertion of “%s” as a CD/DVD into “%s” failed");
                         machine.got_error (msg.printf (path_basename, machine.name));
                         debug ("Error inserting '%s' as CD into '%s': %s", path_basename, machine.name, e.message);
                     }
@@ -232,8 +232,8 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
                     button_label.set_text_with_mnemonic (_("_Select"));
                     label.set_markup (Markup.printf_escaped ("<i>%s</i>", _("empty")));
                 } catch (GLib.Error e) {
-                    // Translators: '%s' here is name of the box.
-                    machine.got_error (_("Removal of CD/DVD from '%s' failed").printf (machine.name));
+                    // Translators: “%s” here is name of the box.
+                    machine.got_error (_("Removal of CD/DVD from “%s” failed").printf (machine.name));
                     debug ("Error ejecting CD from '%s': %s", machine.name, e.message);
                 }
             }
@@ -523,6 +523,36 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
         if (machine.storage_volume == null)
             return;
 
+        List<GVir.DomainSnapshot> snapshots;
+        try {
+            snapshots = yield get_snapshots (null);
+        } catch (GLib.Error e) {
+            warning ("Error fetching snapshots for %s: %s", machine.name, e.message);
+            snapshots = new List<GVir.DomainSnapshot> ();
+        }
+
+        var num_snapshots = snapshots.length ();
+        if (num_snapshots != 0) {
+            // qemu-img doesn't support resizing disk image with snapshots:
+            // https://bugs.launchpad.net/qemu/+bug/1563931
+            var msg = ngettext ("Storage resize requires deleting associated snapshot.",
+                                "Storage resize requires deleting %llu associated snapshots.",
+                                num_snapshots).printf (num_snapshots);
+
+            Notification.OKFunc undo = () => {
+                debug ("Storage resize of '%s' cancelled by user.", machine.name);
+            };
+
+            Notification.DismissFunc really_resize = () => {
+                debug ("User did not cancel storage resize of '%s'. Deleting all snapshots..", machine.name);
+                force_change_storage_size.begin (property, value);
+            };
+
+            machine.window.notificationbar.display_for_action (msg, _("_Undo"), (owned) undo, (owned) really_resize);
+
+            return;
+        }
+
         try {
             if (machine.is_running) {
                 var disk = machine.get_domain_disk ();
@@ -555,6 +585,20 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
         }
     }
 
+    private async void force_change_storage_size (Boxes.Property property, uint64 value) {
+        try {
+            var snapshots = yield get_snapshots (null);
+
+            foreach (var snapshot in snapshots) {
+                yield snapshot.delete_async (0, null);
+            }
+
+            change_storage_size.begin (property, value);
+        } catch (GLib.Error e) {
+            warning ("Error while deleting snapshots: %s", e.message);
+        }
+    }
+
     private uint64 get_minimum_disk_size () throws GLib.Error {
         var volume_info = machine.storage_volume.get_info ();
         if (machine.vm_creator == null) {
@@ -574,8 +618,8 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
         if (minimum_resources != null && minimum_resources.storage != -1) {
             return minimum_resources.storage;
         } else {
-            var default_resources = OSDatabase.get_default_resources ();
-            return uint64.min (volume_info.capacity, default_resources.storage);
+            minimum_resources = OSDatabase.get_minimum_resources ();
+            return uint64.min (volume_info.capacity, minimum_resources.storage);
         }
     }
 
@@ -619,11 +663,11 @@ private class Boxes.LibvirtMachineProperties: GLib.Object, Boxes.IPropertiesProv
         label.mnemonic_widget = toggle;
 
         var name = machine.name;
-        box.tooltip_text = toggle.active? _("'%s' will not be paused automatically.").printf (name) :
-                                          _("'%s' will be paused automatically to save resources.").printf (name);
+        box.tooltip_text = toggle.active? _("“%s” will not be paused automatically.").printf (name) :
+                                          _("“%s” will be paused automatically to save resources.").printf (name);
         toggle.notify["active"].connect ((tooltip) => {
-            box.tooltip_text = toggle.active? _("'%s' will not be paused automatically.").printf (name) :
-                                              _("'%s' will be paused automatically to save resources.").printf (name);
+            box.tooltip_text = toggle.active? _("“%s” will not be paused automatically.").printf (name) :
+                                              _("“%s” will be paused automatically to save resources.").printf (name);
         });
 
         add_property (ref list, null, box, null);

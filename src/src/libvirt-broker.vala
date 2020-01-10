@@ -20,13 +20,13 @@ private class Boxes.LibvirtBroker : Boxes.Broker {
     }
 
     public GVir.Connection get_connection (string name) {
-        return_if_fail (broker != null);
+        return_val_if_fail (broker != null, null);
         return broker.connections.get (name);
     }
 
     public async LibvirtMachine add_domain (CollectionSource source, GVir.Connection connection, GVir.Domain domain)
                                             throws GLib.Error {
-        return_if_fail (broker != null);
+        return_val_if_fail (broker != null, null);
 
         if (pending_domains.find (domain) != null) {
             // Already being added asychronously
@@ -140,7 +140,9 @@ private class Boxes.LibvirtBroker : Boxes.Broker {
             var disk_path = (clone.vm_creator as VMImporter).source_media.device_file;
             LibvirtMachine? cloned = null;
 
-            foreach (var item in App.app.collection.items.data) {
+            for (int i = 0 ; i < App.app.collection.length ; i++) {
+                var item = App.app.collection.get_item (i);
+
                 if (!(item is LibvirtMachine))
                     continue;
 

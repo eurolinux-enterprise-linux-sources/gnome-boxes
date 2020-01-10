@@ -13,6 +13,7 @@ private class Boxes.SpiceDisplay: Boxes.Display {
             return session.uri;
         }
     }
+    public override bool can_transfer_files { get { return main_channel.agent_connected; } }
     public GLib.ByteArray ca_cert { owned get { return session.ca; } set { session.ca = value; } }
 
     private weak Machine machine; // Weak ref for avoiding cyclic ref
@@ -25,6 +26,10 @@ private class Boxes.SpiceDisplay: Boxes.Display {
     private BoxConfig.SavedProperty[] display_saved_properties;
     private BoxConfig.SavedProperty[] gtk_session_saved_properties;
     private bool closed;
+
+    private PortChannel webdav_channel;
+    private string shared_folder;
+    private GLib.Settings shared_folder_settings;
 
     private GLib.HashTable<Spice.Channel,SpiceChannelHandler> channel_handlers;
     private Display.OpenFDFunc? open_fd;
@@ -52,13 +57,15 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         session = new Session ();
         audio = Spice.Audio.get (session, null);
         gtk_session = GtkSession.get (session);
+
+        Spice.set_session_option (session);
         try {
             var manager = UsbDeviceManager.get (session);
 
             manager.device_error.connect ( (dev, err) => {
                 var device_description = dev.get_description ("%1$s %2$s");
                 var box_name = get_box_name ();
-                got_error (_("Redirection of USB device '%s' for '%s' failed").printf (device_description, box_name));
+                got_error (_("Redirection of USB device “%s” for “%s” failed").printf (device_description, box_name));
                 debug ("Error connecting %s to %s: %s", device_description, box_name, err.message);
             });
         } catch (GLib.Error error) {
@@ -82,10 +89,12 @@ private class Boxes.SpiceDisplay: Boxes.Display {
                 });
 
                 can_grab_mouse = main_channel.mouse_mode != 2;
+                new_file_transfer_id = main_channel.new_file_transfer.connect (on_new_file_transfer);
             }
     }
     ulong main_event_id;
     ulong main_mouse_mode_id;
+    ulong new_file_transfer_id;
 
     private void main_cleanup () {
         if (main_channel == null)
@@ -96,6 +105,8 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         main_event_id = 0;
         o.disconnect (main_mouse_mode_id);
         main_mouse_mode_id = 0;
+        o.disconnect (new_file_transfer_id);
+        new_file_transfer_id = 0;
         main_channel = null;
     }
 
@@ -127,6 +138,8 @@ private class Boxes.SpiceDisplay: Boxes.Display {
             session.cert_subject = GLib.Environment.get_variable ("BOXES_SPICE_HOST_SUBJECT");
 
         config.save_properties (gtk_session, gtk_session_saved_properties);
+
+        init_shared_folders ();
     }
 
     public SpiceDisplay.with_uri (Machine machine, BoxConfig config, string uri) {
@@ -138,6 +151,8 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         session.uri = uri;
 
         config.save_properties (gtk_session, gtk_session_saved_properties);
+
+        init_shared_folders ();
     }
 
     public SpiceDisplay.priv (Machine machine, BoxConfig config) {
@@ -147,6 +162,8 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         this.config = config;
 
         config.save_properties (gtk_session, gtk_session_saved_properties);
+
+        init_shared_folders ();
     }
 
     public override Gtk.Widget get_display (int n) {
@@ -234,7 +251,7 @@ private class Boxes.SpiceDisplay: Boxes.Display {
             channel_destroy_id = session.channel_destroy.connect (on_channel_destroy);
 
         session.password = password;
-        if (open_fd != null)
+        if (this.open_fd != null)
             session.open_fd (-1);
         else
             session.connect ();
@@ -257,7 +274,7 @@ private class Boxes.SpiceDisplay: Boxes.Display {
     }
 
     private void on_channel_new (Spice.Session session, Spice.Channel channel) {
-        var handler = new SpiceChannelHandler (this, channel, (owned) open_fd);
+        var handler = new SpiceChannelHandler (this, channel, open_fd);
         channel_handlers.set (channel, handler);
 
         if (channel is Spice.DisplayChannel) {
@@ -266,6 +283,9 @@ private class Boxes.SpiceDisplay: Boxes.Display {
 
             access_start ();
         }
+
+        if (channel is Spice.WebdavChannel)
+            webdav_channel = channel as Spice.PortChannel;
     }
 
     private void on_channel_destroy (Spice.Session session, Spice.Channel channel) {
@@ -275,6 +295,173 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         var display = channel as DisplayChannel;
         hide (display.channel_id);
         access_finish ();
+    }
+
+    private bool add_shared_folder (string path, string name) {
+        if (!FileUtils.test (shared_folder, FileTest.IS_DIR))
+            Posix.unlink (shared_folder);
+
+        if (!FileUtils.test (shared_folder, FileTest.EXISTS)) {
+            var ret = Posix.mkdir (shared_folder, 0755);
+
+            if (ret == -1) {
+                warning (strerror (errno));
+
+                return false;
+            }
+        }
+
+        var link_path = GLib.Path.build_filename (shared_folder, name);
+
+        var ret = GLib.FileUtils.symlink (path, link_path);
+        if (ret == -1) {
+            warning (strerror (errno));
+
+            return false;
+        }
+        add_gsetting_shared_folder (path, name);
+
+        return true;
+    }
+
+    private void remove_shared_folder (string name) {
+        if (!FileUtils.test (shared_folder, FileTest.EXISTS) || !FileUtils.test (shared_folder, FileTest.IS_DIR))
+            return;
+
+        var to_remove = GLib.Path.build_filename (shared_folder, name);
+        Posix.unlink (to_remove);
+
+        remove_gsetting_shared_folder (name);
+    }
+
+    private HashTable<string, string>? get_shared_folders () {
+        if (!FileUtils.test (shared_folder, FileTest.EXISTS) || !FileUtils.test (shared_folder, FileTest.IS_DIR))
+            return null;
+
+        var hash = new HashTable <string, string> (str_hash, str_equal);
+        try {
+            Dir dir = Dir.open (shared_folder, 0);
+            string? name = null;
+
+            while ((name = dir.read_name ()) != null) {
+                var path = Path.build_filename (shared_folder, name);
+                if (FileUtils.test (path, FileTest.IS_SYMLINK)) {
+                    var folder = GLib.FileUtils.read_link (path);
+
+                    hash[name] = folder;
+                }
+            }
+        } catch (GLib.FileError err) {
+            warning (err.message);
+        }
+
+        return hash;
+    }
+
+    private void init_shared_folders () {
+        shared_folder = GLib.Path.build_filename (GLib.Environment.get_user_config_dir (), "gnome-boxes", machine.config.uuid);
+
+        shared_folder_settings = new GLib.Settings ("org.gnome.boxes");
+        var hash = parse_shared_folders ();
+        var names = hash.get_keys ();
+        foreach (var name in names) {
+            add_shared_folder (hash[name], name);
+        }
+    }
+
+    private HashTable<string, string> parse_shared_folders () {
+        var hash = new HashTable <string, string> (str_hash, str_equal);
+
+        string shared_folders = shared_folder_settings.get_string("shared-folders");
+        if (shared_folders == "")
+            return hash;
+
+        try {
+            GLib.Variant? entry = null;
+            string uuid_str;
+            string path_str;
+            string name_str;
+
+            var variant = Variant.parse (new GLib.VariantType.array (GLib.VariantType.VARIANT), shared_folders);
+            VariantIter iter = variant.iterator ();
+            while (iter.next ("v",  &entry)) {
+                entry.lookup ("uuid", "s", out uuid_str);
+                entry.lookup ("path", "s", out path_str);
+                entry.lookup ("name", "s", out name_str);
+
+                if (machine.config.uuid == uuid_str)
+                    hash[name_str] = path_str;
+            }
+        } catch (VariantParseError err) {
+            warning (err.message);
+        }
+
+        return hash;
+    }
+
+    private void add_gsetting_shared_folder (string path, string name) {
+        var variant_builder = new GLib.VariantBuilder (new GLib.VariantType.array (VariantType.VARIANT));
+
+        string shared_folders = shared_folder_settings.get_string ("shared-folders");
+        if (shared_folders != "") {
+            try {
+                GLib.Variant? entry = null;
+
+                var variant = Variant.parse (new GLib.VariantType.array (GLib.VariantType.VARIANT), shared_folders);
+                VariantIter iter = variant.iterator ();
+                while (iter.next ("v",  &entry)) {
+                    variant_builder.add ("v",  entry);
+                }
+            } catch (VariantParseError err) {
+                warning (err.message);
+            }
+        }
+
+        var entry_variant_builder = new GLib.VariantBuilder (GLib.VariantType.VARDICT);
+
+        var uuid_variant = new GLib.Variant ("s", machine.config.uuid);
+        var path_variant = new GLib.Variant ("s", path);
+        var name_variant = new GLib.Variant ("s", name);
+        entry_variant_builder.add ("{sv}", "uuid", uuid_variant);
+        entry_variant_builder.add ("{sv}", "path", path_variant);
+        entry_variant_builder.add ("{sv}", "name", name_variant);
+        var entry_variant = entry_variant_builder.end ();
+
+        variant_builder.add ("v",  entry_variant);
+        var variant = variant_builder.end ();
+
+        shared_folder_settings.set_string ("shared-folders", variant.print (true));
+    }
+
+    private void remove_gsetting_shared_folder (string name) {
+        var variant_builder = new GLib.VariantBuilder (new GLib.VariantType.array (VariantType.VARIANT));
+
+        string shared_folders = shared_folder_settings.get_string ("shared-folders");
+        if (shared_folders == "")
+            return;
+
+        try {
+            GLib.Variant? entry = null;
+            string name_str;
+            string uuid_str;
+
+            var variant = Variant.parse (new GLib.VariantType.array (GLib.VariantType.VARIANT), shared_folders);
+            VariantIter iter = variant.iterator ();
+            while (iter.next ("v",  &entry)) {
+                entry.lookup ("uuid", "s", out uuid_str);
+                entry.lookup ("name", "s", out name_str);
+
+                if (uuid_str == machine.config.uuid && name_str == name)
+                    continue;
+
+                variant_builder.add ("v", entry);
+            }
+            variant = variant_builder.end ();
+
+            shared_folder_settings.set_string ("shared-folders", variant.print (true));
+        } catch (VariantParseError err) {
+            warning (err.message);
+        }
     }
 
     private void main_event (ChannelEvent event) {
@@ -306,6 +493,22 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         }
     }
 
+    public override void transfer_files (GLib.List<string> uris) {
+        GLib.File[] files = {};
+        foreach (string uri in uris) {
+            var file = GLib.File.new_for_uri (uri);
+            files += file;
+        }
+        files += null;
+
+        main_file_copy_async.begin (main_channel, files, FileCopyFlags.NONE, null, null);
+    }
+
+    private void on_new_file_transfer (Spice.MainChannel main_channel, Object transfer_task) {
+        DisplayPage page = machine.window.display_page;
+        page.add_transfer (transfer_task);
+    }
+
     public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page) {
         var list = new List<Boxes.Property> ();
 
@@ -333,78 +536,40 @@ private class Boxes.SpiceDisplay: Boxes.Display {
             break;
 
         case PropertiesPage.DEVICES:
-            if (!connected)
-                break;
-
             try {
                 var manager = UsbDeviceManager.get (session);
                 var devs = get_usb_devices (manager);
 
-                if (devs.length <= 0)
-                    return list;
+                if (connected && devs.length > 0) {
+                    devs.sort ( (a, b) => {
+                        string str_a = a.get_description ("    %1$s %2$s");
+                        string str_b = b.get_description ("    %1$s %2$s");
 
-                devs.sort ( (a, b) => {
-                    string str_a = a.get_description ("    %1$s %2$s");
-                    string str_b = b.get_description ("    %1$s %2$s");
+                        return strcmp (str_a, str_b);
+                    });
 
-                    return strcmp (str_a, str_b);
-                });
+                    var frame = create_usb_frame (manager, devs);
 
-                var frame = new Gtk.Frame (null);
-                var listbox = new Gtk.ListBox ();
-                listbox.hexpand = true;
-                frame.add (listbox);
+                    var usb_property = add_property (ref list, _("USB devices"), new Gtk.Label (""), frame);
 
-                for (int i = 0; i < devs.length; i++) {
-                    var dev = devs[i];
-
-                    var hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-                    hbox.margin_start = 12;
-                    hbox.margin_end = 12;
-                    hbox.margin_top = 6;
-                    hbox.margin_bottom = 6;
-                    var label = new Gtk.Label (dev.get_description ("%1$s %2$s"));
-                    label.halign = Gtk.Align.START;
-                    hbox.pack_start (label, true, true, 0);
-                    var dev_toggle = new Gtk.Switch ();
-                    dev_toggle.halign = Gtk.Align.END;
-                    hbox.pack_start (dev_toggle, true, true, 0);
-                    listbox.prepend (hbox);
-
-                    dev_toggle.active = manager.is_device_connected (dev);
-
-                    dev_toggle.notify["active"].connect ( () => {
-                        if (dev_toggle.active) {
-                            manager.connect_device_async.begin (dev, null, (obj, res) => {
-                                try {
-                                    manager.connect_device_async.end (res);
-                                } catch (GLib.Error err) {
-                                    dev_toggle.active = false;
-                                    var device_desc = dev.get_description ("%1$s %2$s");
-                                    var box_name = get_box_name ();
-                                    var msg = _("Redirection of USB device '%s' for '%s' failed");
-                                    got_error (msg.printf (device_desc, box_name));
-                                    debug ("Error connecting %s to %s: %s",
-                                           device_desc,
-                                           box_name, err.message);
-                                }
-                            });
-                        } else {
-                            manager.disconnect_device (dev);
-                        }
+                    manager.device_added.connect ((manager, dev) => {
+                        usb_property.refresh_properties ();
+                    });
+                    manager.device_removed.connect ((manager, dev) => {
+                        usb_property.refresh_properties ();
                     });
                 }
-
-                var usb_property = add_property (ref list, _("USB devices"), new Gtk.Label (""), frame);
-
-                manager.device_added.connect ((manager, dev) => {
-                    usb_property.refresh_properties ();
-                });
-                manager.device_removed.connect ((manager, dev) => {
-                    usb_property.refresh_properties ();
-                });
             } catch (GLib.Error error) {
             }
+
+            if (webdav_channel == null || !webdav_channel.port_opened)
+                break;
+
+            session.shared_dir = shared_folder;
+
+            var frame = create_shared_folders_frame ();
+            add_property (ref list, _("Folder Shares"), new Gtk.Label (""), frame);
+
             break;
         }
 
@@ -421,6 +586,9 @@ private class Boxes.SpiceDisplay: Boxes.Display {
     private GLib.GenericArray<UsbDevice> get_usb_devices (UsbDeviceManager manager) {
         GLib.GenericArray<UsbDevice> ret = new GLib.GenericArray<UsbDevice> ();
         var devs = manager.get_devices ();
+
+        if (Environment.get_variable ("BOXES_USB_REDIR_ALL") != null)
+            return devs;
 
         for (int i = 0; i < devs.length; i++) {
             var dev = devs[i];
@@ -461,6 +629,123 @@ private class Boxes.SpiceDisplay: Boxes.Display {
         return ret;
     }
 
+    private Gtk.Frame create_usb_frame (UsbDeviceManager manager, GLib.GenericArray<UsbDevice> devs) {
+        var frame = new Gtk.Frame (null);
+        var listbox = new Gtk.ListBox ();
+        listbox.hexpand = true;
+        frame.add (listbox);
+
+        for (int i = 0; i < devs.length; i++) {
+            var dev = devs[i];
+
+            var hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            hbox.margin_start = 12;
+            hbox.margin_end = 12;
+            hbox.margin_top = 6;
+            hbox.margin_bottom = 6;
+            var label = new Gtk.Label (dev.get_description ("%1$s %2$s"));
+            label.halign = Gtk.Align.START;
+            hbox.pack_start (label, true, true, 0);
+            var dev_toggle = new Gtk.Switch ();
+            dev_toggle.halign = Gtk.Align.END;
+            hbox.pack_start (dev_toggle, true, true, 0);
+            listbox.prepend (hbox);
+
+            dev_toggle.active = manager.is_device_connected (dev);
+
+            dev_toggle.notify["active"].connect ( () => {
+                if (dev_toggle.active) {
+                    manager.connect_device_async.begin (dev, null, (obj, res) => {
+                        try {
+                            manager.connect_device_async.end (res);
+                        } catch (GLib.Error err) {
+                            dev_toggle.active = false;
+                            var device_desc = dev.get_description ("%1$s %2$s");
+                            var box_name = get_box_name ();
+                              var msg = _("Redirection of USB device “%s” for “%s” failed");
+                            got_error (msg.printf (device_desc, box_name));
+                            debug ("Error connecting %s to %s: %s",
+                                   device_desc,
+                                   box_name, err.message);
+                        }
+                    });
+                } else {
+                    manager.disconnect_device (dev);
+                }
+            });
+        }
+
+        return frame;
+    }
+
+    private Gtk.Frame create_shared_folders_frame () {
+        var frame = new Gtk.Frame (null);
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        var listbox = new Gtk.ListBox ();
+        var button_plus = new Gtk.Button.from_icon_name ("list-add-symbolic", IconSize.BUTTON);
+        button_plus.halign = Gtk.Align.CENTER;
+        button_plus.get_style_context ().add_class ("flat");
+
+        box.pack_start (listbox, true, true, 0);
+        box.pack_end (button_plus, false, false, 6);
+        frame.add (box);
+
+        var popover = new SharedFolderPopover ();
+
+        button_plus.clicked.connect (() => {
+            popover.relative_to = button_plus;
+            popover.target_position = -1;
+
+            popover.popup ();
+        });
+
+        listbox.row_activated.connect ((row) => {
+            popover.relative_to = row;
+            popover.target_position = row.get_index ();
+
+            var folder_row = row as SharedFolderRow;
+            popover.file_chooser_button.set_uri ("file://" + folder_row.folder_path);
+            popover.name_entry.set_text (folder_row.folder_name);
+
+            popover.popup ();
+        });
+
+        var hash = get_shared_folders ();
+        if (hash != null) {
+            var keys = hash.get_keys ();
+            foreach (var key in keys) {
+                add_listbox_row (listbox, hash[key], key, -1);
+            }
+        }
+
+        popover.saved.connect ((path, name, target_position) => {
+            // Update previous entry
+            if (target_position != - 1) {
+                var row = listbox.get_row_at_index (target_position) as Boxes.SharedFolderRow;
+                remove_shared_folder (row.folder_name);
+            }
+
+            if (add_shared_folder (path, name))
+                add_listbox_row (listbox, path, name, target_position);
+        });
+
+        return frame;
+    }
+
+    private void add_listbox_row (Gtk.ListBox listbox, string path, string name, int target_position) {
+        var listboxrow = new SharedFolderRow (path, name);
+
+        if (target_position != -1)
+            listbox.remove (listbox.get_row_at_index (target_position));
+
+        listbox.insert (listboxrow, target_position);
+
+        listboxrow.removed.connect (() => {
+            listbox.remove (listboxrow);
+            remove_shared_folder (name);
+        });
+    }
+
     private bool is_usb_kbd_or_mouse (uint8 class, uint8 subclass, uint8 protocol) {
         var ret = false;
 
@@ -494,10 +779,10 @@ private class Boxes.SpiceChannelHandler : GLib.Object {
     private Spice.Channel channel;
     private Display.OpenFDFunc? open_fd;
 
-    public SpiceChannelHandler (SpiceDisplay display, Spice.Channel channel, owned Display.OpenFDFunc? open_fd = null) {
+    public SpiceChannelHandler (SpiceDisplay display, Spice.Channel channel, Display.OpenFDFunc? open_fd = null) {
         this.display = display;
         this.channel = channel;
-        this.open_fd = (owned) open_fd;
+        this.open_fd = open_fd;
         var id = channel.channel_id;
 
         if (open_fd != null)
@@ -512,6 +797,13 @@ private class Boxes.SpiceChannelHandler : GLib.Object {
 
             var spice_display = display.get_display (id) as Spice.Display;
             spice_display.notify["ready"].connect (on_display_ready);
+        }
+
+        if (channel is Spice.WebdavChannel) {
+            if (open_fd != null)
+                on_open_fd (channel, 0);
+            else
+                channel.connect ();
         }
     }
 
@@ -567,5 +859,30 @@ static void spice_validate_uri (string uri_as_text,
         break;
     default:
         throw new Boxes.Error.INVALID (_("Invalid URL"));
+    }
+}
+
+[GtkTemplate (ui = "/org/gnome/Boxes/ui/properties-shared-folder-row.ui")]
+private class Boxes.SharedFolderRow : Gtk.ListBoxRow {
+    public string folder_path { set; get; }
+    public string folder_name { set; get; }
+
+    public signal void removed ();
+    [GtkChild]
+    private Gtk.Label folder_path_label;
+    [GtkChild]
+    private Gtk.Label folder_name_label;
+
+    public SharedFolderRow (string path, string name) {
+        this.folder_path = path;
+        this.folder_name = name;
+
+        bind_property ("folder_path", folder_path_label, "label", BindingFlags.SYNC_CREATE);
+        bind_property ("folder_name", folder_name_label, "label", BindingFlags.SYNC_CREATE);
+    }
+
+    [GtkCallback]
+    private void on_delete_button_clicked () {
+        removed ();
     }
 }

@@ -93,6 +93,8 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     [GtkChild]
     public EmptyBoxes empty_boxes;
     [GtkChild]
+    public TroubleshootView troubleshoot_view;
+    [GtkChild]
     public Gtk.Stack below_bin;
     [GtkChild]
     private IconView icon_view;
@@ -188,9 +190,11 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
         selectionbar.setup_ui (this);
         searchbar.setup_ui (this);
         empty_boxes.setup_ui (this);
+        troubleshoot_view.setup_ui (this);
         notificationbar.searchbar = searchbar;
 
         group = new Gtk.WindowGroup ();
+        group.add_window (this);
         wizard_window = new WizardWindow (this);
         group.add_window (wizard_window);
         props_window = new PropertiesWindow (this);
@@ -231,7 +235,7 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
 
         switch (ui_state) {
         case UIState.COLLECTION:
-            if (App.app.collection.items.length != 0)
+            if (App.app.collection.length != 0)
                 below_bin.visible_child = view;
             else
                 below_bin.visible_child = empty_boxes;
@@ -264,6 +268,11 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
         case UIState.PROPERTIES:
             if (current_item != null)
                 (current_item as Machine).unschedule_autosave ();
+
+            break;
+
+        case UIState.TROUBLESHOOT:
+            below_bin.visible_child = troubleshoot_view;
 
             break;
 
@@ -301,6 +310,29 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
             set_state (UIState.PROPERTIES);
             break;
         }
+    }
+
+    public void show_send_file () {
+        var dialog = new Gtk.FileChooserDialog (
+                _("Select files to transfer"), this, Gtk.FileChooserAction.OPEN,
+                _("_Cancel"),
+                Gtk.ResponseType.CANCEL,
+                _("_Open"),
+                Gtk.ResponseType.ACCEPT);
+        dialog.select_multiple = true;
+
+        if (dialog.run () == Gtk.ResponseType.ACCEPT) {
+            SList<string> uris = dialog.get_uris ();
+
+            GLib.List<string> uris_param = null;
+            foreach (var uri in uris) {
+                uris_param.append (uri);
+            }
+
+            (current_item as Machine).display.transfer_files (uris_param);
+        }
+
+        dialog.destroy ();
     }
 
     public void connect_to (Machine machine) {
@@ -381,6 +413,17 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
         } else if (event.keyval == Gdk.Key.f &&
                    (event.state & default_modifiers) == Gdk.ModifierType.CONTROL_MASK) {
             topbar.click_search_button ();
+
+            return true;
+        } else if (event.keyval == Gdk.Key.a &&
+                   (event.state & default_modifiers) == Gdk.ModifierType.CONTROL_MASK) {
+            selection_mode = true;
+            foreach_view ((view) => { view.select_all (); });
+
+            return true;
+        } else if (event.keyval == Gdk.Key.A &&
+                   (event.state & default_modifiers) == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK) {
+            foreach_view ((view) => { view.unselect_all (); });
 
             return true;
         } else if (((direction == Gtk.TextDirection.LTR && // LTR

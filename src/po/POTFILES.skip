@@ -1,7 +1,5 @@
-data/org.gnome.Boxes.desktop.in
-# Have to list it twice because of a intltool bug
-sub/data/org.gnome.Boxes.desktop.in
-data/org.gnome.boxes.gschema.xml.in.in
+# List of source files that should *not* be translated.
+# Please keep this file sorted alphabetically.
 src/actions-popover.c
 src/app.c
 src/app-window.c
@@ -35,6 +33,7 @@ src/snapshot-list-row.c
 src/snapshots-property.c
 src/spice-display.c
 src/topbar.c
+src/transfer-info-row.c
 src/unattended-installer.c
 src/unattended-setup-box.c
 src/util-app.c

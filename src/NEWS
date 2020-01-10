@@ -1,16 +1,716 @@
-3.22.4 - Feb 6, 2017
-====================
+3.28.5 - May 24, 2018
+=====================
+
+Changes since 3.28.4
+
+  - Rename icons to match application id
+  - Build in Flatpak
+  - Use VIRTIO video adapter for new VMs
+  - Added/updated/fixed translations
+    - zh_CN
+    - Swedish
+    - Polish
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Felipe Borges <felipeborges@gnome.org>
+Mingcong Bai <jeffbai@aosc.xyz>
+Piotr Drąg <piotrdrag@gmail.com>
+
+3.28.4 - May 09, 2018
+=====================
+
+Changes since 3.28.3
+
+  - Revert filter of incompatible OS supported architectures
+
+All contributors to this release:
+
+Felipe Borges <felipeborges@gnome.org>
+
+3.28.3 - May 07, 2018
+=====================
+
+Changes since 3.28.2
+
+  - Added/updated/fixed translations
+    - Slovenian
+    - Greek
+    - Romanian
+    - Brazilian Portuguese
+
+All contributors to this release:
+
+Daniel Șerbănescu <daniel@serbanescu.dk>
+Efstathios Iosifidis <eiosifidis@gnome.org>
+Felipe Borges <felipeborges@gnome.org>
+Matej Urbančič <mateju@svn.gnome.org>
+Rafael Fontenelle <rafaelff@gnome.org>
+
+3.28.2 - Apr 10, 2018
+=====================
+
+Changes since 3.28.1
+
+  - Revert "Inhibit suspend" functionality due to breakage of
+    string freeze break.
+
+Piotr Drąg <piotrdrag@gmail.com>
+
+3.28.1 - Apr 09, 2018
+=====================
+
+Changes since 3.28.0
+
+  - Offer to download only supported architectures
+  - Inhibit suspending in various long lasting operations:
+    - Downloading media
+    - Installing (under-construction)
+    - Cloning machine
+  - Select PUBLIC by default in the Shared Folder popover
+  - Select box on child-activated in the icon view
+  - Added/updated/fixed translations
+    - Russian
+    - Croatian
+    - Afrikaans
+    - German
+    - Galician
+    - Chinese (China)
+    - Slovenian
+    - Belarusian
+    - Czech
+
+Felipe Borges <felipeborges@gnome.org>
+Florian Heiser <gnu.l10n.de@gmail.com>
+Fran Dieguez <fran@openhost.es>
+gogo <trebelnik2@gmail.com>
+Marek Cernocky <marek_cernocky@conel.cz>
+Matej Urbančič <mateju@svn.gnome.org>
+Mingcong Bai <jeffbai@aosc.xyz>
+Pieter Schalk Schoeman <pieter@sonbesie.co.za>
+Stas Solovey <whats_up@tut.by>
+Yuras Shumovich <shumovichy@gmail.com>
+
+3.28.0 - Mar 12, 2018
+=====================
+
+Changes since 3.27.92
+
+  - Resolve custom downloadable OSes logos
+  - Add EndlessOS and Pop!_OS logos
+  - Added/updated/fixed translations
+    - Hungarian
+    - French
+    - Danish
+    - British English
+    - Swedish
+
+All contributors to this release:
+
+Alan Mortensen <alanmortensen.am@gmail.com>
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Bruce Cowan <bruce@bcowan.eu>
+Felipe Borges <felipeborges@gnome.org>
+Gábor Kelemen <kelemeng@openscope.org>
+Guillaume Bernard <associations@guillaume-bernard.fr>
+Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>
+
+3.27.92 - Mar 04, 2018
+======================
+
+Changes since 3.27.90
+
+  - Drop autotools (now we build with meson only)
+  - Don't offer EOL operating systems for download
+  - Handle mime-types (allows opening ISOs w/ Boxes from file manager)
+  - Fix window grouping for multiple windows
+  - Fix showing logo while downloading an image from the internet
+  - Download logos from new source (gitlab.gnome.org/gnome/gnome-boxes-logos)
+  - Add FreeDOS logo
+  - Added/updated/fixed translations
+    - Spanish
+    - Friulian
+    - Brazilian Portuguese
+    - Polish
+    - Indonesian
+    - Turkish
+    - Chinese (Taiwan)
+    - Galician
+    - German
+    - Croatian
+    - Serbian
+    - Serbian Latin
+    - Dutch
+    - Hungarian
+    - Kazakh
+    - Korean
+    - Italian
+    - Slovak
+    - Lithuanian
+    - Czech
+
+All contributors to this release:
+
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Úr <balazs@urbalazs.hu>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Cheng-Chia Tseng <pswo10680@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Emin Tufan Çetin <etcetin@gmail.com>
+Enrico Nicoletto <liverig@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Fran Dieguez <frandieguez@gnome.org>
+gogo <trebelnik2@gmail.com>
+Iñigo Martínez <inigomartinez@gmail.com>
+Isaac F. Ferreira Filho <isaacmob@riseup.net>
+Jeremy Bicha <jbicha@ubuntu.com>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Милош Поповић <gpopac@gmail.com>
+Марко Костић <marko.m.kostic@gmail.com>
+Marek Černocký <marek@manet.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Milo Casagrande <milo@ubuntu.com>
+Nathan Follens <nathan@anche.no>
+Piotr Drąg <piotrdrag@gmail.com>
+Seong-ho Cho <shcho@gnome.org>
+
+3.27.90 - Feb 05, 2018
+======================
+
+Changes since 3.27.4
+
+  - Migrated the code base to gitlab.gnome.org
+  - Various documentation updates
+  - Fix notification dismissal that prevented Boxes from exiting
+  - Introduce selection mode keybord shortcuts
+  - Remember user credentials (keyring) for remote machines
+  - Show "oops page" when failing to connect to the backend
+  - Add DnD file transfer UI (visual feedback)
+  - Add Transfers popover to keep track of ongoing file transfers
+  - Many wizard UI/UX changes such as:
+    - Make "Select a File" a menu entry
+    - Introduce the "Download an OS" section
+    - Make it possible to search for a downloadable OS
+    - Offer to download an ISO if none is found in the filesystem
+  - Added/updated/fixed translations:
+    - Finnish
+    - Hungarian
+    - Catalan
+    - German
+    - Slovak
+    - Indonesian
+    - Brazilian Portuguese
+    - Friulian
+    - Polish
+
+All cintributors to this release:
+
+Balázs Meskó <meskobalazs@fedoraproject.org>
+Dušan Kazik <prescott66@gmail.com>
+Ernestas Kulik <ernestask@gnome.org>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Gil Forcada <gil.gnome@gmail.com>
+Iñigo Martínez <inigomartinez@gmail.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Jordi Mas <jmas@softcatala.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+Tim Sabsch <tim@sabsch.com>
+Visarion Alexandru <viorel.visarion@gmail.com>
+
+3.27.4 - Jan 09, 2018
+=====================
+
+Changes since 3.27.3
+
+  - Various build (meson) fixes and improvements
+  - Port of the IconView to GtkFlowBox
+  - Fix notification dismissal at application shutdown
+  - Added/updated/fixed translations:
+    - Russian
+    - Spanish
+    - Serbian
+    - Slovenian
+    - Friulian
+
+Dependencies changed:
+
+  - libgd (dropped)
+
+All contributors to this release:
+
+Борисав Живановић <borisavzivanovic@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Debarshi Ray <debarshir@gnome.org>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Iñigo Martínez <inigomartinez@gmail.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Pavel Grunt <pavelgrunt@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Stas Solovey <whats_up@tut.by>
+
+3.27.3 - Dec 06, 2017
+=====================
+
+Changes since 3.27.2
+
+  - Use a more convenient developers.redhat.com API end-point
+  - Port the Downloaded list to GtkListBox
+  - Introduce a flat styling for the wizard rows
+  - Set a user-agent when using the network
+  - Make the wizard content scrollable (fit small screens)
+  - Offer other operating systems for download
+  - Added/updated/fixed translations:
+    - Turkish
+    - Norwegian
+    - Lithuanian
+    - Indonesian
+    - Italian
+
+All contributors to this release:
+
+Aurimas Černius <aurisc4@gmail.com>
+Debarshi Ray <debarshir@gnome.org>
+Federico Bruni <fede@inventati.org>
+Felipe Borges <felipeborges@gnome.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Nurperi Utlu <utlunurperi@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+
+3.27.2 - Nov 13, 2017
+=====================
+
+Changes since 3.27.1
+
+  - Sufix screenshot filenames with .png
+  - Install appstream metadata at the new right location
+  - Fix enable-debug CFlags in the build machinery
+  - Don't use the default size as minimum size in the machine setup
+  - Added/updated/fixed translations:
+    - Nepali
+    - Czech
+    - Swedish
+    - Brazilian Portuguese
+    - Polish
+    - German
+    - Slovak
+    - Friulian
+    - Norwegian bokmål
+    - Italian
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Benoit Gschwind <gschwind@gnu-log.net>
+Dušan Kazik <prescott66@gmail.com>
+Fabiano Fidêncio <fabiano@fidencio.org>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Jeremy Bicha <jbicha@ubuntu.com>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Cernocky <marek_cernocky@conel.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Milo Casagrande <milo@ubuntu.com>
+Pawan Chitrakar <chautari@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+
+3.27.1 - Oct 16, 2017
+=====================
+
+Changes since 3.26.0
+
+  - Allow multiple attempts to authenticate a VNC connection
+  - Port to the Meson build system
+  - Allow keeping the media after installation
+  - Fix the logo resolution in the wizard
+  - Fix target dev name for floppy nodes
+  - Allow resize of disks with snapshots
+  - Make the wizard look closer to the mockups
+  - Introduce RHEL Developer Suite integration
+  - Added/updated/fixed translations:
+    - Swedish
+    - German
+    - Greek
+    - Russian
+    - Catalan (Valencian)
+    - Polish
+
+Dependencies changed:
+
+- libosinfo >= 1.10
+- gtk+ >= 3.22.20
+- json-glib-1.0 (NEW)
+- webkit2gtk-4.0 (NEW)
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Andre Klapper <a9016009@gmx.de>
+Christophe Fergeau <cfergeau@redhat.com>
+Debarshi Ray <debarshir@gnome.org>
+Efstathios Iosifidis <eiosifidis@gnome.org>
+Fabiano Fidêncio <fabiano@fidencio.org>
+Felipe Borges <felipeborges@gnome.org>
+Piotr Drąg <piotrdrag@gmail.com>
+Rico Tzschichholz <ricotz@ubuntu.com>
+Visarion Alexandru <viorel.visarion@gmail.com>
+Xavi Ivars <xavi.ivars@gmail.com>
+Yuri Myasoedov <ymyasoedov@yandex.ru>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.26.0 - Sept 11, 2017
+======================
+
+Changes since 3.25.91
+
+  - Fix Icon in Nepali translation
+  - Correct docs for the download method
+  - Added/updated/fixed translations:
+    - Czech
+    - Galician
+    - Polish
+    - Serbian
+    - Chinese (Taiwan)
+    - Catalan
+    - Brazilian
+    - Slovak
+    - Nepali
+    - Dutch
+    - French
+    - Danish
+    - Latvian
+    - German
+    - Italian
+    - Finnish
+    - Belarusian
+    - Korean
+    - Hungarian
+    - Basque
+    - Swedish
+    - British English
+
+All contributors to this release:
+
+Alain Lojewski <allomervan@gmail.com>
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Balázs Úr <urbalazs@gmail.com>
+Bruce Cowan <bruce@bcowan.me.uk>
+Debarshi Ray <debarshir@gnome.org
+Dušan Kazik <prescott66@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Gábor Kelemen <kelemeng@openscope.org>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Jordi Mas <jmas@softcatala.org>
+hanniedu <hannie@ubuntu-nl.org>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Milo Casagrande <milo@ubuntu.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Seong-ho Cho <shcho@gnome.org>
+Yuras Shumovich <shumovichy@gmail.com>
+
+3.25.91 - Aug 23, 2017
+======================
+
+Changes since 3.25.90
+
+ - Fixes in the gettext machinery
+ - Added/updated/fixed translations:
+   - Czech
+   - Galician
+   - Polish
+   - Serbian
+   - Chinese (Taiwan)
+
+Dependencies changed:
+
+- glib >= 2.52
+- libsoup >= 2.44
+
+All contributors to this release:
+
+Cheng-Chia Tseng <pswo10680@gmail.com>
+Debarshi Ray <debarshir@gnome.org>
+Felipe Borges <felipeborges@gnome.org>
+Fran Dieguez <frandieguez@gnome.org>
+Мирослав Николић <miroslavnikolic@rocketmail.com>
+Marek Cernocky <marek_cernocky@conel.cz>
+Piotr Drąg <piotrdrag@gmail.com>
+
+3.25.90 - Aug 07, 2017
+======================
+
+Changes since 3.25.4
+
+ - Migrate from Intltool to Gettext
+ - Deattach notifications after timeout
+ - Update TODO file
+ - Added/updated/fixed translations:
+   - Friulian
+   - Indonesian
+   - Catalan
+   - German
+   - Lithuanian
+   - Spanish
+   - Nepali
+   - Kazakh
+   - Turkish
+   - Norwegian bokmål
+   - Slovenian
+   - Czech
+
+All contributors to this release:
+
+Aurimas Černius <aurisc4@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Emin Tufan Çetin <etcetin@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Jordi Mas <jmas@softcatala.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Marek Cernocky <marek_cernocky@conel.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Pawan Chitrakar <chautari@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Thiago Mendes <tribeirom@gmail.com>
+Zeeshan Ali <zeenix@gmail.com>
+
+3.25.4 - Jul 17, 2017
+=====================
+
+Changes since 3.25.3
+
+ - Suggest 5GM RAM and 20GB of free disk in Help docs
+ - Add libtracker-sparql-2.0 to build checks
+ - Use GLib.uuid_string_random instead of libuuid
+ - Add DBus activatable service file
+ - Added/updated/fixed translations:
+   - Spanish
+   - Friulian
+   - Hungarian
+   - Belarusian
+   - Polish
+   - Catalan
+   - Indonesian
+   - Slovak
+
+Dependencies changed:
+
+ - Drop libuuid
+
+All contributors to this release:
+
+Balázs Meskó <meskobalazs@fedoraproject.org>
+Carlos Garnacho <carlosg@gnome.org>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Jordi Mas <jmas@softcatala.org>
+kerryc <kerryc@riseup.net>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Yuras Shumovich <shumovichy@gmail.com>
+
+3.25.3 - Jun 19, 2017
+=====================
+
+Changes since 3.25.2
+
+ - Add screenshot option
+ - Introduce shared folders
+ - Mark schema strings for translation
+ - Added/updated/fixed translations:
+   - Turkish
+   - Serbian
+   - German
+   - Spanish
+   - Friulian
+   - Indonesian
+   - Kazakh
+   - Norwegian
+
+All contributors to this release:
+
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>
+Kjartan Maraas <kmaraas@gnome.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Марко Костић <marko.m.kostic@gmail.com>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Visarion Alexandru <viorel.visarion@gmail.com>
+
+3.25.2 - May 22, 2017
+=====================
+
+Changes since 3.25.1
+
+ - Port auth notifications to Gtk+ revealer
+ - Update help documentation to 3.24
+ - Let GtkApplication load the appmenu
+ - Added/updated/fixed translations:
+   - Indonesian
+   - Brazilian Portuguese
+   - Slovenian
+   - Spanish
+   - German
+   - Hungarian
+
+Dependencies changed:
+
+- vala >= 0.36.0
+
+All contributors to this release:
+
+Balázs Úr <urbalazs@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Michael Hill <mdhillca@gmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+
+3.25.1 - Apr 24, 2017
+=====================
+
+Changes since 3.24.0:
+
+ - Do not expose "Read only" VNC option
+ - Keep aspect ration when scaling VNC display
+ - Drop "maximum" text at the properties dialog
+ - Allow sending ctrl+alt+del keys
+ - Set VM to run in background during install
+ - Do not transfer open_fd() ownership in spice-session
+ - Added/updated/fixed translations:
+   - Greek
+   - French
+   - Friulian
+   - Belarusian
+
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Guillaume Bernard <contact.guib@guillaume-bernard.fr>
+Julius Härtl <jus@bitgrid.net>
+Pavel Grunt <pgrunt@redhat.com>
+Soeren Grunewald <soeren.grunewald@desy.de>
+Tom Tryfonidis <tomtryf@gnome.org>
+Yuras Shumovich <shumovichy@gmail.com>
+
+3.24.0 - Mar 20, 2017
+=====================
+
+Changes since 3.23.91:
+
+ - Added/updated/fixed translations:
+   - French
+   - Chinese (Taiwan)
+   - Slovenian
+   - Korean
+   - Danish
+   - Galician
+   - Slovak
+   - Italian
+   - Russian
+   - Belarusian
+   - Turkish
+   - Latvian
+
+All contributors to this release:
+
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>
+Çağatay Yiğit Şahin <cyigitsahin@outlook.com>
+Dušan Kazik <prescott66@gmail.com>
+Fran Dieguez <frandieguez@gnome.org>
+Guillaume Bernard <contact.guib@guillaume-bernard.fr>
+Matej Urbančič <mateju@svn.gnome.org>
+Milo Casagrande <milo@ubuntu.com>
+Muhammet Kara <muhammetk@gmail.com>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Seong-ho Cho <shcho@gnome.org>
+Yuras Shumovich <shumovichy@gmail.com>
+Yuri Myasoedov <ymyasoedov@yandex.ru>
+
+3.23.91 - Feb 27, 2017
+======================
+
+Changes since 3.23.4.1:
+
+ - Fix build with vala >= 0.36
+ - Added/updated/fixed translations:
+  - Friulian
+  - Finnish
+  - Czech
+  - Swedish
+  - Basque
+  - Norwegian
+  - German
+  - Indonesian
+  - Spanish
+  - Danish
+  - Kazakh
+  - Chinese (Taiwan)
+  - Italian
+  - Brazilian Portuguese
+  - Ukrainian
+  - Lithuanian
+  - Hungarian
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Meskó <meskobalazs@fedoraproject.org>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+Flo H <gnu.l10n.de@gmail.com>
+Gianvito Cavasoli <gianvito@gmx.it>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Kukuh Syafaat <syafaatkukuh@gmail.com>
+Marek Černocký <marek@manet.cz>
+Мирослав Николић <miroslavnikolic@rocketmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+ 
+3.23.4.1 - Feb 1, 2017
+======================
 
 Unplanned release to fix a possibly exploitable vulnerability.
 
+Changes since 3.23.4:
+
+- Fix translator comments.
+- Port BoxesNotification from GdNotification to GtkRevealer.
 - Store the user password in the keyring during an express installation.
-- Fix typo in debug string in vm-configurator.
-- Fix printf format strings in the selectiontoolbar.
+- Use unicode in a new translatable string.
 - Added/updated/fixed translations:
   - Polish
-  - Brazilian Portuguese
-  - Swedish
-  - German
+  - Danish
 
 Dependencies changed:
 
@@ -18,62 +718,115 @@ libsecret-1 (new dependency)
 
 All contributors to this release:
 
-Anders Jonsson <anders.jonsson@norsjovallen.se>
-Christian Kirbach <Christian.Kirbach@gmail.com>
+Ask Hjorth Larsen <asklarsen@gmail.com>
 Debarshi Ray <debarshir@gnome.org>
-Jürg Billeter <j@bitron.ch>
+Felipe Borges <felipeborges@gnome.org>
 Piotr Drąg <piotrdrag@gmail.com>
-Rafael Fontenelle <rafaelff@gnome.org>
 
-3.22.3 - Nov 21, 2016
+3.23.4 - Jan 18, 2017
 =====================
 
-- Fix thread leaks.
-- Fix issue of primary window closing along with last secondary window.
-- Added/updated/fixed translations:
-  - Italian
+Changes since 3.23.3:
+
+- Add option groups for spice-gtk, gtk-vnc and gtk+.
+- Fix typo in debug string in vm-configurator.
+- Withdraw system notifications on exit
+
+Dependencies changed:
+
+spice-gtk >= 0.32
 
 All contributors to this release:
 
-Gianvito Cavasoli <gianvito@gmx.it>
-Sebastien Nobert <sebastien.nobert@gmail.com>
+Debarshi Ray <debarshir@gnome.org>
+Dušan Kazik <prescott66@gmail.com>
+Efstathios Iosifidis <eiosifidis@gnome.org>
+Fábio Nogueira <fnogueira@gnome.org>
+Felipe Borges <felipeborges@gnome.org>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Jordi Mas <jmas@softcatala.org>
+Rafael Fontenelle <rafaelff@gnome.org>
 Visarion Alexandru <viorel.visarion@gmail.com>
 
-3.22.2 - Nov 05, 2016
+3.23.3 - Dec 13, 2016
 =====================
 
-- Work around a libvirt-glib bug to avoid a crash during startup.
+Changes since 3.23.2:
+
+- Don't sanitize oVirt URI in ovirt-brokers.
 - Added/updated/fixed translations:
-  - Chinese (Taiwan)
-  - Finnish
-  - Friulian
-  - German
-  - Italian
-  - Norwegian bokmål
-  - Simplified Chinese (China)
+  - Hungarian
+  - Kazakh
+  - Swedish
+
+Dependencies changed:
+
+govirt >= 0.3.4
 
 All contributors to this release:
 
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Balázs Meskó <meskobalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Felipe Borges <felipeborges@gnome.org>
+
+3.23.2 - Nov 21, 2016
+=====================
+
+Changes since 3.22.0:
+
+- All fixes in 3.22.1, 3.22.2 and 3.22.3.
+- Allow sending CTRL+ALT+F3 key combo to guest (for reaching TTY3) shortcut.
+- Don't autosave live & under-installation VMs.
+- Use new Gtk+ CSS property names.
+- Re-layout custom osinfo db to comply with new libosinfo format.
+- Use latest libgd.
+- Fix some user-visible strings.
+- Allow redirection of USB mouse and keyboard if 'BOXES_USB_REDIR_ALL'
+  environment variable is set.
+- Make use of unicode in translatable strings.
+- Added/updated/fixed translations:
+  - Catalan
+  - Chinese (Taiwan)
+  - Czech
+  - Finnish
+  - French
+  - Friulian
+  - German
+  - Hungarian
+  - Italian
+  - Norwegian bokmål
+  - Polish
+  - Spanish
+
+Dependencies changed:
+
+Require Gtk+ >= 3.19.8
+
+All contributors to this release:
+
+Balázs Meskó <meskobalazs@gmail.com>
 Cédric Bosdonnat <cbosdonnat@suse.com>
+Charles Monzat <superboa@hotmail.fr>
 Cheng-Chia Tseng <pswo10680@gmail.com>
-Christian Kirbach <Christian.Kirbach@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
 Fabio Tomat <f.t.public@gmail.com>
 Gianvito Cavasoli <gianvito@gmx.it>
 Jiri Grönroos <jiri.gronroos@iki.fi>
+Jordi Mas <jmas@softcatala.org>
+Jürg Billeter <j@bitron.ch>
 Kjartan Maraas <kmaraas@gnome.org>
+Marek Cernocky <marek_cernocky@conel.cz>
+Marek Černocký <marek@manet.cz>
 Mario Blättermann <mario.blaettermann@gmail.com>
-YunQiang Su <yqsu@src.gnome.org>
-
-3.22.1 - Oct 07, 2016
-=====================
-
-- Fix some glitches on display resize.
-- Fix build agianst latest valac.
-
-All contributors to this release:
-
+Piotr Drąg <piotrdrag@gmail.com>
+Quey-Liang Kao <s101062801@m101.nthu.edu.tw>
 Rico Tzschichholz <ricotz@ubuntu.com>
-Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Sebastien Nobert <sebastien.nobert@gmail.com>
+Thomas Hindoe Paaboel Andersen <phomes@gmail.com>
+Visarion Alexandru <viorel.visarion@gmail.com>
+YunQiang Su <yqsu@src.gnome.org>
+Zeeshan Ali <zeenix@gmail.com>
 
 3.22.0 - Sep 20, 2016
 =====================

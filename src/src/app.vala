@@ -4,7 +4,9 @@ private abstract class Boxes.Broker : GLib.Object {
     // Overriding subclass should chain-up at the end of its implementation
     public virtual async void add_source (CollectionSource source) throws GLib.Error {
         var used_configs = new GLib.List<BoxConfig> ();
-        foreach (var item in App.app.collection.items.data) {
+        for (int i = 0; i < App.app.collection.length; i++) {
+            var item = App.app.collection.get_item (i);
+
             if (!(item is Machine))
                 continue;
 
@@ -21,6 +23,7 @@ private class Boxes.App: Gtk.Application {
     public const string DEFAULT_SOURCE_NAME = "QEMU Session";
 
     private List<Boxes.AppWindow> windows;
+    private List<string> system_notifications;
 
     public unowned AppWindow main_window {
         get { return (windows.length () > 0) ? windows.data : null; }
@@ -43,11 +46,13 @@ private class Boxes.App: Gtk.Application {
 
     public App () {
         application_id = "org.gnome.Boxes";
-        flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
+        flags |= ApplicationFlags.HANDLES_COMMAND_LINE | ApplicationFlags.HANDLES_OPEN;
+        resource_base_path = "/org/gnome/Boxes";
 
         app = this;
         async_launcher = AsyncLauncher.get_default ();
         windows = new List<Boxes.AppWindow> ();
+        system_notifications = new List<string> ();
         sources = new HashTable<string,CollectionSource> (str_hash, str_equal);
         brokers = new HashTable<string,Broker> (str_hash, str_equal);
         var action = new GLib.SimpleAction ("quit", null);
@@ -104,8 +109,8 @@ private class Boxes.App: Gtk.Application {
                                    "comments", _("A simple GNOME 3 application to access remote or virtual systems"),
                                    "copyright", "Copyright 2011 Red Hat, Inc.",
                                    "license-type", Gtk.License.LGPL_2_1,
-                                   "logo-icon-name", "gnome-boxes",
-                                   "version", Config.VERSION,
+                                   "logo-icon-name", "org.gnome.Boxes",
+                                   "version", Config.PACKAGE_VERSION,
                                    "website", Config.PACKAGE_URL,
                                    "wrap-license", true);
         });
@@ -119,26 +124,12 @@ private class Boxes.App: Gtk.Application {
         unowned string [] args2 = args;
         Gtk.init (ref args2);
 
-        var menu = new GLib.Menu ();
-        menu.append (_("Keyboard Shortcuts"), "win.kbd-shortcuts");
-        menu.append (_("Help"), "app.help");
-        menu.append (_("About"), "app.about");
-        menu.append (_("Quit"), "app.quit");
-
-        set_app_menu (menu);
-
         collection = new Collection ();
 
-        collection.item_added.connect ((item) => {
-            main_window.foreach_view ((view) => { view.add_item (item); });
-        });
-        collection.item_removed.connect ((item) => {
-            main_window.foreach_view ((view) => { view.remove_item (item); });
-        });
-
         brokers.insert ("libvirt", LibvirtBroker.get_default ());
-        if (Config.HAVE_OVIRT)
-            brokers.insert ("ovirt", OvirtBroker.get_default ());
+#if HAVE_OVIRT
+        brokers.insert ("ovirt", OvirtBroker.get_default ());
+#endif
 
         check_cpu_vt_capability.begin ();
         check_module_kvm_loaded.begin ();
@@ -193,10 +184,13 @@ private class Boxes.App: Gtk.Application {
         opt_uris = null;
         opt_search = null;
 
-        var parameter_string = _("- A simple application to access remote or virtual machines");
+        var parameter_string = _("— A simple application to access remote or virtual machines");
         var opt_context = new OptionContext (parameter_string);
         opt_context.add_main_entries (options, null);
-        opt_context.set_help_enabled (false);
+        opt_context.add_group (Spice.get_option_group ());
+        opt_context.add_group (Vnc.Display.get_option_group ());
+        opt_context.add_group (Gtk.get_option_group (true));
+        opt_context.set_help_enabled (true);
 
         try {
             string[] args1 = cmdline.get_arguments();
@@ -261,6 +255,17 @@ private class Boxes.App: Gtk.Application {
         return 0;
     }
 
+    public override void open (File[] _files, string hint) {
+        activate ();
+
+        File[] files = _files;
+        call_when_ready (() => {
+            foreach (File file in files) {
+                main_window.wizard_window.wizard.open_with_uri (file.get_uri ());
+            }
+        });
+    }
+
     public bool quit_app () {
         foreach (var window in windows)
             window.hide ();
@@ -286,13 +291,19 @@ private class Boxes.App: Gtk.Application {
         }
         async_launcher.await_all ();
         suspend_machines ();
+
+        // Withdraw all the existing notifications
+        foreach (var notification in system_notifications)
+            withdraw_notification (notification);
     }
 
     public void open_name (string name) {
         main_window.set_state (UIState.COLLECTION);
 
         // after "ready" all items should be listed
-        foreach (var item in collection.items.data) {
+        for (int i = 0 ; i < collection.length ; i++) {
+            var item = collection.get_item (i);
+
             if (item.name == name) {
                 main_window.select_item (item);
 
@@ -305,7 +316,9 @@ private class Boxes.App: Gtk.Application {
         main_window.set_state (UIState.COLLECTION);
 
         // after "ready" all items should be listed
-        foreach (var item in collection.items.data) {
+        for (int i = 0 ; i < collection.length ; i++) {
+            var item = collection.get_item (i);
+
             if (!(item is Boxes.Machine))
                 continue;
             var machine = item as Boxes.Machine;
@@ -398,7 +411,7 @@ private class Boxes.App: Gtk.Application {
         setup_sources.begin ();
     }
 
-    private async void setup_default_source () {
+    private async void setup_default_source () ensures (default_connection != null) {
         var path = get_user_pkgconfig_source (DEFAULT_SOURCE_NAME);
         var create_session_source = true;
         try {
@@ -427,10 +440,17 @@ private class Boxes.App: Gtk.Application {
             yield add_collection_source (source);
         } catch (GLib.Error error) {
             printerr ("Error setting up default broker: %s\n", error.message);
-            release (); // will end application
-        }
 
-        assert (default_connection != null);
+            main_window.set_state (UIState.TROUBLESHOOT);
+
+            return;
+        }
+    }
+
+    private new void send_notification (string notification_id, GLib.Notification notification) {
+        base.send_notification (notification_id, notification);
+
+        system_notifications.append (notification_id);
     }
 
     public void notify_machine_installed (Machine machine) {
@@ -440,11 +460,11 @@ private class Boxes.App: Gtk.Application {
             return;
         }
 
-        var msg = _("Box '%s' installed and ready to use").printf (machine.name);
+        var msg = _("Box “%s” installed and ready to use").printf (machine.name);
         var notification = new GLib.Notification (msg);
         notification.add_button ("Launch", "app.launch-box::" + machine.name);
 
-        send_notification (null, notification);
+        send_notification ("installed-" + machine.name, notification);
     }
 
     private async void setup_sources () {
@@ -483,7 +503,7 @@ private class Boxes.App: Gtk.Application {
         var context = new MainContext ();
 
         context.push_thread_default ();
-        foreach (var item in collection.items.data) {
+        collection.foreach_item ((item) => {
             if (item is LibvirtMachine) {
                 var machine = item as LibvirtMachine;
 
@@ -495,7 +515,7 @@ private class Boxes.App: Gtk.Application {
                     });
                 }
             }
-        }
+        });
         context.pop_thread_default ();
 
         // wait for async methods to complete
@@ -528,7 +548,7 @@ private class Boxes.App: Gtk.Application {
 
         var msg = message;
         if (msg == null)
-            msg = (num_items == 1) ? _("Box '%s' has been deleted").printf (items.data.name) :
+            msg = (num_items == 1) ? _("Box “%s” has been deleted").printf (items.data.name) :
                                      ngettext ("%u box has been deleted",
                                                "%u boxes have been deleted",
                                                num_items).printf (num_items);
@@ -584,7 +604,6 @@ private class Boxes.App: Gtk.Application {
             return quit_app ();
 
         var initial_windows_count = windows.length ();
-        bool window_was_main = (window == main_window);
 
         if (window.current_item != null)
             (window.current_item as Machine).window = null;
@@ -593,11 +612,6 @@ private class Boxes.App: Gtk.Application {
 
         windows.remove (window);
         base.remove_window (window);
-
-        // If the main window have been removed,
-        // populate the new main window's collection view.
-        if (window_was_main)
-            main_window.foreach_view ((view) => { collection.populate (view); });
 
         notify_property ("main-window");
 

@@ -10,6 +10,15 @@ public errordomain Boxes.OSDatabaseError {
 }
 
 private class Boxes.OSDatabase : GLib.Object {
+    public enum MediaURLsColumns {
+        URL = 0,  // string
+        OS = 1,   // Osinfo.Os
+
+        LAST
+    }
+
+    private const int64 MINIMAL_STORAGE = 10 * (int64) GIBIBYTES;
+
     private const int DEFAULT_VCPUS = 1;
     private const int64 DEFAULT_RAM = 2 * (int64) GIBIBYTES;
 
@@ -33,6 +42,16 @@ private class Boxes.OSDatabase : GLib.Object {
         return resources;
     }
 
+    public static Resources get_minimum_resources () {
+        var resources = new Resources ("whatever", "x86_64");
+
+        resources.n_cpus = DEFAULT_VCPUS;
+        resources.ram = DEFAULT_RAM;
+        resources.storage = MINIMAL_STORAGE;
+
+        return resources;
+    }
+
     public async void load () {
         db_loading = true;
         var loader = new Loader ();
@@ -42,7 +61,7 @@ private class Boxes.OSDatabase : GLib.Object {
             warning ("Error loading default libosinfo database: %s", e.message);
         }
         try {
-            yield App.app.async_launcher.launch (() => { loader.process_path (get_logos_db ()); }); // Load our custom database
+            yield App.app.async_launcher.launch (() => { loader.process_path (get_custom_osinfo_db ()); }); // Load our custom database
         } catch (GLib.Error e) {
             warning ("Error loading GNOME Boxes libosinfo database: %s", e.message);
         }
@@ -80,6 +99,51 @@ private class Boxes.OSDatabase : GLib.Object {
             throw new OSDatabaseError.UNKNOWN_OS_ID ("Unknown OS ID '%s'", id);
 
         return os;
+    }
+
+    public async GLib.List<Osinfo.Media> list_downloadable_oses () throws OSDatabaseError {
+        if (!yield ensure_db_loaded ())
+            throw new OSDatabaseError.DB_LOADING_FAILED ("Failed to load OS database");
+
+        int year, month, day;
+        var date_time = new DateTime.now_local ();
+        date_time.get_ymd (out year, out month, out day);
+        var now = Date ();
+        now.set_dmy ((DateDay) day, month, (DateYear) year);
+
+        var after_list = new GLib.List<Osinfo.Media> ();
+        foreach (var entity in db.get_os_list ().get_elements ()) {
+            var os = entity as Os;
+
+            if (os.get_release_status () != ReleaseStatus.RELEASED)
+                continue;
+
+            foreach (var media_entity in os.get_media_list ().get_elements ()) {
+                var media = media_entity as Media;
+
+                if (media.url == null)
+                    continue;
+
+                var eol = (os as Product).get_eol_date ();
+                if (eol == null || now.compare (eol) > 1)
+                    after_list.append (media);
+            }
+        }
+
+        // Sort list in desceding order by release date.
+        after_list.sort ((media_a, media_b) => {
+            var release_a = media_a.os.get_release_date ();
+            var release_b = media_b.os.get_release_date ();
+
+            if (release_a == null)
+                return -1;
+            else if (release_b == null)
+                return 1;
+
+            return release_b.compare (release_a);
+        });
+
+        return after_list;
     }
 
     // Returned list is in ascending order by release dates. If release date is
@@ -129,29 +193,6 @@ private class Boxes.OSDatabase : GLib.Object {
         });
 
         return after_list;
-    }
-
-    public async Gtk.ListStore get_all_media_urls_as_store () throws OSDatabaseError {
-        if (!yield ensure_db_loaded ())
-            throw new OSDatabaseError.DB_LOADING_FAILED ("Failed to load OS database");
-
-        var store = new Gtk.ListStore (1, typeof (string));
-        foreach (var entity in db.get_os_list ().get_elements ()) {
-            var os = entity as Os;
-
-            foreach (var media_entity in os.get_media_list ().get_elements ()) {
-                var media = media_entity as Media;
-
-                if (media.url != null && (media.installer || media.live)) {
-                    Gtk.TreeIter iter;
-
-                    store.append (out iter);
-                    store.set (iter, 0, media.url);
-                }
-            }
-        }
-
-        return store;
     }
 
     public Media get_media_by_id (Os os, string id) throws OSDatabaseError {

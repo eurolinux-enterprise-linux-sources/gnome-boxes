@@ -20,6 +20,12 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
     public bool can_delete { get; set; default = true; }
     public bool under_construction { get; protected set; default = false; }
 
+    private Cancellable auth_cancellable = new Cancellable ();
+    private Secret.Schema secret_auth_schema
+            = new Secret.Schema ("org.gnome.Boxes",
+                                 Secret.SchemaFlags.NONE,
+                                 "gnome-boxes-machine-uuid", Secret.SchemaAttributeType.STRING);
+
     public signal void got_error (string message);
 
     protected virtual bool should_autosave {
@@ -215,7 +221,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
                         window.set_state (Boxes.UIState.COLLECTION);
 
                     if (failed)
-                        window.notificationbar.display_error (_("Connection to '%s' failed").printf (name));
+                        window.notificationbar.display_error (_("Connection to “%s” failed").printf (name));
                 }
 
                 load_screenshot ();
@@ -406,7 +412,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             config.uuid = uuid;
 
         if (config.uuid == null)
-            config.uuid = uuid_generate ();
+            config.uuid = Uuid.string_random ();
 
         config.save ();
     }
@@ -592,6 +598,9 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
                 auth_notification.dismiss ();
             disconnect_display ();
 
+            auth_cancellable.cancel ();
+            auth_cancellable = new Cancellable ();
+
             break;
         }
     }
@@ -600,7 +609,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         try {
             yield connect_display (flags);
         } catch (Boxes.Error.RESTORE_FAILED e) {
-            var message = _("'%s' could not be restored from disk\nTry without saved state?").printf (name);
+            var message = _("“%s” could not be restored from disk\nTry without saved state?").printf (name);
             var notification = window.notificationbar.display_for_action (message, _("Restart"), () => {
                 try_connect_display.begin (flags | Machine.ConnectFlags.IGNORE_SAVED_STATE);
             });
@@ -610,15 +619,57 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         } catch (Boxes.Error.START_FAILED e) {
             warning ("Failed to start %s: %s", name, e.message);
             window.set_state (UIState.COLLECTION);
-            window.notificationbar.display_error (_("Failed to start '%s'").printf (name));
+
+            var msg = _("Failed to start “%s”").printf (name);
+            if (this is LibvirtMachine) {
+                Notification.OKFunc troubleshoot = () => {
+                    window.current_item = this;
+                    window.show_properties ();
+
+                    var logs = (this as LibvirtMachine).properties.collect_logs ();
+                    window.props_window.show_troubleshoot_log (logs);
+                };
+
+                window.notificationbar.display_for_action (msg, _("Troubleshooting Log"), (owned) troubleshoot, null);
+            } else {
+                window.notificationbar.display_error (msg);
+            }
         } catch (GLib.Error e) {
             warning ("Failed to connect to %s: %s", name, e.message);
             window.set_state (UIState.COLLECTION);
-            window.notificationbar.display_error (_("Connection to '%s' failed").printf (name));
+            window.notificationbar.display_error (_("Connection to “%s” failed").printf (name));
         }
     }
 
-    private Gd.Notification auth_notification;
+    private void store_auth_credentials () {
+        if (this.password == "" || this.password == null)
+            return;
+
+        var builder = new GLib.VariantBuilder (GLib.VariantType.VARDICT);
+
+        if (this.username != null)
+            builder.add ("{sv}", "username", new GLib.Variant ("s", this.username));
+
+        builder.add ("{sv}", "password", new GLib.Variant ("s", this.password));
+
+        var credentials_str = builder.end ().print (true);
+
+        var label = ("GNOME Boxes credentials for '%s'").printf (config.uuid);
+        Secret.password_store.begin (secret_auth_schema,
+                                     Secret.COLLECTION_DEFAULT,
+                                     label,
+                                     credentials_str,
+                                     null,
+                                     (obj, res) => {
+            try {
+                Secret.password_store.end (res);
+            } catch (GLib.Error error) {
+                warning ("Failed to store password for '%s' in the keyring: %s", config.uuid, error.message);
+            }
+        }, "gnome-boxes-machine-uuid", config.uuid);
+    }
+
+    private Boxes.AuthNotification auth_notification;
 
     private void handle_auth () {
         if (auth_notification != null)
@@ -634,20 +685,52 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             if (password != "")
                 this.password = password;
 
-            auth_notification = null;
             try_connect_display.begin ();
+
+            /* Maybe this can be an optional preference with a toggle in the UI. */
+            store_auth_credentials ();
         };
+
         Notification.DismissFunc dismiss_func = () => {
             auth_notification = null;
             window.set_state (UIState.COLLECTION);
         };
 
-        // Translators: %s => name of launched box
-        var auth_string = _("'%s' requires authentication").printf (name);
-        auth_notification = window.notificationbar.display_for_auth (auth_string,
-                                                                         (owned) auth_func,
-                                                                         (owned) dismiss_func,
-                                                                         need_username);
+        Secret.password_lookup.begin (secret_auth_schema, auth_cancellable, (obj, res) => {
+            try {
+                var parsing_error = new Boxes.Error.INVALID ("couldn't unpack a string for the machine credentials");
+                var credentials_str = Secret.password_lookup.end (res);
+                if (credentials_str == null || credentials_str == "")
+                    throw parsing_error;
+
+                try {
+                    var credentials_variant = GLib.Variant.parse (null, credentials_str, null, null);
+
+                    string username_str;
+                    credentials_variant.lookup ("username", "s", out username_str);
+                    if (username_str != null && username_str != "")
+                        this.username = username_str;
+
+                    string password_str;
+                    credentials_variant.lookup ("password", "s", out password_str);
+                    if (password_str != null && password_str != "")
+                        this.password = password_str;
+
+                    try_connect_display.begin ();
+                } catch (GLib.Error error) {
+                    throw parsing_error;
+                }
+            } catch (GLib.Error error) {
+                debug ("No credentials found in keyring. Prompting user.");
+
+                // Translators: %s => name of launched box
+                var auth_string = _("“%s” requires authentication").printf (name);
+                auth_notification = window.notificationbar.display_for_auth (auth_string,
+                                                                             (owned) auth_func,
+                                                                             (owned) dismiss_func,
+                                                                             need_username);
+            }
+        }, "gnome-boxes-machine-uuid", config.uuid);
     }
 
     public override int compare (CollectionItem other) {

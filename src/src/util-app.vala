@@ -325,20 +325,20 @@ namespace Boxes {
             pool_path = extract_xpath (standard_output, "string(/pool[@type='dir']/target/path)");
         } catch (GLib.Error error) {
             debug (error.message);
-            diagnosis = _("Could not get 'gnome-boxes' storage pool information from libvirt. Make sure 'virsh -c qemu:///session pool-dumpxml gnome-boxes' is working.");
+            diagnosis = _("Could not get “gnome-boxes” storage pool information from libvirt. Make sure “virsh -c qemu:///session pool-dumpxml gnome-boxes” is working.");
             return false;
         }
 
         if (!FileUtils.test (pool_path, FileTest.EXISTS)) {
-            diagnosis = _("%s is known to libvirt as GNOME Boxes's storage pool but this directory does not exist").printf (pool_path);
+            diagnosis = _("%s is known to libvirt as GNOME Boxes’s storage pool but this directory does not exist").printf (pool_path);
             return false;
         }
         if (!FileUtils.test (pool_path, FileTest.IS_DIR)) {
-            diagnosis = _("%s is known to libvirt as GNOME Boxes's storage pool but is not a directory").printf (pool_path);
+            diagnosis = _("%s is known to libvirt as GNOME Boxes’s storage pool but is not a directory").printf (pool_path);
             return false;
         }
         if (Posix.access (pool_path, Posix.R_OK | Posix.W_OK | Posix.X_OK) != 0) {
-            diagnosis = _("%s is known to libvirt as GNOME Boxes's storage pool but is not user-readable/writable").printf (pool_path);
+            diagnosis = _("%s is known to libvirt as GNOME Boxes’s storage pool but is not user-readable/writable").printf (pool_path);
             return false;
         }
 
@@ -561,34 +561,6 @@ namespace Boxes {
         } catch (GLib.Error error) {
             warning (error.message);
         }
-    }
-
-    namespace UUID {
-        [CCode (cname = "uuid_generate", cheader_filename = "uuid/uuid.h")]
-        internal extern static void generate ([CCode (array_length = false)] uchar[] uuid);
-        [CCode (cname = "uuid_unparse", cheader_filename = "uuid/uuid.h")]
-        internal extern static void unparse ([CCode (array_length = false)] uchar[] uuid,
-                                             [CCode (array_length = false)] uchar[] output);
-    }
-
-    string uuid_generate () {
-        var udn = new uchar[50];
-        var id = new uchar[16];
-
-        UUID.generate (id);
-        UUID.unparse (id, udn);
-
-        return (string) udn;
-    }
-
-    // shamelessly copied from gnome-documents
-    public GLib.Icon create_symbolic_emblem (string name) {
-        var pix = Gd.create_symbolic_icon (name, 128);
-
-        if (pix == null)
-            pix = new GLib.ThemedIcon (name);
-
-        return pix;
     }
 
     public Gdk.Pixbuf? paint_empty_frame (int width, int height, double radius, Gdk.RGBA border_color, Gdk.RGBA? bg_color) {

@@ -13,14 +13,20 @@ private class Boxes.DisplayPage: Gtk.Box {
     public Gtk.Label size_label;
 
     [GtkChild]
+    public Gtk.Box transfer_message_box;
+    [GtkChild]
     private EventBox event_box;
     [GtkChild]
     private DisplayToolbar overlay_toolbar;
     [GtkChild]
     private EventBox overlay_toolbar_box;
+    public Boxes.TransferPopover transfer_popover;
     private uint toolbar_hide_id;
     private uint toolbar_show_id;
     private ulong cursor_id;
+    private ulong widget_drag_motion_id = 0;
+    private ulong transfer_message_box_drag_leave_id = 0;
+    private ulong transfer_message_box_drag_motion_id = 0;
 
     private uint overlay_toolbar_invisible_timeout;
     private uint size_label_timeout;
@@ -67,6 +73,20 @@ private class Boxes.DisplayPage: Gtk.Box {
 
         toolbar.setup_ui (window);
         overlay_toolbar.setup_ui (window);
+
+        Gtk.TargetEntry[] target_list = {};
+        Gtk.TargetEntry urilist_entry = { "text/uri-list", 0, 0 };
+        target_list += urilist_entry;
+
+        drag_dest_set (transfer_message_box, Gtk.DestDefaults.DROP, target_list, DragAction.ASK);
+        transfer_popover = new Boxes.TransferPopover (window.topbar.display_toolbar);
+        transfer_popover.bind_property ("progress", window.topbar.display_toolbar, "progress", BindingFlags.DEFAULT);
+        transfer_popover.relative_to = window.topbar.display_toolbar.transfers_button;
+
+        transfer_popover.all_finished.connect (() => {
+            transfer_popover.clean_up ();
+            transfer_popover.popdown ();
+        });
     }
 
      private void update_toolbar_visible() {
@@ -76,6 +96,11 @@ private class Boxes.DisplayPage: Gtk.Box {
              toolbar.visible = false;
 
          set_overlay_toolbar_visible (false);
+     }
+
+     public void add_transfer (Object transfer_task) {
+        transfer_popover.add_transfer (transfer_task);
+        transfer_popover.popup ();
      }
 
      private void set_overlay_toolbar_visible(bool visible) {
@@ -126,6 +151,20 @@ private class Boxes.DisplayPage: Gtk.Box {
             return;
 
         remove_display ();
+
+        if (display.can_transfer_files) {
+            widget_drag_motion_id = widget.drag_motion.connect (() => {
+                transfer_message_box.visible = true;
+
+                return true;
+            });
+            transfer_message_box_drag_motion_id = transfer_message_box.drag_motion.connect (() => {
+                return true;
+            });
+            transfer_message_box_drag_leave_id = transfer_message_box.drag_leave.connect (() => {
+                transfer_message_box.hide ();
+            });
+        }
 
         this.display = display;
         mouse_grabbed_id = display.notify["mouse-grabbed"].connect(() => {
@@ -197,8 +236,23 @@ private class Boxes.DisplayPage: Gtk.Box {
             cursor_id = 0;
         }
 
-        if (widget != null)
+        if (transfer_message_box_drag_leave_id != 0) {
+            transfer_message_box.disconnect (transfer_message_box_drag_leave_id);
+            transfer_message_box_drag_leave_id = 0;
+        }
+        if (transfer_message_box_drag_motion_id != 0) {
+            transfer_message_box.disconnect (transfer_message_box_drag_motion_id);
+            transfer_message_box_drag_motion_id = 0;
+        }
+
+        if (widget != null) {
+            if (widget_drag_motion_id != 0) {
+                widget.disconnect (widget_drag_motion_id);
+                widget_drag_motion_id = 0;
+            }
+
             event_box.remove (widget);
+        }
 
         return widget;
     }
@@ -252,8 +306,8 @@ private class Boxes.DisplayPage: Gtk.Box {
         width = allocation.width;
         height = allocation.height;
 
-        // Translators: Showing size of widget as WIDTHxHEIGHT here.
-        size_label.label = _("%dx%d").printf (allocation.width, allocation.height);
+        // Translators: Showing size of widget as WIDTH×HEIGHT here.
+        size_label.label = _("%d×%d").printf (allocation.width, allocation.height);
 
         Idle.add (() => {
             // Reason to do this in Idle is that Gtk+ doesn't like us showing

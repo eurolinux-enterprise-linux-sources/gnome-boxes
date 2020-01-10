@@ -1,0 +1,27 @@
+From 9271632f42e0ba4851f47cc0c56584b8c9cdf49b Mon Sep 17 00:00:00 2001
+From: Felipe Borges <felipeborges@gnome.org>
+Date: Mon, 16 Jul 2018 16:47:23 +0200
+Subject: [PATCH] Revert "vm-configurator: Use VIRTIO video adapter for new
+ VMs"
+
+This reverts commit d05c38bb3287b1f8fea75d147f2c982b3de2f9b0.
+---
+ src/vm-configurator.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/vm-configurator.vala b/src/vm-configurator.vala
+index 3090e138..3e12cb08 100644
+--- a/src/vm-configurator.vala
++++ b/src/vm-configurator.vala
+@@ -355,7 +355,7 @@ private static void set_os_config (Domain domain, InstallerMedia install_media,
+ 
+     private static void set_video_config (Domain domain, InstallerMedia install_media) {
+         var video = new DomainVideo ();
+-        video.set_model (DomainVideoModel.VIRTIO);
++        video.set_model (DomainVideoModel.QXL);
+ 
+         domain.add_device (video);
+     }
+-- 
+2.17.1
+
