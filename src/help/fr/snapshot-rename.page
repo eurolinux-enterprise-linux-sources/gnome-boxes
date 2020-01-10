@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-rename" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Donner un nom significatif à l'instantané.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Renommer un instantané</title>
+
+  <p>Machines attribue par défaut un nom générique à l'instantané sur une base temps, du genre :</p>
+
+    <p><file>09/14/2014, 11:54:36 AM</file></p>
+
+  <p>Vous pouvez le modifier pour quelque chose de plus significatif, du style :</p>
+
+    <p><file>Fedora_22_avec_jhbuild</file> ou <file>Windows 7 plus GTK+ 3.6.4</file>.</p>
+
+  <steps>
+    <item><p>Ouvrez la <link xref="interface#properties">vue des propriétés</link> de la machine. Si la machine est ouverte, cliquez sur le bouton <gui style="button">Propriétés</gui> dans la barre d'en-têtes. Vous pouvez aussi accéder à la vue des propriétés à partir du <link xref="interface#selection">mode de sélection</link>.</p></item>
+    <item><p>Cliquez sur <gui>Instantanés</gui> dans le panneau latéral.</p></item>
+    <item><p>Sélectionnez l'instantané à renommer dans la liste.</p></item>
+    <item><p>Cliquez sur le bouton menu à droite et choisissez <gui>Renommer</gui>.</p></item>
+    <item><p>Saisissez le nom souhaité et appuyez sur <key>Entrée</key>.</p></item>
+  </steps>
+
+</page>

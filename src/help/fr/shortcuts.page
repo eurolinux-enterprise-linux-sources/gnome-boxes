@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="topic" style="task" id="shortcuts" xml:lang="fr">
+
+  <info>
+    <link type="guide" xref="index#use"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Lasse Schuirmann</name>
+      <email its:translate="no">lasse.schuirmann@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Utiliser <app>Machines</app> à l'aide des raccourcis clavier.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Raccourcis clavier</title>
+
+  <p>Différents raccourcis clavier permettent de naviguer dans <app>Machines</app>. Outre les mnémoniques, les raccourcis suivants sont disponibles :</p>
+
+  <table rules="rows" frame="top bottom">
+    <thead>
+      <tr>
+        <td>
+          <p>Action</p>
+        </td>
+        <td>
+          <p>Raccourci</p>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p>Créer une nouvelle machine virtuelle</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>N</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Basculer le mode recherche</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>F</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Reculer</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Flèche gauche</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Avancer</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Flèche droite</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Annuler</p>
+        </td>
+        <td>
+          <p><keyseq><key>Échap</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Relâcher la souris et saisir le clavier</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Alt</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Quitter <app>Machines</app></p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Q</key></keyseq></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</page>

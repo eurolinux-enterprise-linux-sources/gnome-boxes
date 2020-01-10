@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-create" xml:lang="de">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>So speichern Sie den Zustand einer Box für eine spätere Verwendung.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Einen Schnappschuss anlegen</title>
+
+  <p>Wenn Ihre virtuelle Maschine perfekt im gewünschten Zustand arbeitet, dann bietet es sich an, den Zustand zu speichern, bevor er sich z.B. durch eine Software-Aktualisierung oder einer Konfigurationsänderung verschlechtert. Ein Schnappschuss einer Box bewahrt den aktuellen Zustand und ermöglicht beliebig oft eine Rückkehr in diesen.</p>
+
+  <steps>
+    <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
+    <item><p>Klicken Sie auf <gui>Schnappschüsse</gui> in der Seitenleiste.</p></item>
+    <item><p>Klicken Sie auf <key>+</key> unterhalb der Liste <gui>Schnappschüsse</gui>.</p></item>
+  </steps>
+
+  <p>Ein Schnappschuss spiegelt den aktuellen Zustand Ihrer Box wieder. Er wird in der Liste aufgeführt.</p>
+
+</page>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="search" xml:lang="cs">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Jak se rychle dostat k boxu podle názvu.</desc>
+  </info>
+
+  <title>Vyhledání boxu</title>
+
+  <p>If there is more than one box, you can locate or filter boxes by name in
+  the <link xref="interface#collection">collection view</link> or
+  <link xref="interface#selection">selection mode</link>. Click the search
+  icon, or just start typing to initiate a search.</p>
+
+  <p>Zmáčknutím <key>Esc</key> hledání skryjete.</p>
+
+</page>

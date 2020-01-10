@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="clipboard" xml:lang="de">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>So verwenden Sie die Zwischenablage mit <app>Boxen</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Die Zwischenablage freigeben</title>
+
+  <p>Die Zwischenablage des Gastgebers kann mit dem Gast in <app>Boxen</app> gemeinsam verwendet werden.</p>
+
+  <steps>
+    <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
+    <item><p>Klicken Sie auf <gui>Anzeige</gui> in der Seitenleiste.</p></item>
+    <item><p>Schalten Sie <gui>Zwischenablage gemeinsam verwenden</gui> auf <gui>AN</gui>.</p></item>
+  </steps>
+
+</page>

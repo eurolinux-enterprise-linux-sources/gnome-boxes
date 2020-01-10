@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-create" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Enregistrer l'état d'une machine pour s'en servir plus tard.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Création d'un instantané</title>
+
+  <p>Si votre machine virtuelle fonctionne parfaitement dans une configuration voulue, il serait sans doute utile d'en enregistrer le paramétrage avant qu'elle ne se casse à la suite d'une mise à niveau logicielle ou d'un changement de configuration. En prendre un instantané enregistre son état actuel et vous permettra ensuite d'y retourner à tout moment.</p>
+
+  <steps>
+    <item><p>Ouvrez la <link xref="interface#properties">vue des propriétés</link> de la machine. Si la machine est ouverte, cliquez sur le bouton <gui style="button">Propriétés</gui> dans la barre d'en-têtes. Vous pouvez aussi accéder à la vue des propriétés à partir du <link xref="interface#selection">mode de sélection</link>.</p></item>
+    <item><p>Cliquez sur <gui>Instantanés</gui> dans le panneau latéral.</p></item>
+    <item><p>Cliquez sur <key>+</key> en-dessous de la liste des <gui>Instantanés</gui>.</p></item>
+  </steps>
+
+  <p>Un instantané de l'état actuel de votre machine est enregistré. Il s'affiche dans la liste.</p>
+
+</page>

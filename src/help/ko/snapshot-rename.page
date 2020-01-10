@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-rename" xml:lang="ko">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>스냅샷에 의미있는 이름을 부여합니다.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>스냅샷 이름 바꾸기</title>
+
+  <p>기본적으로 스냅샷은 다음과 같은 타임스탬프를 기반으로 일반적인 이름을 부여합니다:</p>
+
+    <p><file>2014/09/14, 오전 11:54:36</file></p>
+
+  <p>다음과 같이 좀 더 의미있는 어떤 이름으로 바꾸시고 싶을지도 모릅니다:</p>
+
+    <p><file>Fedora_22_with_jhbuild</file> 또는 <file>Windows 7 plus GTK+ 3.6.4</file>.</p>
+
+  <steps>
+    <item><p>Open the <link xref="interface#properties">properties view</link>
+    for the box. If the box is open, click the
+    <gui style="button">Properties</gui> button in the header bar. The
+    properties view can also be accessed from
+    <link xref="interface#selection">selection mode</link>.</p></item>
+    <item><p>가장자리 표시줄에 있는 <gui>스냅샷</gui>을 누르십시오.</p></item>
+    <item><p>목록에서 이름을 바꿀 스냅샷을 선택하십시오.</p></item>
+    <item><p>우측의 메뉴 단추를 누르고 <gui>이름 바꾸기</gui>를 선택하십시오.</p></item>
+    <item><p>원하는 이름을 입력하고 <key>Enter</key>키를 누르십시오.</p></item>
+  </steps>
+
+</page>

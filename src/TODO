@@ -1,0 +1,36 @@
+Last updated 08/2012
+This is not an exhaustive list of TODO items:
+
+* general:
+  - machine sharing (how: avahi, telepathy, others?)
+  - save passwords in gnome-keyring (code-in)
+  - better error reporting
+  - help (mallard), a11y (fix clutter-gtk)
+
+* machine/collection:
+  - remove a collection source (think of qemu:///system)
+  - spread the various screenshots in time, do not take all at the same time
+  - a rhevm/o-virt portal source collection
+  - management of groups / collections ala iOS (common widget with gnome-docs?)
+  - add avahi sources
+
+* wizard:
+  - download isos
+  - tracking install progression, in collection view
+
+* display:
+  - support for VNC logic authentication (only password right now)
+  - (spice) multi-head support
+  - spice tls port
+  - add opacity to auto-hide toolbar, fade-in - fade-out (code-in)
+    see also http://git.gnome.org/browse/gedit/commit/?id=b8a344cbd442303045602c88ed101bdb46286edd
+  - add rdp support
+  - add ssh tunnel support
+  - some day chromoting?
+
+* properties page:
+  - better content
+
+* libvirt/spice:
+  - support advanced screenshots (size and format)
+  - do not update screenshots if screensaver or disable screensaver

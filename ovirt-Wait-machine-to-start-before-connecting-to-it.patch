@@ -1,0 +1,87 @@
+From 90ab2f639a083754719c147a97631e2f8f1020a0 Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Tue, 28 Jul 2015 16:37:48 +0100
+Subject: [PATCH] ovirt: Wait machine to start before connecting to it
+
+Apparently the starting process is asynchronous in the sense that even
+after the async Ovirt.Vm.start_async() returns, the state change is not
+not guaranteed to have taken place and communicated back from server.
+This results in Boxes giving up on connecting on slower networks where
+state change (and it's communication etc) can take a few seconds.
+
+This patch tries to solve the issue by waiting for state change to
+happen for 3 seconds (more specifically, for 1 second 3 times) before
+giving up on the state change and hence connecting to it.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=752966
+---
+ src/ovirt-machine.vala | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
+
+diff --git a/src/ovirt-machine.vala b/src/ovirt-machine.vala
+index 6eae4b2..4d4449f 100644
+--- a/src/ovirt-machine.vala
++++ b/src/ovirt-machine.vala
+@@ -3,6 +3,11 @@
+ using Gtk;
+ 
+ private class Boxes.OvirtMachine: Boxes.Machine {
++    private const uint STATE_CHANGE_TIMEOUT = 1000; // 1 second
++    // We only try changing state once, this controls how many times we wait
++    // STATE_CHANGE_TIMEOUT miliseconds for state change to happen.
++    private const uint8 STATE_CHANGE_RETRIES = 3;
++
+     private Ovirt.Vm vm;
+     private Ovirt.Proxy proxy;
+ 
+@@ -31,13 +36,14 @@ public override async void connect_display (Machine.ConnectFlags flags) throws G
+         if (state == MachineState.STOPPED)
+             try {
+                 yield vm.start_async (proxy, connecting_cancellable);
+-                this.update_state ();
+             } catch (IOError.CANCELLED error) {
+                 debug ("connection to %s was cancelled", name);
+             } catch (GLib.Error error) {
+                 throw new Boxes.Error.INVALID ("Couldn't start oVirt VM '%s': %s", vm.name, error.message);
+             }
+ 
++        yield wait_for_state (MachineState.RUNNING, connecting_cancellable);
++
+         if (state != MachineState.RUNNING)
+             throw new Boxes.Error.INVALID ("oVirt VM '%s' is not RUNNING", vm.name);
+ 
+@@ -100,6 +106,31 @@ private Display create_display_connection () throws GLib.Error {
+             throw new Boxes.Error.INVALID ("unsupported display type %d for %s", vm.display.type, vm.name);
+         }
+     }
++
++    private async void wait_for_state (Machine.MachineState desired_state, Cancellable cancellable) {
++        for (var i = 0; i < STATE_CHANGE_RETRIES; i++) {
++            this.update_state ();
++
++            if (state == desired_state)
++                break;
++
++            SourceFunc callback = wait_for_state.callback;
++            Timeout.add (STATE_CHANGE_TIMEOUT, () => {
++                callback ();
++
++                return false;
++            });
++
++            yield;
++
++            if (cancellable.is_cancelled ()) {
++                debug ("connection to %s was cancelled", name);
++
++                return;
++            }
++        }
++    }
++
+     private void update_state () {
+         switch (vm.state) {
+             case VmState.UP:
+-- 
+2.4.3
+

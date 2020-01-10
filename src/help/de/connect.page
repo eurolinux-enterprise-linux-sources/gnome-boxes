@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="de">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Auf eine Box oder einen Dienst über das Netzwerk zugreifen.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Mit einem anderen Rechner verbinden</title>
+
+  <p><app>Boxen</app> kann zum Betrachten und Zugriff auf entfernte physikalische und virtuelle Maschinen verwendet werden.</p>
+
+  <note style="important">
+    <p>Die entfernte Maschine sollte bereits eingerichtet sein.</p>
+  </note>
+
+  <steps>
+    <item><p>Klicken Sie auf <gui style="button">Neu</gui> in der oberen linken Ecke, um den Assistenten zum Erstellen einer Box aufzurufen.</p></item>
+    <item><p>Eine Einführungsnachricht wird angezeigt. Klicken Sie auf <gui style="button">Weiter</gui>.</p></item>
+    <item><p>Klicken Sie auf <gui style="button">Adresse eingeben</gui> auf der <gui>Quellenauswahl</gui>-Anzeige des Assistenten.</p></item>
+
+    <item><p>Geben Sie eine Adresse bestehend aus dem Protokoll, der IP-Adresse und der Portnummer des entfernten Geräts oder Dienstes ein. Zum Beispiel:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>Das Protokoll ist:</p>
+      <list>
+        <item><p>»spice://«, um mit einem lokalen oder entfernten <app>Xspice</app>-Server zu verbinden.</p></item>
+        <item><p>»qemu://«, um mit einer »libvirt«-Instanz zu verbinden, die Ihnen Zugriff auf alle virtuellen Maschinen bietet, die sie verwahrt.</p></item>
+        <item><p>»vnc://«, um zu einem entfernten <app>vino</app>- oder <app>VNC</app>-Server zu verbinden.</p></item>
+      </list>
+      <note style="info">
+        <p>Adresse und Portnummer sollten in der Konfiguration des Gerätes oder Dienstes der entfernten Maschine ersichtlich sein. Zum Beispiel zeigt die <gui style="menu">Eigenschaften</gui>-Ansicht in <app>Boxen</app> die Adresse, die Sie zum Verbinden zu dieser Box verwenden können.</p>
+      </note>
+    </item>
+    <item><p>Klicken Sie auf <gui style="button">Weiter</gui> in der oberen rechten Ecke.</p></item>
+    <item><p>Klicken Sie auf <gui style="button">Anpassen</gui>, falls Sie die Box umbenennen möchten.</p></item>
+    <item><p>Klicken Sie auf <gui style="button">Anlegen</gui>.</p></item>
+  </steps>
+
+  <p>Die entfernte Box wird in der Sammlungsansicht geöffnet.</p>
+
+</page>

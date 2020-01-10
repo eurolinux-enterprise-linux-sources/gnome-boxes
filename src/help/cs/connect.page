@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="cs">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Jak připojit box nebo službu skrz síť.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  </info>
+
+  <title>Připojení k jinému počítači</title>
+
+  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+
+  <note style="important">
+    <p>Vzdálený stroj by již měl být nastaven.</p>
+  </note>
+
+  <steps>
+    <item><p>Klikněte na <gui style="button">Nový</gui> v levém horním rohu a spustí se průvodce vytvořením boxu.</p></item>
+    <item><p>Jako první je zobrazena úvodní informace. Klikněte na <gui style="button">Pokračovat</gui>.</p></item>
+    <item><p>Na obrazovce průvodce <gui>Výběr zdroje</gui> klikněte na <gui style="button">Zadat adresu URL</gui>.</p></item>
+
+    <item><p>Zadejte adresu URL obsahující protokol, adresu IP a číslo portu vzdáleného zařízení nebo služby. Například:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>Protokol může být:</p>
+      <list>
+        <item><p>spice:// pro připojení k místnímu nebo vzdálenému serveru <app>Xspice</app>.</p></item>
+        <item><p>qemu:// pro připojení k instanci libvirt poskytující přístup ke všem virtuálním strojům, které jsou hostovány.</p></item>
+        <item><p>vnc:// pro připojení ke vzdálenému serveru <app>vino</app> nebo <app>VNC</app>.</p></item>
+      </list>
+      <note style="info">
+        <p>Adresa a číslo portu by měli jít zjistit v nastavení zařízení nebo služby na vzdáleném stroji. Například v zobrazení <gui style="menu">Vlastností</gui> v <app>Boxech</app> uvidíte adesu URL, kterou byste použili k připojení k danému boxu.</p>
+      </note>
+    </item>
+    <item><p>Klikněte na tlačítko <gui style="button">Pokračovat</gui> v pravém horním rohu.</p></item>
+    <item><p>Pokud chcete box přejmenovat, klikněte na <gui style="button">Přizpůsobit</gui>.</p></item>
+    <item><p>Klikněte na <gui style="button">Vytvořit</gui>.</p></item>
+  </steps>
+
+  <p>Vzdálený box se otevře v zobrazení skupin.</p>
+
+</page>

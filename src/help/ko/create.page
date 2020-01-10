@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="create" xml:lang="ko">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-17" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-06" status="review"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc><gui style="button">새 박스</gui>를 눌러 박스 만들기를 시작합니다.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>박스 만들기</title>
+
+  <p><app>박스</app>를 실행했을 때 모음 보기를 열고 기존의 박스를 표시합니다. 아직 만든 박스가 없다면, 인사말에 <gui>박스가 없습니다</gui>라고 나옵니다.</p>
+
+  <steps>
+    <item><p>좌측 상단 구석의 <gui style="button">새 박스</gui>를 눌러 박스 만들기 마법사를 실행하십시오.</p></item>
+    <item><p>인사 메시지가 나타납니다. <gui style="button">계속</gui>을 누르십시오.</p></item>
+    <item><p>At the wizard's <gui>Source Selection</gui> screen, choose a source
+    to determine the type of box you want to create. A local virtual machine
+    can be created from:</p>
+
+      <list>
+        <item><p>An ISO found by <app>Boxes</app>.</p></item>
+        <item><p>Installation media on a CD/DVD/USB drive.</p></item>
+        <item><p>A local ISO file (if not found automatically above).</p></item>
+        <item><p>A URL to a remote machine (physical or virtual) through a
+        <link xref="connect">remote connection</link>.</p></item>
+      </list>
+
+      <note style="important">
+        <p>If your installation media supports <gui>Express Installation</gui>,
+        the installation will proceed without further input.</p>
+      </note>
+    </item>
+
+    <item><p>After making your selection, or providing the necessary
+    information, click <gui style="button">Continue</gui>, which will take you to 
+    the <gui>Review</gui> page.</p></item>
+    <item><p><gui style="button">사용자 정의</gui>를 눌러서 메모리 또는 디스크 크기를 조절하시거나 박스의 이름을 바꾸십시오.</p></item>
+    <item><p><gui style="button">만들기</gui>를 누르십시오.</p></item>
+  </steps>
+
+  <p>모음 보기로 돌아가서 박스 설치를 시작합니다.</p>
+
+</page>

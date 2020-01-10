@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="usb-redirection" xml:lang="cs">
+  <info>
+
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-24" status="candidate"/>
+
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Jak umožnit boxu přístup k zařízení na USB.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  </info>
+
+  <title>Přesměrování USB</title>
+
+  <p><sys>USB</sys> je protokol univerzální hardwarové sběrnice používaný k připojení všech možných zařízení k počítači. <sys>Přesměrování USB</sys> zajistí, že zařízení připojené do vašeho místního počítače bude přístupné ve stroji, který máte napojený v <app>Boxech</app>. Například flashdisk nebo kamera USB se budou jevit, jako by byli připojeny ke vzdálenému nebo virtuálnímu stroji.</p>
+
+  <steps>
+    <title>Jak v boxu povolit hostitelské zařízení USB:</title>
+    <item><p>Klikněte pravým tlačítkem na box v zobrazení skupin nebo, když je box již otevřen, klikněte na tlačítko vlastností na nástrojové liště.</p></item>
+    <item><p>V postranním panelu klikněte na <gui style="menuitem">Zařízení</gui>.</p></item>
+    <item><p>Ujistěte se, že <gui>Přesměrovat nová zařízení USB</gui> je <gui style="switch">zapnuto</gui>. <gui>Zařízení USB</gui> připojená k hostitelskému stroji jsou zobrazena v seznamu.</p></item>
+    <item><p>Přepínač u každého z požadovaných zařízení přepněte na <gui style="switch">❙</gui>.</p></item>
+  </steps>
+
+</page>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="system-requirements" xml:lang="de">
+
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Zeeshan Ali (Khattak)</name>
+      <email>zeeshanak@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Hardware-Anforderungen zum Betreiben einer virtuellen Maschine mit <app>Boxen</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Erste Schritte mit virtuellen Maschinen</title>
+
+  <p>Ihr Rechner sollte bestimme Kriterien für eine ausreichende Leistung beim Erstellen und Ausführen von virtuellen Maschinen in <app>Boxen</app> erfüllen. Diese Anforderungen sind von den Herstellern der Betriebssysteme festgelegt. <app>Boxen</app> vergibt den virtuellen Maschinen automatisch Ressourcen basierend auf den Empfehlungen der Hersteller. Falls diese Informationen nicht verfügbar sind, reserviert <app>Boxen</app> Ressourcen wie folgt:</p>
+
+  <list>
+    <item>
+      <p>20GB maximaler Speicherplatz.</p>
+      <note style="advanced">
+      <p>Das bedeutet jedoch nicht, dass <app>Boxen</app> 20 GB Speicherplatz belegt, wenn die virtuelle Maschine erstellt wird. Der wirklich von <app>Boxen</app> verwendete Platz wird weniger als (oder im schlimmsten Fall gleich viel wie) der von der virtuellen Maschine verwendete Platz sein.</p>
+      </note>
+    </item>
+    <item>
+      <p>500MB Arbeitsspeicher.</p>
+    </item>
+  </list>
+
+  <note style="advanced">
+    <p><app>Boxen</app> läuft am schnellsten, wenn der Prozessor Ihres Rechners hardwarebasierte <link xref="virtualization">Virtualisierungserweiterungen</link> unterstützt und diese im System-BIOS aktiviert sind.</p>
+  </note>
+
+</page>

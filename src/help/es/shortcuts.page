@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="topic" style="task" id="shortcuts" xml:lang="es">
+
+  <info>
+    <link type="guide" xref="index#use"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Lasse Schuirmann</name>
+      <email its:translate="no">lasse.schuirmann@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Operate <app>Boxes</app> using keyboard shortcuts.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Atajos de teclado</title>
+
+  <p>Se puede usar varios atajos del teclado para manejar Cajas. Aparte de los nemónicos, están disponibles los siguientes atajos:</p>
+
+  <table rules="rows" frame="top bottom">
+    <thead>
+      <tr>
+        <td>
+          <p>Acción</p>
+        </td>
+        <td>
+          <p>Atajo</p>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p>Crear una máquina virtual nueva</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>N</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Conmutar la búsqueda</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>F</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Retroceder</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Left</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Avanzar</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Derecha</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Cancelar</p>
+        </td>
+        <td>
+          <p><keyseq><key>Esc</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Soltar el ratón y usar el teclado</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Alt</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Salir de Cajas</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Q</key></keyseq></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</page>

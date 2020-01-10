@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="continuous" xml:lang="ko">
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>연속 디스크 이미지로 박스를 만듭니다.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>연속성 수단으로 박스 사용하기</title>
+
+  <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link>
+  is GNOME's continuous build system. Boxes is able to create a box from a
+  Continuous <em>qcow2</em> image.</p>
+
+  <steps>
+    <item><p>The latest images are found at the link provided in the
+    <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Installation</link>
+    section of the wiki page.</p>
+      <note style="info">
+        <p>이미지는 <em>런타임</em>과 <em>개발-디버깅</em> 취향에 따라 존재합니다. <em>개발-디버깅</em> 이미지는 개발자 도구와 헤더가 들어있는 가상머신입니다.</p>
+      </note>
+    </item>
+    <item><p><app>박스</app>에서, <gui style="button">새 박스</gui>를 눌러 박스 만들기 마법사를 실행하십시오.</p></item>
+    <item><p>인사 메시지가 나타납니다. <gui style="button">계속</gui>을 누르십시오.</p></item>
+    <item><p>Click <gui style="button">Enter URL</gui> and type the URL
+    including the full filename of the gzipped runtime or devel-debug qcow2
+    image. Boxes will download and install the image.</p>
+    <p>If you have already saved an image to disk, click
+    <gui style="button">Select a file</gui> and navigate to the
+    Continuous qcow2 image. Select the file and click
+    <gui style="button">Open</gui>.</p></item>
+    <item><p><gui>검토</gui> 페이지를 여십시오. <gui style="button">사용자 정의</gui>를 눌러 메모리 또는 디스크 크기를 조절하거나 박스 이름을 바꾸십시오.</p></item>
+    <item><p><gui style="button">만들기</gui>를 누르십시오. 모음 보기로 돌아가서 박스 설치를 시작합니다.</p></item>
+  </steps>
+
+  <p>연속성 가상머신 업그레이드에 필요한 정보는 <link href="https://wiki.gnome.org/Projects/GnomeContinuous">위키 페이지</link>에 있습니다.</p>
+
+</page>

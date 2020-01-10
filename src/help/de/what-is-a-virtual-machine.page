@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="topic" id="what-is-a-virtual-machine" xml:lang="de">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="why-do-i-need-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Was ist eine virtuelle Maschine?</title>
+
+  <p>Eine virtuelle Maschine ist ein simulierter Rechner, der in einem anderen Rechner läuft. Der simulierte Rechner wird oft <em>Gast</em> genannt, die echte Maschine wird <em>Gastgeber</em> genannt.</p>
+  <p>Bei <em>Virtualisierung</em> hat der Gast Zugriff auf die echte Hardware, auf welcher der Gastgeber läuft. Wenn der Gast auf vorgetäuschter Hardware läuft spricht man von <em>Emulation</em>.</p>
+
+</page>

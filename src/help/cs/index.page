@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="guide" id="index" xml:lang="cs">
+
+  <info>
+    <title role="trail" type="link">
+      <media type="image" mime="image/png" its:translate="no" height="20" src="figures/boxes_icon.png">
+      <span its:translate="yes">Boxy</span></media>
+    </title>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.12" date="2014-03-10" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email its:translate="no">baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email its:translate="no">mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Naučte se, jak nasavit místní virtuální stroj a jak se připojit k vzdálenému virtuálnímu stroji. <app>Boxy</app> můžete použít i k připojení ke vzdálené pracovní ploše.</desc>
+  </info>
+
+  <title><media type="image" mime="image/png" its:translate="no" height="36" src="figures/boxes_icon.png"/> Boxy</title>
+
+  <p><app>Boxy</app> jsou aplikace, která vám poskytuje přístup k <link xref="what-is-a-virtual-machine">virtuálním strojům</link> běžícím ať už místně nebo vzdáleně. Umožňuje také připojení k obrazovce vzdáleného počítače.</p>
+
+  <section id="start" style="2column">
+    <title>Začínáme</title>
+  </section>
+
+<!--
+  <section id="manage" style="2column">
+    <title>Managing Boxes</title>
+  </section>
+-->
+
+  <section id="use" style="2column">
+    <title>Používání Boxů</title>
+  </section>
+
+  <section id="properties" style="2column">
+    <title>Properties</title>
+  </section>
+
+  <section id="snapshots" style="2column">
+    <title>Snapshots</title>
+  </section>
+
+  <section id="faq" style="2column">
+    <title>Dotazy</title>
+  </section>
+
+  <section id="advanced" style="2column">
+    <title>Advanced topics</title>
+  </section>
+
+</page>

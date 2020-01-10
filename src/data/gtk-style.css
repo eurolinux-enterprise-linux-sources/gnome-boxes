@@ -1,0 +1,176 @@
+@define-color boxes_bg_color shade (@theme_bg_color, 0.5);
+@define-color boxes_bg2_color mix (@theme_bg_color, @boxes_bg_color, 0.5);
+@define-color boxes_selected_color #3465a4;
+
+#CollectionLabel {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.separator {
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-separator-height: 1;
+}
+
+.boxes-snapshot-list-row {
+    border-bottom: 1px solid @borders;
+}
+
+.boxes-snapshot-list-row.indicator {
+    background-color: @insensitive_fg_color;
+    border: none;
+}
+
+.boxes-snapshot-list-row.indicator.active {
+    background-color: @theme_fg_color;
+}
+
+BoxesMiniGraph {
+    background-color: @content_view_bg;
+    border-color: @borders;
+    color: @theme_fg_color;
+}
+
+.sidebar {
+    background-color: @theme_bg_color;
+    border-style: solid;
+    border-width: 0 2px 0 0;
+    border-color: @borders;
+}
+
+.sidebar GtkTreeView:selected {
+    background-color: @boxes_selected_color;
+    border-width: 2px 8px 2px 0;
+    border-color: transparent;
+    border-image-source: url("icons/boxes-arrow.svg");
+    border-image-slice: 0 8 0 0;
+    border-image-width: 2px 8px 2px 0;
+    border-image-repeat: stretch;
+    border-style: solid;
+}
+
+.sidebar GtkTreeView {
+    -GtkTreeView-vertical-separator: 8;
+}
+
+.sidebar .cell {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.transparent-bg {
+    background-color: transparent;
+    background-image: none;
+}
+
+.boxes-property-name-label {
+    color: @theme_unfocused_fg_color;
+}
+
+.boxes-step-label {
+    color: #989898;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.content-bg {
+    background-color: @content_view_bg;
+}
+
+.boxes-wizard-label {
+    color: @theme_fg_color;
+}
+
+.boxes-wizard-summary-prop-name-label {
+    color: @theme_unfocused_fg_color;
+}
+
+.boxes-wizard-media-os-label {
+    color: #d8d8d8;
+    font-weight: bold;
+}
+
+.boxes-wizard-current-page-label {
+    color: @theme_fg_color;
+}
+
+.boxes-logo-notice-label {
+    color: #989898;
+    font-style: italic;
+}
+
+.boxes-source-label {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.boxes-graph-label {
+    font-size: 8px;
+    font-family: monospace;
+    color: #989898;
+}
+
+.boxes-source-nb {
+    background-color: alpha(#fff, 0.0);
+}
+
+.boxes-selected {
+    background-color: @boxes_selected_color;
+}
+
+.boxes-product-key-entry {
+    font-family: monospace;
+}
+
+/* Ensure the viewport is transparent so the background don't
+   show through the rounded corners */
+.boxes-menu GtkViewport {
+    background-image: none;
+    background-color: transparent;
+    border-style: none;
+}
+
+.boxes-menu-row {
+    -GtkWidget-focus-line-width: 0;
+    border-style: ridge none none none;
+    border-color: shade (@boxes_bg2_color, 0.7);
+    border-width: 2px 0 0 0;
+    box-shadow: none;
+    border-image: none;
+    background-image: none;
+    background-color: @boxes_bg2_color;
+    border-radius: 0;
+}
+
+.boxes-menu-row:nth-child(first) {
+    border-radius: 15px 15px 0 0;
+    border-style: none;
+}
+
+.boxes-menu-scrolled .boxes-menu-row:nth-child(first) {
+    border-radius: 0;
+}
+
+.boxes-menu > .boxes-menu-row:nth-child(last) {
+    border-radius: 0 0 15px 15px;
+}
+
+.boxes-menu-row:prelight, .boxes-menu-row:focus {
+    background-color: shade (@boxes_bg2_color, 1.2);
+}
+
+.boxes-menu-row:active {
+    background-color: @theme_selected_bg_color;
+}
+
+.boxes-menu-row *:active {
+    color: #ffffff;
+}
+
+.boxes-toplevel {
+    background-color: @theme_bg_color;
+}
+
+.boxes-empty-image {
+    icon-shadow: 0 -1px rgba(0,0,0,0.5);
+}

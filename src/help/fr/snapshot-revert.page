@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-revert" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Revenir à l'état d'un instantané enregistré.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Retour à l'état antérieur d'une machine</title>
+
+  <p>Le <em>Retour</em> à un instantané antérieur restaure l'état de la machine à cet instant là.</p>
+
+  <steps>
+    <item><p>Ouvrez la <link xref="interface#properties">vue des propriétés</link> de la machine. Si la machine est ouverte, cliquez sur le bouton <gui style="button">Propriétés</gui> dans la barre d'en-têtes. Vous pouvez aussi accéder à la vue des propriétés à partir du <link xref="interface#selection">mode de sélection</link>.</p></item>
+    <item><p>Cliquez sur <gui>Instantanés</gui> dans le panneau latéral.</p></item>
+    <item><p>Dans la liste, sélectionnez l'instantané vers lequel revenir.</p></item>
+    <item><p>Cliquez sur le bouton menu à droite et appuyez sur <gui>Retourner à cet état</gui>.</p></item>
+  </steps>
+
+  <p>Les modifications apportées à la machine postérieurement à la date d'enregistrement de l'instantané sont ignorées.</p>
+
+</page>

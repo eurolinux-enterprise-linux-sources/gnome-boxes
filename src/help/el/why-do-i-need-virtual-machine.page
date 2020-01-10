@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="why-do-i-need-virtual-machine" xml:lang="el">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="what-is-a-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Θάνος Τρυφωνίδης</mal:name>
+      <mal:email>tomtryf@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Maria Mavridou</mal:name>
+      <mal:email>mavridou@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Γιατί χρειάζομαι μια εικονική μηχανή;</title>
+
+  <p>Μια εικονική μηχανή μπορεί να είναι χρήσιμη όταν θελήσετε να χρησιμοποιήσετε εφαρμογές που εκτελούνται μόνο σε άλλο λειτουργικό σύστημα, για παράδειγμα σε Microsoft Windows™. Μια εικονική μηχανή μπορεί να χρησιμοποιηθεί κατά τη διάρκεια της ανάπτυξης λογισμικού, για τον έλεγχο του σε φυσικό περιβάλλον</p>
+
+</page>

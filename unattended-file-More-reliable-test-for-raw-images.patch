@@ -1,0 +1,36 @@
+From 9a93e4b1adb38224ab62fc046112f2b9f56b05be Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Fri, 17 Jul 2015 16:32:09 +0100
+Subject: [PATCH] unattended-file: More reliable test for raw images
+
+The issue with checking if content type is
+"application/x-raw-disk-image", is that it fails on systems with slighly
+older shared-mime-info where the content_type is detected as
+"application-octetstream".
+---
+ src/unattended-file.vala | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/unattended-file.vala b/src/unattended-file.vala
+index 02aa92e..fbc8b76 100644
+--- a/src/unattended-file.vala
++++ b/src/unattended-file.vala
+@@ -66,8 +66,13 @@ private async void copy_with_mcopy (string       disk_file,
+     private static bool is_libarchive_compatible (string filename) {
+         // FIXME: We need better way to determine libarchive compatibility cause mcopy is used
+         //        if this function returns false and mcopy can only handle MS-DOS images while
+-        //        libarchive can handle other types of disk images
+-        return GLib.ContentType.guess (filename, null, null) != "application/x-raw-disk-image";
++        //        libarchive can handle other types of disk images.
++        //
++        //        Just in case you get the idea to compare the content_type to
++        //        "application/x-raw-disk-image", that's what we were doing but then it failed
++        //        on systems with slighly older shared-mime-info where the content_type is
++        //        detected as 'application-octetstream'.
++        return !filename.has_suffix (".img") && !filename.has_suffix (".IMG");
+     }
+ }
+ 
+-- 
+2.4.3
+

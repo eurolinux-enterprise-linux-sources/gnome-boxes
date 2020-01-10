@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="topic" id="what-is-a-virtual-machine" xml:lang="ko">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="why-do-i-need-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>가상 머신이란 무엇인가요?</title>
+
+  <p>가상 머신은 다른 컴퓨터 안에서 실행하는 시뮬레이션 컴퓨터입니다. 시뮬레이션 컴퓨터는 보통 <em>게스트</em>라고 하고, 실제 머신은 <em>호스트</em>라고 합니다.</p>
+  <p><em>가상화</em>를 활용하면, 게스트는 호스트가 동작하는 실체 하드웨어에 접근합니다. 게스트가 가짜 하드웨어에서 실행할 수 있다면 <em>에뮬레이션</em>이라고 칭합니다.</p>
+
+</page>

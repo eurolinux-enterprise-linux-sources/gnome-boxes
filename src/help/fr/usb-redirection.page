@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="usb-redirection" xml:lang="fr">
+  <info>
+
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-24" status="candidate"/>
+
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Permettre à la machine d'accéder à un périphérique USB.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Redirection USB</title>
+
+  <p><sys>USB</sys> est un protocole de bus matériel universel utilisé pour le branchement de toutes sortes de périphériques sur votre ordinateur local. La <sys>redirection USB</sys> rend les périphériques branchés sur votre ordinateur local accessibles aux machines auxquelles vous êtes connecté par <app>Machines</app>. Par exemple, un disque flash USB ou une webcam apparaissent comme directement connectés à l'ordinateur distant ou virtuel.</p>
+
+  <steps>
+    <title>Activation de périphériques USB hôtes dans une machine :</title>
+    <item><p>Faites un clic droit sur la machine dans la fenêtre de collection, ou, si la machine est déjà ouverte, cliquez sur le bouton des propriétés dans la barre d'outils.</p></item>
+    <item><p>Cliquez sur <gui style="menuitem">Périphériques</gui> dans le panneau latéral.</p></item>
+    <item><p>Assurez-vous que <gui>Rediriger les nouveaux périphériques USB</gui> est activé. Les <gui>Périphériques USB</gui> connectés à la machine hôte sont affichés dans une liste.</p></item>
+    <item><p>Basculez l'interrupteur proche de chaque périphérique voulu sur <gui style="switch">Activé</gui>.</p></item>
+  </steps>
+
+</page>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="pt-BR">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Acesse uma máquina ou serviço pela rede.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Rafael Ferreira</mal:name>
+      <mal:email>rafael.f.f1@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Conectando a outro computador</title>
+
+  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+
+  <note style="important">
+    <p>A máquina remota deveria já estar configurada.</p>
+  </note>
+
+  <steps>
+    <item><p>Clique em <gui style="button">Nova</gui> no canto superior esquerdo para lançar o assistente de criação da máquina.</p></item>
+    <item><p>Uma mensagem introdutória é exibida. Clique em <gui style="button">Continuar</gui>.</p></item>
+    <item><p>Na tela de <gui>Seleção de fonte</gui> do assistente, clique em <gui style="button">Inserir URL</gui>.</p></item>
+
+    <item><p>Insira uma URL contendo o protocolo, endereço IP e número de porta do serviço ou dispositivo remoto. Por exemplo:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>O protocolo será:</p>
+      <list>
+        <item><p>spice:// para conectar a um servidor <app>Xspice</app> local e remoto.</p></item>
+        <item><p>qemu:// para conectar a uma instância libvirt fornecendo acesso a todas máquina virtuais hospedadas.</p></item>
+        <item><p>vnc:// para conectar a um servidor <app>vino</app> ou <app>VNC</app> remoto.</p></item>
+      </list>
+      <note style="info">
+        <p>O endereço e número de porta deve estar disponível da configuração do dispositivo ou serviço na máquina remota. Por exemplo, o visão <gui style="menu">Propriedades</gui> no <app>Boxes</app> fornece a URL que você usaria para conectar àquela máquina.</p>
+      </note>
+    </item>
+    <item><p>Clique em <gui style="button">Continuar</gui> no canto superior direito.</p></item>
+    <item><p>Clique em <gui style="button">Personalizar</gui> se você deseja renomear a máquina.</p></item>
+    <item><p>Clique em <gui style="button">Criar</gui>.</p></item>
+  </steps>
+
+  <p>A máquina remota vai abrir na visão de coleções.</p>
+
+</page>

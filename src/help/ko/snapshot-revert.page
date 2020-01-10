@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-revert" xml:lang="ko">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>저장한 스냅샷 상태로 되돌립니다.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>박스 상태 되돌리기</title>
+
+  <p>스냅샷으로 <em>되돌리기</em>는 스냅샷으로 저장한 가상 머신의 상태로 되돌립니다.</p>
+
+  <steps>
+    <item><p>Open the <link xref="interface#properties">properties view</link>
+    for the box. If the box is open, click the
+    <gui style="button">Properties</gui> button in the header bar. The
+    properties view can also be accessed from
+    <link xref="interface#selection">selection mode</link>.</p></item>
+    <item><p>가장자리 표시줄에 있는 <gui>스냅샷</gui>을 누르십시오.</p></item>
+    <item><p>되돌릴 스냅샷을 목록에서 선택하십시오.</p></item>
+    <item><p>우측의 메뉴 단추를 누르고 <gui>이 상태로 되돌리기</gui>를 선택하십시오.</p></item>
+  </steps>
+
+  <p>저장한 이후의 가상 머신에서 바뀐 내용이 없어집니다.</p>
+
+</page>

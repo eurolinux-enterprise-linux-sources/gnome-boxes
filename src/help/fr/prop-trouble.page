@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="prop-trouble" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#properties"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Identifier les problèmes de votre machine grâce au journal de dépannage.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Affichage du journal de dépannage d'une machine</title>
+
+  <p>Si une machine ne démarre pas ou fonctionne mal, des indications vous permettant de résoudre le problème se trouvent dans le journal de dépannage. Celui-ci affiche l'état de la machine virtuelle, sa configuration libvirt et le journal de l'hyperviseur QEMU.</p>
+
+  <steps>
+    <item><p>Ouvrez la <link xref="interface#properties">vue des propriétés</link> de la machine. Si la machine est ouverte, cliquez sur le bouton <gui style="button">Propriétés</gui> dans la barre d'en-têtes. Vous pouvez aussi accéder à la vue des propriétés à partir du <link xref="interface#selection">mode de sélection</link>.</p></item>
+    <item><p>Cliquez sur <gui>Système</gui> dans le panneau latéral.</p></item>
+    <item><p>Cliquez sur le bouton <gui style="button">Journal de dépannage</gui> pour l'afficher.</p></item>
+  </steps>
+
+</page>

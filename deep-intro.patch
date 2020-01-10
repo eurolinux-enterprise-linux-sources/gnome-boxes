@@ -1,0 +1,11 @@
+diff -up gnome-boxes-3.14.3.1/data/ui/wizard.ui.deep-intro gnome-boxes-3.14.3.1/data/ui/wizard.ui
+--- gnome-boxes-3.14.3.1/data/ui/wizard.ui.deep-intro	2015-08-19 13:12:15.903504193 -0400
++++ gnome-boxes-3.14.3.1/data/ui/wizard.ui	2015-08-19 13:11:55.410148987 -0400
+@@ -40,6 +40,7 @@
+                 <property name="wrap">True</property>
+                 <!-- Work around clutter size allocation issue (bz#677260) -->
+                 <property name="max-width-chars">40</property>
++                <property name="width-chars">20</property>
+                 <property name="use-markup">True</property>
+                 <property name="label" translatable="yes">Creating a Box will allow you to use another operating system directly from your existing login.
+ 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">org.gnome.Boxes.desktop</id>
+  <licence>CC0</licence>
+  <summary>Simple remote and virtual machines</summary>
+  <description>
+    <_p>
+      A simple GNOME 3 application to access remote or virtual systems. Unlike
+      some other virtual machine management software, Boxes is targeted towards
+      typical desktop end-users. For this reason, Boxes will not provide many
+      advanced options to tweak virtual machines. Instead Boxes will focus on
+      getting things working out of the box with very little input from user.
+    </_p>
+    <_p>
+      You want to install Boxes if you just want a very safe and easy way to try
+      out new operating systems or new (potentially unstable) versions of your
+      favorite operating system(s), or need to connect to a remote machine (for
+      example, in your office).
+    </_p>
+  </description>
+  <screenshots>
+    <screenshot type="default" width="800" height="485">http://people.gnome.org/~zeeshanak/screenshots/gnome-boxes-wizard-menu.png</screenshot>
+    <screenshot width="800" height="485">http://people.gnome.org/~zeeshanak/screenshots/gnome-boxes-wizard-setup.png</screenshot>
+    <screenshot width="800" height="485">http://people.gnome.org/~zeeshanak/screenshots/gnome-boxes-winxp-display.png</screenshot>
+    <screenshot width="800" height="485">http://people.gnome.org/~zeeshanak/screenshots/gnome-boxes-collection.png</screenshot>
+    <screenshot width="800" height="485">http://people.gnome.org/~zeeshanak/screenshots/gnome-boxes-selection.png</screenshot>
+ </screenshots>
+  <url type="homepage">http://live.gnome.org/Apps/Boxes</url>
+  <updatecontact>zeeshanak_at_src.gnome.org</updatecontact>
+</application>

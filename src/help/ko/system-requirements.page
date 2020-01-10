@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="system-requirements" xml:lang="ko">
+
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Zeeshan Ali (Khattak)</name>
+      <email>zeeshanak@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>하드웨어는 <app>박스</app> 가상 머신 실행이 필요합니다.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Seong-ho Cho</mal:name>
+      <mal:email>shcho@gnome.org</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>가상 머신 시작하기</title>
+
+  <p><app>박스</app>에서 가상 머신을 만들고 실행할 때 최상의 성능에 대한 각각의 기준을 충족해야 합니다. 이들 요구 조건은 운영체제 제조사에서 지정했습니다. <app>박스</app>는 제조사 추천에 따라 가상 머신에 자원을 자동으로 할당합니다. <app>박스</app>에 이런 정보가 없다면 다음 내용을 할당합니다:</p>
+
+  <list>
+    <item>
+      <p>최대 저장소 용량 20GB.</p>
+      <note style="advanced">
+      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
+         when creating the virtual machine. The actual disk space used by
+         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
+         space used by the virtual machine itself.</p>
+      </note>
+    </item>
+    <item>
+      <p>RAM 500MB.</p>
+    </item>
+  </list>
+
+  <note style="advanced">
+    <p><app>Boxes</app> performs best if your computer processor supports
+    hardware <link xref="virtualization">virtualization extensions</link> and
+    these are enabled in the system BIOS.</p>
+  </note>
+
+</page>

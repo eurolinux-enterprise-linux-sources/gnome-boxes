@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="system-requirements" xml:lang="el">
+
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Zeeshan Ali (Khattak)</name>
+      <email>zeeshanak@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Θάνος Τρυφωνίδης</mal:name>
+      <mal:email>tomtryf@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Maria Mavridou</mal:name>
+      <mal:email>mavridou@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Ξεκινώντας με τις εικονικές μηχανές</title>
+
+  <p>Ο υπολογιστής σας θα πρέπει να πληρεί ορισμένα κριτήρια για καλύτερη απόδοση κατά την δημιουργία και την εκτέλεση εικονικών μηχανών στα <app>Πλασία</app>. Αυτές οι απαιτήσεις καθορίζονται από τους κατασκευαστές των λειτουργικών συστημάτων. Η εφαρμογή <app>Πλασία</app> κατανέμει αυτόματα τους πόρους στις εικονικές μηχανές με βάση τις συστάσεις του κατασκευαστή. Όταν δεν είναι διαθέσιμες αυτές οι πληροφορίες τα <app>Πλασία</app> κατανέμουν τα ακόλουθα:</p>
+
+  <list>
+    <item>
+      <p>20 GB μέγιστου αποθηκευτικού χώρου.</p>
+      <note style="advanced">
+      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
+         when creating the virtual machine. The actual disk space used by
+         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
+         space used by the virtual machine itself.</p>
+      </note>
+    </item>
+    <item>
+      <p>500 MB μνήμης RAM.</p>
+    </item>
+  </list>
+
+  <note style="advanced">
+    <p><app>Boxes</app> performs best if your computer processor supports
+    hardware <link xref="virtualization">virtualization extensions</link> and
+    these are enabled in the system BIOS.</p>
+  </note>
+
+</page>

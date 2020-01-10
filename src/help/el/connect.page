@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="el">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Αποκτήστε πρόσβαση σε ένα πλαίσιο ή μια υπηρεσία μέσω του δικτύου.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Θάνος Τρυφωνίδης</mal:name>
+      <mal:email>tomtryf@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Maria Mavridou</mal:name>
+      <mal:email>mavridou@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Σύνδεση σε άλλον υπολογιστή</title>
+
+  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+
+  <note style="important">
+    <p>Το απομακρυσμένο σύστημα θα πρέπει να είναι ήδη ρυθμισμένο.</p>
+  </note>
+
+  <steps>
+    <item><p>Πατήστε <gui style="button">Νέο</gui> στην πάνω αριστερή γωνία για να εκκινήσετε τον οδηγό δημιουργίας ενός πλαισίου.</p></item>
+    <item><p>Εμφανίζεται ένα εισαγωγικό μήνυμα. Κάντε κλικ στο κουμπί <gui style="button">Συνέχεια</gui>.</p></item>
+    <item><p>Στην οθόνη <gui>Επιλογή πηγής</gui> του οδηγού ρύθμισης, κάντε κλικ στο <gui style="button">Εισάγετε URL</gui>.</p></item>
+
+    <item><p>Πληκτρολογήστε ένα URL όπου περιέχει το πρωτόκολλο, μια διεύθυνση IP και τον αριθμό θύρας για την απομακρυσμένη συσκευή ή υπηρεσία. Για παράδειγμα:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>Το πρωτόκολλο θα είναι:</p>
+      <list>
+        <item><p>spice:// για να συνδεθείτε σε έναν τοπικό ή απομακρυσμένο διακομιστή <app>Xspice</app>.</p></item>
+        <item><p>qemu:// για να συνδεθείτε σε ένα σύστημα libvirt παρέχοντας πρόσβαση σε όλες τις εικονικές μηχανές που φιλοξενεί.</p></item>
+        <item><p>vnc:// για να συνδεθείτε σε έναν απομακρυσμένο διακομιστή <app>vino</app> ή <app>VNC</app>.</p></item>
+      </list>
+      <note style="info">
+        <p>Η διεύθυνση και ο αριθμός θύρας θα πρέπει να είναι διαθέσιμα από την ρύθμιση της συσκευής ή της υπηρεσίας στον απομακρυσμένο υπολογιστή. Για παράδειγμα, οι <gui style="menu">Προτιμήσεις</gui> στα <app>Πλαίσια</app> παρέχουν ένα URL που μπορείτε να χρησιμοποιήσετε για να συνδεθείτε σε αυτό το πλαίσιο.</p>
+      </note>
+    </item>
+    <item><p>Κάντε κλικ στη <gui style="button">Συνέχεια</gui> στην πάνω δεξιά γωνία.</p></item>
+    <item><p>Αν θέλετε να μετονομάσετε το πλαίσιο κάντε κλικ στην <gui style="button">Προσαρμογή</gui></p></item>
+    <item><p>Πατήστε <gui style="button">Δημιουργία</gui>.</p></item>
+  </steps>
+
+  <p>Το απομακρυσμένο πλαίσιο θα ανοίξει στην προβολή συλλογής.</p>
+
+</page>

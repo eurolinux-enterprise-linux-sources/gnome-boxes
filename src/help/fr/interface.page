@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="interface" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-23" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Explorer l'application.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>L'interface de Machines</title>
+
+  <section id="collection">
+  <title>La fenêtre de collection</title>
+
+  <p>Au premier lancement de <app>Machines</app>, la page d'accueil vous demande de cliquer sur le bouton <gui style="button">Nouveau</gui> pour créer votre première machine. Lors des visites ultérieures, <app>Machines</app> s'ouvre sur la <em>fenêtre de collection</em> qui affiche dans une grille les miniatures des machines installées. Les favoris ou les machines souvent utilisées se trouvent en début de liste. La fenêtre de collection permet de :</p>
+
+  <list>
+    <item><p>cliquer sur <gui style="button">Nouveau</gui> pour débuter la création d'une machine,</p></item>
+    <item><p>cliquer sur une machine pour en lancer une session virtuelle,</p></item>
+    <item><p><link xref="search">Rechercher</link> une machine,</p></item>
+    <item><p>cocher la case ou sélectionner une machine pour ouvrir le mode de sélection.</p></item>
+  </list>
+
+  </section>
+
+  <section id="wizard">
+  <title>L'assistant</title>
+
+  <p>Cliquer sur <gui style="button">Nouveau</gui> démarre l'<em>assistant</em> qui vous guide à travers le processus de création d'une machine.</p>
+
+  </section>
+
+  <section id="selection">
+  <title>Mode sélection</title>
+
+  <p>Dans la fenêtre de collection, cocher la case ou cliquer droit sur une miniature vous fait passer en <em>mode sélection</em>, où diverses opérations sur les machines sont possibles, individuellement ou en groupes. Vous pouvez alors :</p>
+
+  <list>
+    <item><p><link xref="delete">Supprimer</link> une ou plusieurs machines,</p></item>
+    <item><p>marquer une ou plusieurs machines comme favorites,</p></item>
+    <item><p>mettre une machine en pause,</p></item>
+    <item><p>ouvrir une machine dans une nouvelle fenêtre.</p></item>
+    <item><p>Cliquez sur le bouton <gui style="button">Propriétés</gui> pour ouvrir la fenêtre des propriétés d'une machine.</p></item>
+  </list>
+
+  </section>
+
+  <section id="properties">
+  <title>Fenêtre des propriétés</title>
+
+  <p>Cliquer sur le bouton <gui style="button">Propriétés</gui> en mode sélection ouvre la <em>fenêtre des propriétés</em>, où certaines informations sur une machine peuvent être configurées. La fenêtre principale affiche le nom de la machine, le virtualiseur en service et l'URI à utiliser pour accéder à la machine en dehors de <app>Machines</app>. De plus, le panneau latéral affiche :</p>
+
+  <list>
+    <item><p>une capture d'écran de la machine,</p></item>
+    <item><p>les courbes de charge du processeur, des entrées et sorties disque et de l'activité du réseau,</p></item>
+    <item><p>le bouton <gui style="button">Forcer l'arrêt</gui>, qui vous vous permet de <link xref="shutdown">forcer une machine à s'arrêter</link>.</p></item>
+  </list>
+
+  <p>La fenêtre principale des propriétés vous permet d'afficher ou modifier des paramètres en fonction du choix de la catégorie que vous faites dans le panneau latéral :</p>
+
+  <list>
+    <item><p>les paramètres <gui>Système</gui> : la mémoire, le maximum d'espace disque autorisé et le <gui>Journal de dépannage</gui>,</p></item>
+    <item><p>les paramètres d'<gui>Affichage</gui> : le protocole d'affichage, le partage du presse-papiers, le redimensionnement de l'affichage,</p></item>
+    <item><p>les paramètres des <gui>Périphériques</gui> : l'accès du système à l'USB ou au CD/DVD,</p></item>
+    <item><p>les paramètres des <gui>Instantanés</gui> : la <link xref="snapshot-create">création</link> et la gestion des instantanés de la machine.</p></item>
+  </list>
+
+  <p>La fenêtre des propriétés est aussi accessible par le bouton <gui style="button">Personnaliser</gui> de l'assistant d'installation, ou encore par le bouton situé dans la barre d'en-têtes d'une session ouverte.</p>
+
+  </section>
+
+</page>

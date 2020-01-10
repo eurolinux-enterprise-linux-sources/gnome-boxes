@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="es">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Acceder a una caja o servicio en la red.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Conectarse a otro equipo</title>
+
+  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+
+  <note style="important">
+    <p>La máquina remota debe estar configurada.</p>
+  </note>
+
+  <steps>
+    <item><p>Pulse <gui style="button">Nueva</gui> en la esquina superior izquierda para lanzar el asistente de creación de cajas.</p></item>
+    <item><p>Se muestra un mensaje introductorio. Pulse <gui style="button">Continuar</gui>.</p></item>
+    <item><p>En la pantalla <gui>Selección de la fuente</gui>, pulse <gui style="button">Introducir URL</gui>.</p></item>
+
+    <item><p>Introduzca un URL que contenga el protocolo, la dirección IP y el número de puerto del dispositivo remoto o del servicio. Por ejemplo:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>El protocolo será:</p>
+      <list>
+        <item><p>spice:// para conectarse a un servidor <app>Xspice</app> local o remoto.</p></item>
+        <item><p>qemu:// para conectarse a una instancia de libvirt que proporcione acceso a todas las máquinas virtuales que aloja.</p></item>
+        <item><p>vnc:// para conectarse a un servidor <app>vino</app> o <app>VNC</app> remotos.</p></item>
+      </list>
+      <note style="info">
+        <p>La dirección y el número del puerto deben estar disponibles en la configuración del dispositivo o del servicio en la máquina remota. Por ejemplo, la vista de <gui style="menu">Propiedades</gui> en <app>Cajas</app> proporciona el URL que debe usar para conectarse a esa caja.</p>
+      </note>
+    </item>
+    <item><p>Pulse <gui style="button">Continuar</gui> en la esquina superior derecha.</p></item>
+    <item><p>Pulse <gui style="button">Personalizar</gui> si quiere renombrar la caja.</p></item>
+    <item><p>Pulse <gui style="button">Crear</gui>.</p></item>
+  </steps>
+
+  <p>La caja remota se abrirá en la vista de colecciones</p>
+
+</page>

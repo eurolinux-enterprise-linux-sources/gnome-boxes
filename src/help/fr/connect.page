@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Accéder à une machine ou à un service sur le réseau.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Connexion à un autre ordinateur</title>
+
+  <p><app>Machines</app> peut être utilisé pour afficher et accéder à une machine distante physique ou virtuelle.</p>
+
+  <note style="important">
+    <p>La machine distante doit être déjà configurée.</p>
+  </note>
+
+  <steps>
+    <item><p>Cliquez sur <gui style="button">Nouveau</gui> dans le coin en haut à gauche pour lancer l'assistant de création de machine.</p></item>
+    <item><p>Un message d'introduction s'affiche. Cliquez sur <gui style="button">Continuer</gui>.</p></item>
+    <item><p>Dans l'écran <gui>Sélection de la source de l'assistant</gui>, cliquez sur <gui style="button">Saisissez l'URL</gui>.</p></item>
+
+    <item><p>Saisissez un URL contenant le protocole, l'adresse IP et le numéro de port du périphérique ou du service distant. Par exemple :</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>Le protocole est :</p>
+      <list>
+        <item><p>spice:// pour se connecter à un serveur <app>Xspice</app> local ou distant.</p></item>
+        <item><p>qemu:// pour se connecter à une instance libvirt fournissant un accès à toutes les machines virtuelles qu'elle héberge.</p></item>
+        <item><p>vnc:// pour se connecter à un serveur <app>vino</app> ou <app>VNC</app> distant.</p></item>
+      </list>
+      <note style="info">
+        <p>L'adresse et le numéro de port sont normalement disponibles dans la configuration du périphérique ou du service sur la machine distante. Par exemple, la fenêtre <gui style="menu">Propriétés</gui> dans <app>Machines</app> fournit l'URL à utiliser pour se connecter à cette machine.</p>
+      </note>
+    </item>
+    <item><p>Cliquez sur <gui style="button">Continuer</gui> dans le coin en haut à droite.</p></item>
+    <item><p>Cliquez sur <gui style="button">Personnaliser</gui> pour renommer la machine.</p></item>
+    <item><p>Cliquez sur <gui style="button">Créer</gui>.</p></item>
+  </steps>
+
+  <p>La machine distante s'ouvre dans la fenêtre de collection.</p>
+
+</page>

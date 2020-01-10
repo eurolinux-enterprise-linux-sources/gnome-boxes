@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="topic" id="what-is-a-virtual-machine" xml:lang="cs">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="why-do-i-need-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  </info>
+
+  <title>Co je to virtální stroj?</title>
+
+  <p>Virtuální stroj je simulovaný počítač běžící uvnitř jiného počítače. Simulovaný počítač je často nazýván jako <em>host</em>, zatímco skutečný počítač jako <em>hostitel</em>.</p>
+  <p>Díky <em>virtualizaci</em> má host přístup ke skutečnému hardwaru, na kterém běží hostitel. Pokud host používá falešný hardware, jedná se o <em>emulaci</em>.</p>
+
+</page>

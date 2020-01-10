@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="clipboard" xml:lang="fr">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Utiliser le presse-papiers avec <app>Machines</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Julien Hardelin</mal:name>
+      <mal:email>jhardlin@orange.fr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alain Lojewski</mal:name>
+      <mal:email>allomervan@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Partage du presse-papiers</title>
+
+  <p>Dans <app>Machines</app>, le presse-papiers de la machine hôte peut être partagé avec l'invité.</p>
+
+  <steps>
+    <item><p>Ouvrez la <link xref="interface#properties">vue des propriétés</link> de la machine. Si la machine est ouverte, cliquez sur le bouton <gui style="button">Propriétés</gui> dans la barre d'en-têtes. Vous pouvez aussi accéder à la vue des propriétés à partir du <link xref="interface#selection">mode de sélection</link>.</p></item>
+    <item><p>Cliquez sur <gui>Afficher</gui> dans le panneau latéral.</p></item>
+    <item><p>Basculez l'interrupteur <gui>Partager le presse-papiers</gui> sur <gui>Activé</gui>.</p></item>
+  </steps>
+
+</page>

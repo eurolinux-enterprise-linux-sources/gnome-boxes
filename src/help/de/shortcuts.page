@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="topic" style="task" id="shortcuts" xml:lang="de">
+
+  <info>
+    <link type="guide" xref="index#use"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Lasse Schuirmann</name>
+      <email its:translate="no">lasse.schuirmann@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>So bedienen Sie <app>Boxen</app> mit Hilfe von Tastenkombinationen.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Tastenkombinationen</title>
+
+  <p>Verschiedene Tastaturkombinationen können zur Bedienung von Boxen verwendet werden. Neben Mnemonics stehen die folgenden Tastenkombinationen zur Verfügung:</p>
+
+  <table rules="rows" frame="top bottom">
+    <thead>
+      <tr>
+        <td>
+          <p>Aktion</p>
+        </td>
+        <td>
+          <p>Tastenkombination</p>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p>Neue virtuelle Maschine erstellen</p>
+        </td>
+        <td>
+          <p><keyseq><key>Strg</key><key>N</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Suchleiste ein-/ausblenden</p>
+        </td>
+        <td>
+          <p><keyseq><key>Strg</key><key>F</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Zurück gehen</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>←</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Vor gehen</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>→</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Abbrechen</p>
+        </td>
+        <td>
+          <p><keyseq><key>Escape</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Maus- und Tastatureinfang freigeben</p>
+        </td>
+        <td>
+          <p><keyseq><key>Strg</key><key>Alt</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Boxen beenden</p>
+        </td>
+        <td>
+          <p><keyseq><key>Strg</key><key>Q</key></keyseq></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</page>

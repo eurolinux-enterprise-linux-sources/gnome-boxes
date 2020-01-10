@@ -1,0 +1,271 @@
+From 95b3cb3c134e5afc4f9b6f805aa65db6f46d966f Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Wed, 19 Nov 2014 00:46:51 +0000
+Subject: [PATCH] Private SPICE connection
+
+This is a squash of all patches that:
+
+* connect to local VMs through FD.
+* add TCP-less SPICE device to new VMs.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=738573
+---
+ src/display.vala                    |  6 ++++--
+ src/libvirt-machine-properties.vala |  2 +-
+ src/libvirt-machine.vala            | 27 ++++++++++++++++++++++-----
+ src/spice-display.vala              | 28 ++++++++++++++++++++++++----
+ src/vm-configurator.vala            | 18 ++++++++++++++----
+ src/vnc-display.vala                |  4 ++--
+ 6 files changed, 67 insertions(+), 18 deletions(-)
+
+diff --git a/src/display.vala b/src/display.vala
+index ffe1b0e..ba06ef0 100644
+--- a/src/display.vala
++++ b/src/display.vala
+@@ -3,7 +3,7 @@
+ 
+ private abstract class Boxes.Display: GLib.Object, Boxes.IPropertiesProvider {
+     public abstract string protocol { get; }
+-    public abstract string uri { owned get; }
++    public abstract string? uri { owned get; }
+ 
+     public BoxConfig? config { get; set; }
+     public bool can_grab_mouse { get; protected set; }
+@@ -19,6 +19,8 @@
+     public signal void disconnected (bool connection_failed);
+     public signal void got_error (string message);
+ 
++    public delegate int OpenFDFunc ();
++
+     public abstract Gtk.Widget get_display (int n);
+     public abstract Gdk.Pixbuf? get_pixbuf (int n) throws Boxes.Error;
+     public abstract void set_enable_inputs (Gtk.Widget widget, bool enable);
+@@ -28,7 +30,7 @@ public virtual bool should_keep_alive () {
+         return false;
+     }
+ 
+-    public abstract void connect_it () throws GLib.Error;
++    public abstract void connect_it (OpenFDFunc? open_fd = null) throws GLib.Error;
+     public abstract void disconnect_it ();
+ 
+     public virtual void collect_logs (StringBuilder builder) {
+diff --git a/src/libvirt-machine-properties.vala b/src/libvirt-machine-properties.vala
+index 657875a..9dd2b3c 100644
+--- a/src/libvirt-machine-properties.vala
++++ b/src/libvirt-machine-properties.vala
+@@ -131,7 +131,7 @@ private string collect_logs () {
+             });
+ 
+             add_string_property (ref list, _("Virtualizer"), machine.source.uri);
+-            if (machine.display != null)
++            if (machine.display != null && machine.display.uri != null)
+                 property = add_string_property (ref list, _("URI"), machine.display.uri);
+             break;
+ 
+diff --git a/src/libvirt-machine.vala b/src/libvirt-machine.vala
+index 22532b6..d22b664 100644
+--- a/src/libvirt-machine.vala
++++ b/src/libvirt-machine.vala
+@@ -48,7 +48,20 @@ public override async void connect_display (Machine.ConnectFlags flags) throws G
+         }
+ 
+         if (update_display ()) {
+-            display.connect_it ();
++            Display.OpenFDFunc? open_fd = null;
++
++            if (source.uri.has_prefix ("qemu+unix"))
++                open_fd = () => {
++                    try {
++                        return domain.open_graphics_fd (0, 0);
++                    } catch (GLib.Error error) {
++                        critical ("Failed to open graphics for %s: %s", name, error.message);
++
++                        return -1;
++                    }
++                };
++
++            display.connect_it (open_fd);
+         } else {
+             show_display ();
+             display.set_enable_audio (true);
+@@ -337,23 +350,27 @@ public bool update_display () throws GLib.Error {
+     }
+ 
+     private Display? create_display () throws Boxes.Error {
+-        string type, port, socket, host;
++        string type, port_str, socket, host;
+ 
+         var xmldoc = domain_config.to_xml ();
+         type = extract_xpath (xmldoc, "string(/domain/devices/graphics/@type)", true);
+-        port = extract_xpath (xmldoc, @"string(/domain/devices/graphics[@type='$type']/@port)");
++        port_str = extract_xpath (xmldoc, @"string(/domain/devices/graphics[@type='$type']/@port)");
+         socket = extract_xpath (xmldoc, @"string(/domain/devices/graphics[@type='$type']/@socket)");
+         host = extract_xpath (xmldoc, @"string(/domain/devices/graphics[@type='$type']/@listen)");
++        var port = int.parse (port_str);
+ 
+         if (host == null || host == "")
+             host = "localhost";
+ 
+         switch (type) {
+         case "spice":
+-            return new SpiceDisplay (this, config, host, int.parse (port));
++            if (port > 0)
++                return new SpiceDisplay (this, config, host, port);
++            else
++                return new SpiceDisplay.priv (this, config);
+ 
+         case "vnc":
+-            return new VncDisplay (config, host, int.parse (port));
++            return new VncDisplay (config, host, port);
+ 
+         default:
+             throw new Boxes.Error.INVALID ("unsupported display of type " + type);
+diff --git a/src/spice-display.vala b/src/spice-display.vala
+index da97e5a..485d561 100644
+--- a/src/spice-display.vala
++++ b/src/spice-display.vala
+@@ -4,7 +4,7 @@
+ 
+ private class Boxes.SpiceDisplay: Boxes.Display {
+     public override string protocol { get { return "SPICE"; } }
+-    public override string uri { owned get { return session.uri; } }
++    public override string? uri { owned get { return session.uri; } }
+     public GLib.ByteArray ca_cert { owned get { return session.ca; } set { session.ca = value; } }
+ 
+     private weak Machine machine; // Weak ref for avoiding cyclic ref
+@@ -124,6 +124,15 @@ public SpiceDisplay (Machine machine, BoxConfig config, string host, int port, i
+         session.uri = uri;
+     }
+ 
++    public SpiceDisplay.priv (Machine machine, BoxConfig config) {
++        this.machine = machine;
++        machine.notify["ui-state"].connect (ui_state_changed);
++
++        this.config = config;
++
++        config.sync_properties (gtk_session, gtk_session_sync_properties);
++    }
++
+     public override Gtk.Widget get_display (int n) {
+         var display = displays.lookup (n) as Spice.Display;
+ 
+@@ -204,7 +213,7 @@ public override void collect_logs (StringBuilder builder) {
+         }
+     }
+ 
+-    public override void connect_it () {
++    public override void connect_it (Display.OpenFDFunc? open_fd = null) {
+         // We only initiate connection once
+         if (connected)
+             return;
+@@ -212,11 +221,19 @@ public override void connect_it () {
+ 
+         main_cleanup ();
+ 
+-        // FIXME: vala does't want to put this in ctor..
++        // FIXME: vala does't want to put this in constructor..
+         if (channel_new_id == 0)
+             channel_new_id = session.channel_new.connect ((channel) => {
+                 var id = channel.channel_id;
+ 
++                if (open_fd != null)
++                    channel.open_fd.connect (() => {
++                        int fd;
++
++                        fd = open_fd ();
++                        channel.open_fd (fd);
++                    });
++
+                 if (channel is Spice.MainChannel) {
+                     main_channel = channel as Spice.MainChannel;
+                     main_event_id = main_channel.channel_event.connect (main_event);
+@@ -251,7 +268,10 @@ public override void connect_it () {
+             });
+ 
+         session.password = password;
+-        session.connect ();
++        if (open_fd != null)
++            session.open_fd (-1);
++        else
++            session.connect ();
+     }
+ 
+     public override void disconnect_it () {
+diff --git a/src/vm-configurator.vala b/src/vm-configurator.vala
+index 6b8f9c6..0e567c0 100644
+--- a/src/vm-configurator.vala
++++ b/src/vm-configurator.vala
+@@ -68,10 +68,7 @@ public static Domain create_domain_config (InstallerMedia install_media, string
+         set_target_media_config (domain, target_path, install_media);
+         install_media.setup_domain_config (domain);
+ 
+-        var graphics = new DomainGraphicsSpice ();
+-        graphics.set_autoport (true);
+-        graphics.set_image_compression (DomainGraphicsSpiceImageCompression.OFF);
+-        domain.add_device (graphics);
++        add_graphics_device (domain);
+ 
+         // SPICE agent channel. This is needed for features like copy&paste between host and guest etc to work.
+         var channel = new DomainChannel ();
+@@ -245,9 +242,12 @@ public static async void update_existing_domain (Domain          domain,
+         // First remove user and 'network' (used by system libvirt machines) interface device
+         GLib.List<GVirConfig.DomainDevice> devices = null;
+         DomainInterface iface = null;
++        DomainGraphicsSpice graphics = null;
+         foreach (var device in domain.get_devices ()) {
+             if (device is DomainInterfaceUser || device is DomainInterfaceNetwork)
+                 iface = device as DomainInterface;
++            else if (device is DomainGraphicsSpice)
++                graphics = device as DomainGraphicsSpice;
+             else
+                 devices.prepend (device);
+         }
+@@ -259,6 +259,9 @@ public static async void update_existing_domain (Domain          domain,
+             var virtio = iface.get_model () == "virtio";
+             add_network_interface (domain, true, virtio);
+         }
++
++        if (graphics != null)
++            add_graphics_device (domain);
+     }
+ 
+     public static void set_target_media_config (Domain         domain,
+@@ -468,6 +471,13 @@ public static void add_network_interface (Domain domain, bool bridge, bool virti
+         domain.add_device (iface);
+     }
+ 
++    public static void add_graphics_device (Domain domain) {
++        var graphics = new DomainGraphicsSpice ();
++        graphics.set_autoport (false);
++        graphics.set_image_compression (DomainGraphicsSpiceImageCompression.OFF);
++        domain.add_device (graphics);
++    }
++
+     private static DomainControllerUsb create_usb_controller (DomainControllerUsbModel model,
+                                                               DomainControllerUsb?     master = null,
+                                                               uint                     index = 0,
+diff --git a/src/vnc-display.vala b/src/vnc-display.vala
+index 67213ff..ccf3973 100644
+--- a/src/vnc-display.vala
++++ b/src/vnc-display.vala
+@@ -4,7 +4,7 @@
+ 
+ private class Boxes.VncDisplay: Boxes.Display {
+     public override string protocol { get { return "VNC"; } }
+-    public override string uri { owned get { return @"vnc://$host:$port"; } }
++    public override string? uri { owned get { return @"vnc://$host:$port"; } }
+     private Vnc.Display display;
+     private string host;
+     private int port;
+@@ -114,7 +114,7 @@ public override void set_enable_inputs (Gtk.Widget widget, bool enable) {
+         return display.get_pixbuf ();
+     }
+ 
+-    public override void connect_it () throws GLib.Error {
++    public override void connect_it (Display.OpenFDFunc? open_fd = null) throws GLib.Error {
+         // We only initiate connection once
+         if (connected)
+             return;
+-- 
+2.5.5
+

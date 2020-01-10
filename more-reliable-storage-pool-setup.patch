@@ -1,0 +1,145 @@
+From 6f8da7627676a6c98483f08c5a1cc80da60f2410 Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Wed, 15 Jul 2015 16:17:29 +0100
+Subject: [PATCH] More reliable storage pool setup
+
+This is a squash of all patches on this bug:
+
+https://bugzilla.gnome.org/show_bug.cgi?id=752417
+---
+ src/libvirt-broker.vala  |  8 +-------
+ src/util-app.vala        | 21 +++++++++++++++++++++
+ src/vm-configurator.vala |  1 -
+ src/vm-creator.vala      | 24 ++----------------------
+ src/vm-importer.vala     |  3 +--
+ 5 files changed, 25 insertions(+), 32 deletions(-)
+
+diff --git a/src/libvirt-broker.vala b/src/libvirt-broker.vala
+index c366c1a..fa1a8c7 100644
+--- a/src/libvirt-broker.vala
++++ b/src/libvirt-broker.vala
+@@ -91,13 +91,7 @@ public override async void add_source (CollectionSource source) {
+             yield connection.open_async (null);
+             yield connection.fetch_domains_async (null);
+             yield connection.fetch_storage_pools_async (null);
+-            var pool = Boxes.get_storage_pool (connection);
+-            if (pool != null) {
+-                if (pool.get_info ().state == GVir.StoragePoolState.INACTIVE)
+-                    yield pool.start_async (0, null);
+-                // If default storage pool exists, we should refresh it already
+-                yield pool.refresh_async (null);
+-            }
++            yield Boxes.ensure_storage_pool (connection);
+         } catch (GLib.Error error) {
+             warning (error.message);
+         }
+diff --git a/src/util-app.vala b/src/util-app.vala
+index 202f0cf..3537304 100644
+--- a/src/util-app.vala
++++ b/src/util-app.vala
+@@ -102,6 +102,27 @@ public void fetch_os_logo (Gtk.Image image, Osinfo.Os os, int size) {
+         }
+     }
+ 
++    public async GVir.StoragePool ensure_storage_pool (GVir.Connection connection) throws GLib.Error {
++        var pool = get_storage_pool (connection);
++        if (pool == null) {
++            debug ("Creating storage pool..");
++            var config = VMConfigurator.get_pool_config ();
++            pool = connection.create_storage_pool (config, 0);
++            yield pool.build_async (0, null);
++            debug ("Created storage pool.");
++        }
++
++        // Ensure pool directory exists in case user deleted it after pool creation
++        var pool_path = get_user_pkgdata ("images");
++        ensure_directory (pool_path);
++
++        if (pool.get_info ().state == GVir.StoragePoolState.INACTIVE)
++            yield pool.start_async (0, null);
++        yield pool.refresh_async (null);
++
++        return pool;
++    }
++
+     public GVir.StoragePool? get_storage_pool (GVir.Connection connection) {
+         return connection.find_storage_pool_by_name (Config.PACKAGE_TARNAME);
+     }
+diff --git a/src/vm-configurator.vala b/src/vm-configurator.vala
+index 1b0442c..df39b13 100644
+--- a/src/vm-configurator.vala
++++ b/src/vm-configurator.vala
+@@ -155,7 +155,6 @@ public static StorageVol create_volume_config (string name, int64 storage) throw
+ 
+     public static StoragePool get_pool_config () throws GLib.Error {
+         var pool_path = get_user_pkgdata ("images");
+-        ensure_directory (pool_path);
+ 
+         var pool = new StoragePool ();
+         pool.set_pool_type (StoragePoolType.DIR);
+diff --git a/src/vm-creator.vala b/src/vm-creator.vala
+index aa6ada0..1bbbfa1 100644
+--- a/src/vm-creator.vala
++++ b/src/vm-creator.vala
+@@ -203,26 +203,6 @@ protected void set_post_install_config (LibvirtMachine machine) {
+         }
+     }
+ 
+-    protected async StoragePool get_storage_pool () throws GLib.Error {
+-        var pool = Boxes.get_storage_pool (connection);
+-        if (pool == null) {
+-            debug ("Creating storage pool..");
+-            var config = VMConfigurator.get_pool_config ();
+-            pool = connection.create_storage_pool (config, 0);
+-            yield pool.build_async (0, null);
+-            yield pool.start_async (0, null);
+-            yield pool.refresh_async (null);
+-            debug ("Created storage pool.");
+-        } else if (pool.get_info ().state == StoragePoolState.INACTIVE) {
+-            // Ensure pool directory exists in case user deleted it after pool creation
+-            DirUtils.create_with_parents (GLib.Path.build_filename (get_user_pkgdata (), "images", null), 0775);
+-            yield pool.start_async (0, null);
+-            yield pool.refresh_async (null);
+-        }
+-
+-        return pool;
+-    }
+-
+     protected virtual async GVirConfig.Domain create_domain_config (string       name,
+                                                                     string       title,
+                                                                     StorageVol   volume,
+@@ -359,7 +339,7 @@ private async void create_domain_name_and_title_from_media (out string name, out
+ 
+         name = base_name;
+         title = base_title;
+-        var pool = yield get_storage_pool ();
++        var pool = yield Boxes.ensure_storage_pool (connection);
+         for (var i = 2;
+              connection.find_domain_by_name (name) != null ||
+              connection.find_domain_by_name (title) != null || // We used to use title as name
+@@ -371,7 +351,7 @@ private async void create_domain_name_and_title_from_media (out string name, out
+     }
+ 
+     private async StorageVol create_target_volume (string name, int64 storage) throws GLib.Error {
+-        var pool = yield get_storage_pool ();
++        var pool = yield Boxes.ensure_storage_pool (connection);
+ 
+         var config = VMConfigurator.create_volume_config (name, storage);
+         debug ("Creating volume '%s'..", name);
+diff --git a/src/vm-importer.vala b/src/vm-importer.vala
+index c158540..0b561e2 100644
+--- a/src/vm-importer.vala
++++ b/src/vm-importer.vala
+@@ -43,8 +43,7 @@ private async void import_vm (LibvirtMachine machine) {
+             yield source_media.copy (destination_path);
+ 
+             // Without refreshing the pool, libvirt will not know of changes to volume we just made
+-            var pool = yield get_storage_pool ();
+-            yield pool.refresh_async (null);
++            yield Boxes.ensure_storage_pool (connection);
+         } catch (GLib.Error error) {
+             warning ("Failed to import box '%s' from file '%s': %s",
+                      machine.name,
+-- 
+2.4.3
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="continuous" xml:lang="es">
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Crear una caja usando una imagen de disco de GNOME Continous</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Usar Cajas con GNOME Continous</title>
+
+  <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link>
+  is GNOME's continuous build system. Boxes is able to create a box from a
+  Continuous <em>qcow2</em> image.</p>
+
+  <steps>
+    <item><p>The latest images are found at the link provided in the
+    <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Installation</link>
+    section of the wiki page.</p>
+      <note style="info">
+        <p>Las imágenes están disponibles en las versiones <em>runtime</em> y <em>devel-debug</em>. La imagen <em>devel-debug</em> se convierte en una máquina virtual que contiene herramientas para desarrolladores y cabeceras.</p>
+      </note>
+    </item>
+    <item><p>En <app>Cajas</app>, pulse en <gui style="button">Nueva</gui> para lanzar el asistente de creación de cajas.</p></item>
+    <item><p>Se muestra un mensaje introductorio. Pulse <gui style="button">Continuar</gui>.</p></item>
+    <item><p>Click <gui style="button">Enter URL</gui> and type the URL
+    including the full filename of the gzipped runtime or devel-debug qcow2
+    image. Boxes will download and install the image.</p>
+    <p>If you have already saved an image to disk, click
+    <gui style="button">Select a file</gui> and navigate to the
+    Continuous qcow2 image. Select the file and click
+    <gui style="button">Open</gui>.</p></item>
+    <item><p>The <gui>Review</gui> page opens. Click
+    <gui style="button">Customize</gui> to adjust memory or disk size, or to
+    rename the box.</p></item>
+    <item><p>Pulse <gui style="button">Crear</gui>. Volverá la vista de la colección y empezará la instalación de la caja.</p></item>
+  </steps>
+
+  <p>En la <link href="https://wiki.gnome.org/Projects/GnomeContinuous">página del wiki</link> puede encontrar toda la información necesaria para actualizar una máquina virtual de GNOME Continous.</p>
+
+</page>

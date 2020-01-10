@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="guide" id="index" xml:lang="el">
+
+  <info>
+    <title role="trail" type="link">
+      <media type="image" mime="image/png" its:translate="no" height="20" src="figures/boxes_icon.png">
+      <span its:translate="yes">Πλαίσια</span></media>
+    </title>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.12" date="2014-03-10" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email its:translate="no">baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email its:translate="no">mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Μάθετε πως να ρυθμίσετε τοπικά εικονικές μηχανές και πως να συνδεθείτε σε απομακρυσμένες εικονικές μηχανές. Επίσης μπορείτε να χρησιμοποιήσετε τα <app>Πλαίσια</app> για να συνδεθείτε σε απομακρυσμένους υπολογιστές.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Θάνος Τρυφωνίδης</mal:name>
+      <mal:email>tomtryf@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Maria Mavridou</mal:name>
+      <mal:email>mavridou@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title><media type="image" mime="image/png" its:translate="no" height="36" src="figures/boxes_icon.png"/> Πλαίσια</title>
+
+  <p>Τα <app>Πλαίσια</app> είναι μια εφαρμογή που σας δίνει πρόσβαση σε <link xref="what-is-a-virtual-machine">εικονικές μηχανές</link>, που εκτελούνται τοπικά ή απομακρυσμένα. Επίσης σας επιτρέπει να συνδεθείτε στην οθόνη ενός απομακρυσμένου υπολογιστή.</p>
+
+  <section id="start" style="2column">
+    <title>Ξεκινώντας</title>
+  </section>
+
+<!--
+  <section id="manage" style="2column">
+    <title>Managing Boxes</title>
+  </section>
+-->
+
+  <section id="use" style="2column">
+    <title>Χρησιμοποιώντας τα Πλαίσια</title>
+  </section>
+
+  <section id="properties" style="2column">
+    <title>Properties</title>
+  </section>
+
+  <section id="snapshots" style="2column">
+    <title>Snapshots</title>
+  </section>
+
+  <section id="faq" style="2column">
+    <title>Ερωτήσεις</title>
+  </section>
+
+  <section id="advanced" style="2column">
+    <title>Advanced topics</title>
+  </section>
+
+</page>

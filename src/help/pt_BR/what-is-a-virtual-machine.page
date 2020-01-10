@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="topic" id="what-is-a-virtual-machine" xml:lang="pt-BR">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="why-do-i-need-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Rafael Ferreira</mal:name>
+      <mal:email>rafael.f.f1@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>O que é uma máquina virtual?</title>
+
+  <p>Uma máquina virtual é um computador simulado funcionando dentro de outro computador. O computador simulado é normalmente chamado de <em>convidado</em>, enquanto a máquina real é chamada de <em>hospedeiro</em>.</p>
+  <p>Com <em>virtualização</em>, o convidado tem acesso ao hardware real no qual hospedeiro está funcionando. Se o convidado pode executar em hardware falso, isos é chamado de <em>emulação</em>.</p>
+
+</page>

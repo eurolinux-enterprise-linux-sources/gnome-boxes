@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-rename" xml:lang="de">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Geben Sie dem Schnappschuss einen sinnvollen Namen.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Einen Schnappschuss entfernen</title>
+
+  <p>Per Voreinstellung wird einem Schnappschuss ein allgemeiner Name anhand des aktuellen Datums und der Uhrzeit gegeben, wie z.B.:</p>
+
+    <p><file>14.09.2014, 11:54:36</file></p>
+
+  <p>Es bietet sich an, einen Namen mit besserer Bedeutung zu wählen, wie z.B.:</p>
+
+    <p><file>Fedora_22_mit_jhbuild</file> oder <file>Windows 7 plus GTK+ 3.6.4</file>.</p>
+
+  <steps>
+    <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
+    <item><p>Klicken Sie auf <gui>Schnappschüsse</gui> in der Seitenleiste.</p></item>
+    <item><p>Wählen Sie den Schnappschuss in der Liste, dessen Namen Sie ändern wollen.</p></item>
+    <item><p>Klicken Sie auf den Menüknopf auf der rechten Seite und wählen Sie <gui>Umbenennen</gui>.</p></item>
+    <item><p>Tippen Sie den gewünschten Namen ein und drücken Sie die <key>Eingabetaste</key>.</p></item>
+  </steps>
+
+</page>

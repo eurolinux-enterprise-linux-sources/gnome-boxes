@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="supported-protocols" xml:lang="de">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#faq"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2012</years>
+    </credit>
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Bernd Homuth</mal:name>
+      <mal:email>dev@hmt.im</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Welche Technologie wird von Boxen genutzt?</title>
+
+
+  <p>Boxen verwendet <app>qemu-kvm</app>, <app>libvirt-glib</app> und <app>spice-gtk</app>, um Benutzern das einfache Verwalten von virtuellen Maschinen und das Verbinden zu entfernten Maschinen zu ermöglichen.</p>
+
+<section>
+
+<title>QEMU mit KVM</title>
+
+  <p><app>QEMU</app> ist ein Emulator und Virtualisierungsprogramm für Rechner. Als Rechner-Emulator kann es Betriebssysteme und Programme, die für eine bestimmte Architektur (z.B. ARM) erstellt wurden, auf einem anderen Rechner (z.B. Ihrem Rechner) ausführen. Als Virtualisierungsprogramm erzielt QEMU beinahe native Geschwindigkeit durch Ausführen der Gast-Instruktionen direkt auf der Gastgeber-CPU mittels KVM.</p>
+
+  <p><app>KVM</app> (Kernel-basierte Virtuelle Maschine) ist ein Linux Kernel-Modul, das es Nutzerprogrammen erlaubt, die Hardwarevirtualisierungsfunktionen verschiedener Prozessoren zu nutzen.</p>
+
+</section>
+<section>
+
+<title>libvirt</title>
+
+  <p><app>libvirt</app> ist ein Werkzeugsatz zum sicheren Manipulieren (Erstellen, Löschen und Bearbeiten) und Überwachen virtueller Maschinen auf entfernten Rechnern.</p>
+
+  <p><app>libvirt-glib</app> bietet libvirt über eine objektorientierte Programmierschnittstelle für glib-basierte Anwendungen an.</p>
+
+</section>
+<section>
+
+<title>SPICE</title>
+
+  <p><app>SPICE</app>, das einfache Protokoll für unabhängige Rechnerumgebungen (Simple Protocol for Independent Computing Environments), ist ein System zum Zugreifen und Steuern entfernter Rechner über ein Netzwerk.</p>
+
+  <p>Der SPICE-Server ist eine Bibliothek, die im QEMU-Programm läuft. Sie ist hauptsächlich für die Legitimierung von Client-Verbindungen, dem Weiterleiten der Grafikausgabe des Gast-Betriebssystems zum Client und dem Weiterleiten von Benutzereingaben (Maus und Tastatur) vom Client zum Gast zuständig.</p>
+
+  <p><app>spice-gtk</app> ist der SPICE-Client, der eine Sicht in das Gast-Betriebssystem bietet.</p>
+
+</section>
+<section>
+
+<title>VNC</title>
+
+  <p><app>VNC</app> (Virtual Network Computing) wird nur für entfernte Anzeige verwendet und ist ein bekanntes Protokoll, jedoch recht eingeschränkt und langsam.</p>
+
+</section>
+</page>

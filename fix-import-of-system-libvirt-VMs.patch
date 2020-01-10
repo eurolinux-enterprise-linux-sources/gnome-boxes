@@ -1,0 +1,202 @@
+From 49ca0cc5dfb8a651c4a7ddbe237e03adf7c0829f Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Tue, 21 Jul 2015 16:49:29 +0100
+Subject: [PATCH] Fix import of system libvirt VMs
+
+This patch is a squash of following patches:
+
+--------------
+libvirt-sys-importer: import_domain() handle errors
+
+import_domain() should be handling it's own errors anyway but this is
+also needed cause vala doesn't seem to copy/ref array of objects for
+closure and hence we have a potential crash at our hand if the calling
+function, import() handles the errors from import_domain()
+asynchronously, where it accesses the domain config array.
+
+--------------
+installed-media: Handle device nodes (/dev/..)
+
+Device files don't have any extension so we have been ignoring them.
+Since we ensure we get the read access to the media during import
+already, we should be handling real device files too.
+
+--------------
+vm-configurator: set_target_media_config() public now
+
+In a following patch, this will be used to add new disk configuration
+during import from system libvirt domain to session libvirt.
+
+--------------
+vm-configurator: Allow setting index of target media
+
+In a following patch, we'll use this parameter to ensure that newly
+added hard disk's guest device doesn't conflict with that of any existing
+CD-ROM devices in imported domain configuration from system libvirt.
+
+-------------
+libvirt-sys-vm-importer: Adapt domain's disk config
+
+When importing domains from system libvirt to session, we convert the
+disk contents to our default format (qcow2) so it's wrong to copy the
+original disk configuration verbatim. This patch fixes this issue by
+removing the copied domain disk config and adding a new one (just like
+we do for new VMs we create against installers.
+
+The code also ensures that newly added main disk doesn't conflict with
+any existing CD-ROM devices in domain configuration.
+---
+ src/installed-media.vala            | 14 +++++++++-----
+ src/libvirt-system-importer.vala    | 22 ++++++++++------------
+ src/libvirt-system-vm-importer.vala | 28 +++++++++++++++++++++-------
+ src/vm-configurator.vala            | 10 +++++++---
+ 4 files changed, 47 insertions(+), 27 deletions(-)
+
+diff --git a/src/installed-media.vala b/src/installed-media.vala
+index 28be17e..0c70029 100644
+--- a/src/installed-media.vala
++++ b/src/installed-media.vala
+@@ -39,11 +39,15 @@
+ 
+     public InstalledMedia (string path) throws GLib.Error {
+         var supported = false;
+-        foreach (var extension in supported_extensions) {
+-            supported = path.has_suffix (extension);
+-            if (supported)
+-                break;
+-        }
++
++        if (path.has_prefix ("/dev/"))
++            supported = true; // Let's assume it's device file in raw format
++        else
++            foreach (var extension in supported_extensions) {
++                supported = path.has_suffix (extension);
++                if (supported)
++                    break;
++            }
+ 
+         if (!supported)
+             throw new IOError.NOT_SUPPORTED (_("Unsupported disk image format."));
+diff --git a/src/libvirt-system-importer.vala b/src/libvirt-system-importer.vala
+index c8cb676..af43a36 100644
+--- a/src/libvirt-system-importer.vala
++++ b/src/libvirt-system-importer.vala
+@@ -77,13 +77,7 @@ public async void import () {
+         }
+ 
+         for (var i = 0; i < configs.length; i++)
+-            import_domain.begin (configs[i], disk_paths[i], null, (obj, result) => {
+-                try {
+-                    import_domain.end (result);
+-                } catch (GLib.Error error) {
+-                    warning ("Failed to import '%s': %s", configs[i].name, error.message);
+-                }
+-            });
++            import_domain.begin (configs[i], disk_paths[i], null);
+     }
+ 
+     private void get_domain_info (Domain domain,
+@@ -97,13 +91,17 @@ private void get_domain_info (Domain domain,
+ 
+     private async void import_domain (GVirConfig.Domain config,
+                                       string            disk_path,
+-                                      Cancellable?      cancellable = null) throws GLib.Error {
++                                      Cancellable?      cancellable = null) {
+         debug ("Importing '%s' from system libvirt..", config.name);
+ 
+-        var media = new LibvirtSystemMedia (disk_path, config);
+-        var vm_importer = media.get_vm_creator ();
+-        var machine = yield vm_importer.create_vm (cancellable);
+-        vm_importer.launch_vm (machine);
++        try {
++            var media = new LibvirtSystemMedia (disk_path, config);
++            var vm_importer = media.get_vm_creator ();
++            var machine = yield vm_importer.create_vm (cancellable);
++            vm_importer.launch_vm (machine);
++        } catch (GLib.Error error) {
++            warning ("Failed to import '%s': %s", config.name, error.message);
++        }
+     }
+ 
+     private string get_disk_path (GVirConfig.Domain config) throws LibvirtSystemImporterError.NO_SUITABLE_DISK {
+diff --git a/src/libvirt-system-vm-importer.vala b/src/libvirt-system-vm-importer.vala
+index a1e2d0b..e865bd7 100644
+--- a/src/libvirt-system-vm-importer.vala
++++ b/src/libvirt-system-vm-importer.vala
+@@ -35,18 +35,32 @@ protected override async Domain create_domain_config (string          name,
+         yield VMConfigurator.update_existing_domain (config, connection);
+ 
+         var devices = config.get_devices ();
++        var filtered = new GLib.List<DomainDevice> ();
++        var hd_index = 0;
+         foreach (var device in devices) {
+-            if (!(device is DomainDisk))
+-                continue;
++            if (device is DomainDisk) {
++                var disk = device as DomainDisk;
+ 
+-            var disk = device as DomainDisk;
+-            if (disk.get_source () == media.device_file) {
+-                disk.set_source (volume.get_path ());
++                if (disk.get_source () == media.device_file)
++                    /* Remove the copied over main disk configuration. */
++                    continue;
+ 
+-                break;
++                /* Let's ensure main disk configuration we're going to add, doesn't conflict with CD-ROM device. */
++                if (disk.get_guest_device_type () == DomainDiskGuestDeviceType.CDROM) {
++                    var dev = disk.get_target_dev ();
++                    var cd_index = ((uint8) dev[dev.length - 1] - 97);
++
++                    hd_index = (cd_index != 0)? 0 : cd_index + 1;
++                }
+             }
++
++            filtered.prepend (device);
+         }
+-        config.set_devices (devices);
++        filtered.reverse ();
++        config.set_devices (filtered);
++
++        /* Add new disk configuration to match the corresponding target volume/media */
++        VMConfigurator.set_target_media_config (config, volume.get_path (), install_media, hd_index);
+ 
+         return config;
+     }
+diff --git a/src/vm-configurator.vala b/src/vm-configurator.vala
+index df39b13..6b8f9c6 100644
+--- a/src/vm-configurator.vala
++++ b/src/vm-configurator.vala
+@@ -261,7 +261,10 @@ public static async void update_existing_domain (Domain          domain,
+         }
+     }
+ 
+-    private static void set_target_media_config (Domain domain, string target_path, InstallerMedia install_media) {
++    public static void set_target_media_config (Domain         domain,
++                                                string         target_path,
++                                                InstallerMedia install_media,
++                                                uint8          dev_index = 0) {
+         var disk = new DomainDisk ();
+         disk.set_type (DomainDiskType.FILE);
+         disk.set_guest_device_type (DomainDiskGuestDeviceType.DISK);
+@@ -270,14 +273,15 @@ private static void set_target_media_config (Domain domain, string target_path,
+         disk.set_source (target_path);
+         disk.set_driver_cache (DomainDiskCacheType.NONE);
+ 
++        var dev_letter_str = ((char) (dev_index + 97)).to_string ();
+         if (install_media.supports_virtio_disk) {
+             debug ("Using virtio controller for the main disk");
+             disk.set_target_bus (DomainDiskBus.VIRTIO);
+-            disk.set_target_dev ("vda");
++            disk.set_target_dev ("vd" + dev_letter_str);
+         } else {
+             debug ("Using IDE controller for the main disk");
+             disk.set_target_bus (DomainDiskBus.IDE);
+-            disk.set_target_dev ("hda");
++            disk.set_target_dev ("hd" + dev_letter_str);
+         }
+ 
+         domain.add_device (disk);
+-- 
+2.4.3
+

@@ -1,0 +1,32 @@
+From 37a679abcc29a8a7660682dbfff38318f9423fd3 Mon Sep 17 00:00:00 2001
+From: "Zeeshan Ali (Khattak)" <zeeshanak@gnome.org>
+Date: Fri, 22 May 2015 15:29:35 +0100
+Subject: [PATCH] util: Look for bridge.conf in qemu-kvm dir too
+
+Seems at least in RHEL, bridge.conf is found under /etc/qemu-kvm
+and not /etc/qemu/. Let's look for it both directories.
+---
+ src/util-app.vala | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/util-app.vala b/src/util-app.vala
+index 6745c65..202f0cf 100644
+--- a/src/util-app.vala
++++ b/src/util-app.vala
+@@ -145,7 +145,12 @@ public bool is_libvirt_bridge_net_available () {
+             // Now check if unprivileged qemu is allowed to access it
+             var file = File.new_for_path ("/etc/qemu/bridge.conf");
+             uint8[] contents;
+-            file.load_contents (null, out contents, null);
++            try {
++                file.load_contents (null, out contents, null);
++            } catch (IOError.NOT_FOUND error) {
++                file = File.new_for_path ("/etc/qemu-kvm/bridge.conf");
++                file.load_contents (null, out contents, null);
++            }
+ 
+             libvirt_bridge_net_available = (Regex.match_simple ("^allow.*virbr0", (string) contents));
+         } catch (GLib.Error error) {
+-- 
+2.1.0
+
