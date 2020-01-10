@@ -24,13 +24,13 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
@@ -46,8 +46,8 @@
       <list>
         <item><p>Einem von <app>Boxen</app> gefundenen ISO-Abbild.</p></item>
         <item><p>Installationsmedien auf einem CD/DVD/USB-Laufwerk.</p></item>
-        <item><p>Einer lokalen ISO-Datei (falls nicht automatisch oben gefunden).</p></item>
-        <item><p>Eine Adresse zu einem entfernten Rechner (physikalisch oder virtuell) durch eine <link xref="connect">Fernverbindung</link>.</p></item>
+        <item><p>Eine lokale ISO-Datei (falls nicht automatisch oben gefunden).</p></item>
+        <item><p>Einer Adresse zu einem entfernten Rechner (physisch oder virtuell) durch eine <link xref="connect">Fernverbindung</link>.</p></item>
       </list>
 
       <note style="important">

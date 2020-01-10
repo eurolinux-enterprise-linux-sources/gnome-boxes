@@ -10,7 +10,13 @@
       <years>2014</years>
     </credit>
 
-    <desc>Remove a snapshot that you no longer need.</desc>
+    <desc>Αφαιρέστε ένα πλαίσιο που δεν χρειάζεστε πια.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -19,27 +25,22 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Delete a snapshot</title>
+  <title>Διαγραφή στιγμιότυπου</title>
 
-  <p>A snapshot that is no longer needed can be removed from the list.</p>
+  <p>Ένα στιγμιότυπο που δεν χρειάζεστε μπορεί να αφαιρεθεί από τη λίστα.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Snapshots</gui> in the sidebar.</p></item>
-    <item><p>Select the snapshot to be deleted from the list.</p></item>
-    <item><p>Click the menu button on the right and select
-    <gui>Delete</gui>.</p></item>
-    <item><p>Confirm to permanently delete the snapshot.</p></item>
+    <item><p>Ανοίξτε την <link xref="interface#properties">προβολή ιδιοτήτων</link> του πλαισίου. Αν το πλαίσιο είναι ανοιχτό, κάντε κλικ στο κουμπί click the <gui style="button">Ιδιότητες</gui> στη γραμμή κεφαλίδας. Η προβολή ιδιοτήτων μπορεί επίσης να προσπελαστεί από τη <link xref="interface#selection">λειτουργία επιλογής</link>.</p></item>
+    <item><p>Στην πλευρική στήλη κάντε κλικ στα <gui>Στιγμιότυπα</gui>.</p></item>
+    <item><p>Επιλέξτε το στιγμιότυπο που θέλετε να διαγραφεί.</p></item>
+    <item><p>Κάντε κλικ στο κουμπί του μενού στα δεξιά και επιλέξτε <gui>Διαγραφή</gui>.</p></item>
+    <item><p>Επιβεβαιώστε για μόνιμη διαγραφή του στιγμιότυπου.</p></item>
   </steps>
 
 </page>

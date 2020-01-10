@@ -27,27 +27,30 @@
       <years>2013</years>
     </credit>
 
-    <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+    <desc>Hardware necessário para executar uma máquina virtual do <app>Boxes</app>.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
   <title>Primeiros passos com máquinas virtuais</title>
 
-  <p>Seu computador deve atender certos critérios para melhor performance ao criar e executar máquinas virtuais no <app>Boxes</app>. Esses requerimentos estão especificados pelos fabricantes dos sistemas operacionais. <app>Boxes</app> aloca automaticamente recursos para as máquinas virtuais baseado nas recomendações do fabricante. Quando tal informação está indisponível para o <app>Boxes</app>, ele aloca o seguinte:</p>
+  <p>Seu computador deve atender a certos critérios para melhor desempenho ao criar e executar máquinas virtuais no <app>Boxes</app>. Esses requerimentos são especificados pelos fabricantes dos sistemas operacionais. O <app>Boxes</app> aloca automaticamente recursos para as máquinas virtuais baseado nas recomendações do fabricante. Quando tal informação está indisponível para o <app>Boxes</app>, ele aloca o seguinte:</p>
 
   <list>
     <item>
       <p>20 GB de espaço de armazenamento máximo.</p>
       <note style="advanced">
-      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
-         when creating the virtual machine. The actual disk space used by
-         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
-         space used by the virtual machine itself.</p>
+      <p>Isso não significa que o <app>Boxes</app> irá alocar 20 GB de espaço ao criar a máquina virtual. O espaço atual em disco a ser usado pelo <app>Boxes</app> será menor do que o (ou, em pior caso, igual ao) espaço em disco usado pela própria máquina virtual.</p>
       </note>
     </item>
     <item>
@@ -56,9 +59,7 @@
   </list>
 
   <note style="advanced">
-    <p><app>Boxes</app> performs best if your computer processor supports
-    hardware <link xref="virtualization">virtualization extensions</link> and
-    these are enabled in the system BIOS.</p>
+    <p>O <app>Boxes</app> funciona melhor se o processor do seu computador possuir suporte a <link xref="virtualization">extensões de virtualização</link> via hardware e caso as mesmas estejam habilitadas na BIOS do sistema.</p>
   </note>
 
 </page>

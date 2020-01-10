@@ -16,13 +16,19 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -30,7 +36,7 @@
 
   <title>Σύνδεση σε άλλον υπολογιστή</title>
 
-  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+  <p>Μπορείτε αν χρησιμοποιήσετε τα <app>Πλαισία</app> για να δείτε και να αποκτήσετε πρόσβαση σε ένα απομακρυσμένο σύστημα ή μια απομακρυσμένη εικονική μηχανή.</p>
 
   <note style="important">
     <p>Το απομακρυσμένο σύστημα θα πρέπει να είναι ήδη ρυθμισμένο.</p>

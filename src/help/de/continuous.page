@@ -21,34 +21,34 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
-  <title>Boxen mit einem »Continous«-Laufwerksabbilds verwenden</title>
+  <title>Boxen mit einem »Continuous«-Laufwerksabbild verwenden</title>
 
   <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link> ist das fortlaufende Erstellungssytem von GNOME. Boxen kann eine Box von einem <em>qcow2</em>-Abbild von Continuous erstellen.</p>
 
   <steps>
     <item><p>Die neuesten Abbilder finden sich unter dem Verweis im Abschnitt <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Installation</link> auf der Wiki-Seite.</p>
       <note style="info">
-        <p>Die Abbilder sind in einer <em>Laufzeit-</em> und einer <em>Entwickler-Diagnose-</em>-Version vorhanden. Die <em>Entwickler-Diagnose</em>-Abbild enthält eine virtuelle Maschine, die Entwicklerwerkzeuge und Header-Dateien enthält.</p>
+        <p>Die Abbilder sind in einer <em>Laufzeit-</em> und einer <em>Entwickler-Diagnose-</em>-Version vorhanden. Das <em>Entwickler-Diagnose</em>-Abbild enthält eine virtuelle Maschine, die Entwicklerwerkzeuge und Header-Dateien enthält.</p>
       </note>
     </item>
     <item><p>Klicken Sie in <app>Boxen</app> auf <gui style="button">Neu</gui>, um den Assistenten zum Erstellen einer Box aufzurufen.</p></item>
     <item><p>Eine Einführungsnachricht wird angezeigt. Klicken Sie auf <gui style="button">Weiter</gui>.</p></item>
-    <item><p>Klicken Sie auf <gui style="button">Geben Sie die Adresse ein</gui> und geben Sie die Adresse einschließlich eines vollständigen Dateinamen des mit gzip komprimierten Laufzeit- oder Entwickler-Diagnose-Abbilds im qcow2-Format ein. Boxen lädt daraufhin das Abbild herunter rund installiert es.</p>
+    <item><p>Klicken Sie auf <gui style="button">Geben Sie die Adresse ein</gui> und geben Sie die Adresse einschließlich eines vollständigen Dateinamens des mit gzip komprimierten Laufzeit- oder Entwickler-Diagnose-Abbilds im qcow2-Format ein. Boxen lädt daraufhin das Abbild herunter und installiert es.</p>
     <p>Wenn Sie bereits ein Abbild auf einem Datenträger gespeichert haben, so klicken Sie auf <gui style="button">Eine Datei wählen</gui> und suchen Sie das Continuous qcow2-Abbild. Wählen Sie die Datei und klicken Sie auf <gui style="button">Öffnen</gui>.</p></item>
     <item><p>Die Seite <gui>Durchsicht</gui> öffnet sich daraufhin. Klicken Sie auf <gui style="button">Anpassen</gui>, um Arbeitsspeicher und Laufwerksgröße anzupassen oder um die Box umzubenennen.</p></item>
     <item><p>Klicken Sie auf <gui style="button">Anlegen</gui>. Die Sammlungsanzeige wird wieder dargestellt und die Installation der Box beginnt.</p></item>
   </steps>
 
-  <p>Eine Anleitung zum Aktualisieren voneiner virtuellen Continuous-Maschine finden sich auf der <link href="https://wiki.gnome.org/Projects/GnomeContinuous">Wiki-Seite</link>.</p>
+  <p>Eine Anleitung zum Aktualisieren einer virtuellen Continuous-Maschine finden sich auf der <link href="https://wiki.gnome.org/Projects/GnomeContinuous">Wiki-Seite</link>.</p>
 
 </page>

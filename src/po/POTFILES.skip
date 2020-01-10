@@ -1,17 +1,24 @@
 data/org.gnome.Boxes.desktop.in
+# Have to list it twice because of a intltool bug
+sub/data/org.gnome.Boxes.desktop.in
 data/org.gnome.boxes.gschema.xml.in.in
+src/actions-popover.c
 src/app.c
 src/app-window.c
-src/collection-view.c
 src/display-page.c
+src/display-toolbar.c
 src/empty-boxes.c
+src/icon-view.c
 src/installed-media.c
 src/installer-media.c
+src/i-properties-provider.c
+src/keys-input-popover.c
 src/libvirt-machine.c
 src/libvirt-machine-properties.c
+src/libvirt-media.c
 src/libvirt-system-importer.c
-src/libvirt-system-media.c
-src/libvirt-system-vm-importer.c
+src/libvirt-vm-importer.c
+src/list-view-row.c
 src/machine.c
 src/main.c
 src/media-manager.c
@@ -19,6 +26,7 @@ src/notificationbar.c
 src/ovirt-broker.c
 src/ovirt-machine.c
 src/properties.c
+src/properties-page-widget.c
 src/remote-machine.c
 src/selectionbar.c
 src/selection-toolbar.c
@@ -37,3 +45,5 @@ src/vm-importer.c
 src/vnc-display.c
 src/wizard.c
 src/wizard-source.c
+src/wizard-toolbar.c
+src/wizard-window.c

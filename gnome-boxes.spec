@@ -10,16 +10,11 @@ ExclusiveArch: x86_64
 # The following qemu_kvm_arches/with_qemu_kvm defines come from
 # libvirt.spec
 %if 0%{?fedora}
-    %if 0%{?fedora} >= 18
-        %define qemu_kvm_arches %{ix86} x86_64 ppc64 s390x
-    %endif
-    %if 0%{?fedora} >= 20
-        %define qemu_kvm_arches %{ix86} x86_64 %{power64} s390x %{arm} aarch64
-    %endif
+    %define qemu_kvm_arches %{ix86} x86_64 %{power64} s390x %{arm} aarch64
 %endif
 
 %if 0%{?rhel} >= 7
-    %define qemu_kvm_arches    x86_64
+    %define qemu_kvm_arches    x86_64 %{power64}
 %endif
 
 %ifarch %{qemu_kvm_arches}
@@ -28,39 +23,38 @@ ExclusiveArch: x86_64
     %define with_qemu_kvm      0
 %endif
 
-
-#based on openSUSE spec file from dimstar, and on the Mageia .spec from bkor
 %global url_ver	%%(echo %{version}|cut -d. -f1,2)
 
 Name:		gnome-boxes
-Version:	3.14.3.1
-Release:	7%{?dist}
+Version:	3.22.4
+Release:	4%{?dist}
 Summary:	A simple GNOME 3 application to access remote or virtual systems
 
-Group:		Applications/Emulators
 License:	LGPLv2+
-URL:		https://live.gnome.org/Boxes
+URL:		https://wiki.gnome.org/Apps/Boxes
 Source0:	http://download.gnome.org/sources/%{name}/%{url_ver}/%{name}-%{version}.tar.xz
 
-BuildRequires:  libgovirt-devel >= 0.3.0
+BuildRequires:  libgovirt-devel
 BuildRequires:	intltool
-BuildRequires:	vala-devel >= 0.21.1
-BuildRequires:	vala-tools >= 0.21.1
+BuildRequires:	vala-devel
+BuildRequires:	vala
 BuildRequires:	yelp-tools
-BuildRequires:	pkgconfig(clutter-gtk-1.0) >= 1.3.2
-BuildRequires:	pkgconfig(glib-2.0) => 2.32
-BuildRequires:	pkgconfig(gobject-introspection-1.0) >= 0.9.6
-BuildRequires:	pkgconfig(gtk+-3.0) >= 3.9
-BuildRequires:	pkgconfig(gtk-vnc-2.0) >= 0.4.4
+BuildRequires:	pkgconfig(clutter-gtk-1.0)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gobject-introspection-1.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(gtk-vnc-2.0)
 BuildRequires:	pkgconfig(libarchive)
-BuildRequires:	pkgconfig(libvirt-gobject-1.0) >= 0.1.5
-BuildRequires:	pkgconfig(libvirt-gconfig-1.0) >= 0.1.5
-BuildRequires:	pkgconfig(libxml-2.0) >= 2.7.8
-BuildRequires:	pkgconfig(gudev-1.0) >= 167
-BuildRequires:	pkgconfig(libosinfo-1.0) >= 0.2.3
-BuildRequires:	pkgconfig(libsoup-2.4) >= 2.38
-BuildRequires:	spice-gtk3-vala >= 0.9
-BuildRequires:	libosinfo-vala >= 0.0.4
+BuildRequires:	pkgconfig(libsecret-1)
+BuildRequires:	pkgconfig(libvirt-gobject-1.0)
+BuildRequires:	pkgconfig(libvirt-gconfig-1.0)
+BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(gudev-1.0)
+BuildRequires:	pkgconfig(libosinfo-1.0)
+BuildRequires:	pkgconfig(libsoup-2.4)
+BuildRequires:	pkgconfig(libusb-1.0)
+BuildRequires:	spice-gtk3-vala
+BuildRequires:	libosinfo-vala
 BuildRequires:	desktop-file-utils
 BuildRequires:	tracker-devel
 BuildRequires:	libuuid-devel
@@ -72,6 +66,8 @@ Requires:	libvirt-daemon-kvm
 %else
 Requires:	libvirt-daemon-qemu
 %endif
+
+Patch0: use-ps2-bus-by-default.patch
 
 # Pulls in libvirtd NAT based networking
 # https://bugzilla.redhat.com/show_bug.cgi?id=1081762
@@ -86,34 +82,6 @@ Requires:	adwaita-icon-theme
 Requires:	gnome-themes-standard
 Requires:	dconf
 
-# https://bugzilla.gnome.org/show_bug.cgi?id=1072611
-# Should not propose to install/boot from CD/DVD in RHEL7
-Patch0: ignore-CDROM-devices.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1214294
-# session networking limited to user interfaces only
-Patch1: look-for-bridge.conf-in-qemu-kvm-dir-too.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1238719
-# cannot start gnome boxes anymore
-Patch2: more-reliable-storage-pool-setup.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1211198
-# unattended installation of Fedora 20 doesn't work
-Patch3: unattended-file-More-reliable-test-for-raw-images.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1201255
-# Import from system broker fails for boxes with device nodes as main disks
-Patch4: fix-import-of-system-libvirt-VMs.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1034354
-# Cannot start non-running oVirt VM and then connect to it
-Patch5: ovirt-Wait-machine-to-start-before-connecting-to-it.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1250270
-# the intro label was forcing the window to be too tall
-Patch6: deep-intro.patch
-
 %description
 gnome-boxes lets you easily create, setup, access, and use:
   * remote machines
@@ -126,23 +94,17 @@ gnome-boxes lets you easily create, setup, access, and use:
 %prep
 %setup -q
 
-%patch0 -p1 -b .ignore-CDROM-devices
-%patch1 -p1 -b .look-for-bridge.conf-in-qemu-kvm-dir-too
-%patch2 -p1 -b .more-reliable-storage-pool-setup
-%patch3 -p1 -b .unattended-file-More-reliable-test-for-raw-images
-%patch4 -p1 -b .fix-import-of-system-libvirt-VMs
-%patch5 -p1 -b .ovirt-Wait-machine-to-start-before-connecting-to-it
-%patch6 -p1 -b .deep-intro
+# https://bugzilla.redhat.com/show_bug.cgi?id=1449922
+%patch0 -p1 -b .use-ps2-bus-by-default
 
 %build
-#fedora-legal and the fedora board permit logos to be enabled
-#http://lists.fedoraproject.org/pipermail/advisory-board/2012-February/011360.html
-%configure --enable-logos --enable-vala --enable-usbredir --enable-smartcard
+%configure --enable-vala
 make %{?_smp_mflags} V=1
 
 
 %install
-make install DESTDIR=%{buildroot}
+make vala-clean
+%make_install
 %find_lang %{name} --with-gnome
 
 
@@ -168,13 +130,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %files -f %{name}.lang
-%doc AUTHORS COPYING README NEWS TODO
+%license COPYING
+%doc AUTHORS README NEWS TODO
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
 %{_datadir}/appdata/org.gnome.Boxes.appdata.xml
 %{_datadir}/applications/org.gnome.Boxes.desktop
 %{_datadir}/glib-2.0/schemas/org.gnome.boxes.gschema.xml
 %{_datadir}/icons/hicolor/*/apps/gnome-boxes.*
+%{_datadir}/icons/hicolor/symbolic/apps/gnome-boxes-symbolic.svg
 %{_libexecdir}/gnome-boxes-search-provider
 %{_datadir}/dbus-1/services/org.gnome.Boxes.SearchProvider.service
 %{_datadir}/dbus-1/services/org.gnome.Boxes.service
@@ -183,6 +147,32 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gnome-shell/search-providers/gnome-boxes-search-provider.ini
 
 %changelog
+* Thu Jun 08 2017 Felipe Borges <feborges@redhat.com> - 3.22.4-4
+- Use PS2 bus by default
+- Related: #1449922
+
+* Wed May 24 2017 Felipe Borges <feborges@redhat.com> - 3.22.4-3
+- Run "make vala-clean" before make install
+- Related: #1435336
+
+* Wed Mar 15 2017 Kalev Lember <klember@redhat.com> - 3.22.4-2
+- Rebuilt for spice-gtk3 soname bump
+- Related: #1402474
+
+* Mon Feb 06 2017 Kalev Lember <klember@redhat.com> - 3.22.4-1
+- Update to 3.22.4
+- Resolves: #1386879
+
+* Fri Jul  1 2016 Matthias Clasen <mclasen@redat.com> - 3.14.3.1-10
+- Update translations
+  Resolves: #1304291
+
+* Tue May 17 2016 Zeeshan Ali <zeenix@redhat.com> - 3.14.3.1-9
+- Avoid characters in hostname, not accepted by Windows. (related: #1336055).
+
+* Tue May 10 2016 Zeeshan Ali <zeenix@redhat.com> - 3.14.3.1-8
+- Private SPICE connection. (related: #1043950).
+
 * Wed Aug 19 2015 Matthias Clasen <mclasen@redhat.com> - 3.14.3.1-7
 - Make window less tall
   Resolves: #1250270

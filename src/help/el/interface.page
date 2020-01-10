@@ -16,13 +16,19 @@
     <desc>Γνωρίστε την εφαρμογή</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -33,19 +39,13 @@
   <section id="collection">
   <title>Προβολή συλλογής</title>
 
-  <p>When you first launch <app>Boxes</app>, the greeting tells you to click the
-  <gui style="button">New</gui> button to create your first box. On subsequent
-  visits, <app>Boxes</app> opens in the <em>collection view</em>, displaying
-  thumbnails of your boxes in a grid. Favourites or frequently-used boxes
-  appear at the top of the list. Collection view allows you to:</p>
+  <p>Όταν εκτελέσετε για πρώτη φορά τα <app>Πλασία</app>, εμφανίζεται ένα μήνυμα λέγοντας σας να κάνετε κλικ στο κουμπί <gui style="button">Νέο</gui>. Σε μεταγενέστερες επισκέψεις, τα <app>Πλασία</app> ανοίγουν σε <em>προβολή συλλογής</em>, εμφανίζοντας μικρογραφίες των πλαισίων. Τα πιο συχνά χρησιμοποιημένα ή τα αγαπημένα σας πλαίσια φαίνονται στην κορυφή της λίστας. Η προβολή συλλογής σας επιτρέπει να:</p>
 
   <list>
-    <item><p>Click <gui style="button">New</gui> to
-    <link xref="create">create</link> a box.</p></item>
-    <item><p>Click a box to launch a virtual machine session.</p></item>
-    <item><p><link xref="search">Search</link> for a box.</p></item>
-    <item><p>Click the checkmark button or select a box to enter selection
-    mode.</p></item>
+    <item><p>Κάνετε κλικ στο κουμπί <gui style="button">Νέο</gui> για να δημιουργήσετε ένα πλαίσιο.</p></item>
+    <item><p>Κάνετε κλικ σε ένα πλαίσιο για να ξεκινήσει μια συνεδρία εικονικής μηχανής.</p></item>
+    <item><p><link xref="search">Αναζητήσετε</link> ένα πλαίσιο.</p></item>
+    <item><p>Κάνετε κλικ στο κουμπί επιλογής ή να επιλέξετε ένα πλαίσιο για να μεταβείτε στη λειτουργία επιλογής.</p></item>
   </list>
 
   </section>
@@ -60,17 +60,14 @@
   <section id="selection">
   <title>Λειτουργία επιλογής</title>
 
-  <p>In collection view, clicking the checkmark button or right-clicking a
-  thumbnail puts you in <em>selection mode</em>, where various operations can be
-  performed on boxes, individually or in groups. You can:</p>
+  <p>Στην προβολή συλλογής, κάνοντας κλικ στο κουμπί με το τικ ή δεξί κλικ σε μια μικρογραφία μπαίνετε σε <em>λειτουργία επιλογής</em>, όπου διάφορες λειτουργίες μπορούν να εκτελεστούν στα πλαίσια, μεμονωμένα ή κατά ομάδες. Μπορείτε:</p>
 
   <list>
-    <item><p><link xref="delete">Delete</link> a box or boxes.</p></item>
-    <item><p>Mark a box or boxes as favorites.</p></item>
-    <item><p>Pause a box.</p></item>
-    <item><p>Open a box in a new window.</p></item>
-    <item><p>Click the <gui style="button">Properties</gui> button to enter the
-    properties view of a box.</p></item>
+    <item><p><link xref="delete">Διαγραφή</link> ενός πλαισίου ή πλαισίων.</p></item>
+    <item><p>Σημειώστε ένα ή περισσότερα πλαίσια ως αγαπημένα.</p></item>
+    <item><p>Παύση πλαισίου</p></item>
+    <item><p>Ανοίξτε ένα πλαίσιο σε νέο παράθυρο.</p></item>
+    <item><p>Κάντε κλικ στο κουμπί <gui style="button">Ιδιότητες</gui> για να μεταβείτε στη προβολή ιδιοτήτων ενός πλαισίου.</p></item>
   </list>
 
   </section>
@@ -78,36 +75,24 @@
   <section id="properties">
   <title>Προβολή ιδιοτήτων</title>
 
-  <p>Clicking the <gui style="button">Properties</gui> button in selection mode
-  opens the <em>properties view</em>, where some of the details of a box can be
-  configured. The main window displays the name of the box, the virtualizer
-  being used, and the URI that can be used to access the box from outside of
-  <app>Boxes</app>. In addition, the sidebar displays:</p>
+  <p>Πατώντας το κουμπί <gui style="button">Ιδιότητες</gui> στη λειτουργία επιλογής ανοίγει η <em>προβολή ιδιοτήτων</em>, όπου μπορούν να ρυθμιστούν οι λεπτομέρειες ενός πλαισίου. Το κύριο παράθυρο εμφανίζει το όνομα του πλαισίου, το είδος της εικονικοποίησης και το URI που μπορείτε να χρησιμοποιήσετε για να έχετε πρόσβαση στο πλαίσιο έξω από την εφαρμογή. Επίσης, η πλευρική στήλη εμφανίζει:</p>
 
   <list>
-    <item><p>A screenshot of the box.</p></item>
-    <item><p>Running graphs of CPU, disk I/O and network activity.</p></item>
-    <item><p>The <gui style="button">Force Shutdown</gui> button, which enables
-    you to <link xref="shutdown">force a box to shut down</link>.</p></item>
+    <item><p>Ένα στιγμιότυπο του πλαισίου.</p></item>
+    <item><p>Γραφήματα της CPU, της χρήσης του σκληρού δίσκου και του δικτύου.</p></item>
+    <item><p>Το κουμπί <gui style="button">Εξαναγκασμός τερματισμού</gui>, όπου σας επιτρέπει <link xref="shutdown">να εξαναγκάσετε τον τερματισμό ενός πλαισίου</link>.</p></item>
   </list>
 
-  <p>The properties view main window allows you to display or change settings
-  depending on which of the following categories is selected in the sidebar:</p>
+  <p>Το κύριο παράθυρο της προβολής ιδιοτήτων σας επιτρέπει να δείτε ή να αλλάξετε τις ρυθμίσεις ανάλογα με το ποια από τις παρακάτω κατηγορίες είναι επιλεγμένη:</p>
 
   <list>
-    <item><p><gui>System</gui> settings: memory, maximum allowed disk space,
-    and the <gui>Trouble Log</gui>.</p></item>
-    <item><p><gui>Display</gui> settings: display protocol, clipboard sharing,
-    resizing of the display.</p></item>
-    <item><p><gui>Device</gui> settings: access to system USB or CD/DVD
-    devices.</p></item>
-    <item><p><gui>Snapshots</gui>: <link xref="snapshot-create">creating</link>
-    and managing snaphots of the box.</p></item>
+    <item><p>Ρυθμίσεις <gui>συστήματος</gui>: μνήμη,  μέγιστος επιτρεπόμενος χώρος του δίσκου και η <gui>Καταγραφή αντιμετώπισης προβλημάτων</gui>.</p></item>
+    <item><p>Ρυθμίσεις <gui>οθόνης</gui>: πρωτόκολλο εμφάνισης, κοινή χρήση του προχείρου, αυξομείωση μεγέθους του παραθύρου.</p></item>
+    <item><p>Ρυθμίσεις <gui>συσκευής</gui>: πρόσβαση σε USB ή συσκευές CD/DVD.</p></item>
+    <item><p><gui>Στιγμιότυπα</gui>: <link xref="snapshot-create">creating</link> και διαχείριση στιγμιότυπων του πλαισίου.</p></item>
   </list>
 
-  <p>The properties view can also be accessed using the wizard's
-  <gui style="button">Customize</gui> button during box setup, and by clicking
-  the tool button in the header bar of a running session.</p>
+  <p>Η προβολή ιδιοτήτων μπορεί επίσης να προσπελαστεί χρησιμοποιώντας το κουμπί <gui style="button">Προσαρμογή</gui> του οδηγού ρύθμισης κατά τη δημιουργία του πλαισίου, ή κάνοντας κλικ το κουμπί της γραμμής κεφαλίδας σε μια εκτελούμενη συνεδρία.</p>
 
   </section>
 

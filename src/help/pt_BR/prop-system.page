@@ -10,29 +10,29 @@
       <years>2014</years>
     </credit>
 
-    <desc>Specify RAM and maximum disk allocation.</desc>
+    <desc>Especifica a RAM e a alocação máxima de disco.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>Adjust the system requirements of a box</title>
+  <title>Ajustando os requerimentos de sistema de uma máquina</title>
 
-  <p>In <app>Boxes</app>, each virtual machine has its own settings for RAM and
-  maximum allocated disk space.</p>
+  <p>No <app>Boxes</app>, cada máquina virtual possui suas próprias configurações de RAM e espaço máximo de alocação em disco.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>System</gui> in the sidebar.</p></item>
-    <item><p>Adjust the <gui>Memory</gui> and <gui>Maximum disk space</gui>
-    sliders to reflect the desired values.</p></item>
+    <item><p>Abra a <link xref="interface#properties">visão de propriedades</link> da máquina. Quando a máquina estiver aberta, clique no botão <gui style="button">Propriedades</gui> na barra de cabeçalho. A visão de propriedades também pode ser acessada a partir do <link xref="interface#selection">modo de seleção</link>.</p></item>
+    <item><p>Clique em <gui>Sistema</gui> na barra lateral.</p></item>
+    <item><p>Ajuste os controladores deslizantes de <gui>Memória</gui> e <gui>Espaço máximo em disco</gui> para refletirem os valores desejados.</p></item>
   </steps>
 
 </page>

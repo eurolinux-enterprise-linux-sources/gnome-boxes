@@ -20,11 +20,17 @@
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
   <title>Conectando a outro computador</title>
 
-  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+  <p><app>Boxes</app> pode ser usado para ver e acessar uma máquina remota física ou virtual.</p>
 
   <note style="important">
     <p>A máquina remota deveria já estar configurada.</p>

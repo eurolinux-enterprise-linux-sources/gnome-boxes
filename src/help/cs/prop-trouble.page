@@ -10,25 +10,17 @@
       <years>2014</years>
     </credit>
 
-    <desc>Diagnose problems with your box using the log file.</desc>
+    <desc>Jak diagnostikovat problémy s boxem pomocí souboru se záznamem.</desc>
   </info>
 
-  <title>View the trouble log of a box</title>
+  <title>Zobrazení záznamu problémů s boxem</title>
 
-  <p>If a box is having a problem starting up or running, clues to help you fix
-  the problem may be found in the trouble log. The trouble log displays the
-  virtual machine state, the virtual machine libvirt configuration, and the
-  QEMU hypervisor log.</p>
+  <p>Pokud má box nějaký problém se spuštěním nebo během, můžete najít vodítko, které vás nasměruje k řešení, v záznamu problémů. Záznam zobrazí stav virtuálního stroje, nastavení libvirt pro daný virtuální stroj a záznam hypervizora QEMU.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>System</gui> in the sidebar.</p></item>
-    <item><p>Click the <gui style="button">Trouble Log</gui> button to view the
-    log.</p></item>
+    <item><p>Otevřete <link xref="interface#properties">zobrazení vlastností</link> daného boxu. Když je box otevřen, klikněte na tlačítko <gui style="button">Vlastnosti</gui> v hlavičkové liště. K zobrazení vlastností se můžete dostat také z <link xref="interface#selection">režimu výběru</link>.</p></item>
+    <item><p>V postranním panelu klikněte na <gui>Systém</gui>.</p></item>
+    <item><p>Kliknutím na tlačítko <gui style="button">Záznamenané problémy</gui> zobrazíte záznam.</p></item>
   </steps>
 
 </page>

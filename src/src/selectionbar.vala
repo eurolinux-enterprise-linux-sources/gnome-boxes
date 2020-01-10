@@ -10,8 +10,6 @@ private class Boxes.Selectionbar: Gtk.Revealer {
     [GtkChild]
     private Gtk.Button remove_btn;
     [GtkChild]
-    private Gtk.Button properties_btn;
-    [GtkChild]
     private Gtk.Button open_btn;
 
     private AppWindow window;
@@ -19,7 +17,6 @@ private class Boxes.Selectionbar: Gtk.Revealer {
     construct {
         App.app.notify["selected-items"].connect (() => {
             update_favorite_btn ();
-            update_properties_btn ();
             update_pause_btn ();
             update_delete_btn ();
             update_open_btn ();
@@ -79,11 +76,6 @@ private class Boxes.Selectionbar: Gtk.Revealer {
         App.app.remove_selected_items ();
     }
 
-    [GtkCallback]
-    private void on_properties_btn_clicked () {
-        window.show_properties ();
-    }
-
     private void update_favorite_btn () {
         var active = false;
         var sensitive = App.app.selected_items.length () > 0;
@@ -106,12 +98,6 @@ private class Boxes.Selectionbar: Gtk.Revealer {
         favorite_btn.active = active;
         favorite_btn.sensitive = sensitive;
         ignore_favorite_btn_clicks = false;
-    }
-
-    private void update_properties_btn () {
-        var sensitive = App.app.selected_items.length () == 1;
-
-        properties_btn.sensitive = sensitive;
     }
 
     private void update_pause_btn () {
@@ -158,13 +144,34 @@ private class Boxes.Selectionbar: Gtk.Revealer {
     }
 
     private void update_open_btn () {
-        var items = App.app.selected_items.length ();
+        foreach (var item in App.app.collection.items.data) {
+            var importing_id = item.get_data<ulong> ("importing_id");
+            if (importing_id > 0) {
+                item.disconnect (importing_id);
+                item.set_data<ulong> ("importing_id", 0);
+            }
+        }
 
-        open_btn.sensitive = items > 0;
+        var items = App.app.selected_items.length ();
+        var sensitive = items > 0;
+        foreach (var item in App.app.selected_items) {
+            ulong importing_id = 0;
+            importing_id = item.notify["importing"].connect (() => {
+                update_open_btn ();
+            });
+            item.set_data<ulong> ("importing_id", importing_id);
+
+            if (item is LibvirtMachine && (item as LibvirtMachine).importing) {
+                sensitive = false;
+                break;
+            }
+        }
+        open_btn.sensitive = sensitive;
+
         // Translators: This is a button to open box(es) in new window(s)
         if (items == 0)
-            open_btn.label = _("_Open in new window");
+            open_btn.label = C_("0 items selected", "_Open in new window");
         else
-            open_btn.label = ngettext ("_Open in new window", "_Open in %d new windows", items).printf (items);
+            open_btn.label = ngettext ("_Open in new window", "_Open in %u new windows", items).printf (items);
     }
 }

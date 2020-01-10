@@ -26,13 +26,19 @@
     <desc>Μάθετε πως να ρυθμίσετε τοπικά εικονικές μηχανές και πως να συνδεθείτε σε απομακρυσμένες εικονικές μηχανές. Επίσης μπορείτε να χρησιμοποιήσετε τα <app>Πλαίσια</app> για να συνδεθείτε σε απομακρυσμένους υπολογιστές.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -57,11 +63,11 @@
   </section>
 
   <section id="properties" style="2column">
-    <title>Properties</title>
+    <title>Ιδιότητες </title>
   </section>
 
   <section id="snapshots" style="2column">
-    <title>Snapshots</title>
+    <title>Στιγμιότυπα</title>
   </section>
 
   <section id="faq" style="2column">
@@ -69,7 +75,7 @@
   </section>
 
   <section id="advanced" style="2column">
-    <title>Advanced topics</title>
+    <title>Προχωρημένα θέματα</title>
   </section>
 
 </page>

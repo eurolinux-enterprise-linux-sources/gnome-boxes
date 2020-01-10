@@ -12,21 +12,25 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Check the resources available to <app>Boxes</app>.</desc>
+    <desc>Verifica os recursos disponíveis ao <app>Boxes</app>.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>Using processor hardware virtualization</title>
+  <title>Usado a virtualização via hardware do processador</title>
 
-  <p>To determine whether your computer supports processor virtualization
-  hardware extensions, and that they have been enabled in the system BIOS, run
-  the following in a terminal window:</p>
-  <p><cmd>gnome-shell --checks</cmd></p>
-  <p>If necessary, switch on the extensions <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">in the BIOS setup</link></p>
+  <p>Para determinar se seu computador possui suporte às extensões de virtualização via hardware e se as mesmas foram habilitadas na BIOS do sistema, execute o seguinte comando em uma janela de terminal:</p>
+  <p><cmd>gnome-boxes --checks</cmd></p>
+  <p>Se necessário, alterne as extensões <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">nas definições de BIOS</link></p>
 
 </page>

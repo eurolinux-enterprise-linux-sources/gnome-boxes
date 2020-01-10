@@ -12,7 +12,13 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Remove a box that you no longer need.</desc>
+    <desc>Διαγράψτε ένα πλαίσιο που δε χρειάζεστε.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -21,23 +27,21 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Delete a box</title>
+  <title>Διαγραφή πλαισίου</title>
 
-  <p>When a box is no longer needed, it can be deleted from <app>Boxes</app>.</p>
+  <p>Όταν δεν χρειάζεστε ένα πλαίσιο, μπορεί να το διαγράψετε από τα <app>Πλαίσια</app>.</p>
 
   <steps>
-    <item><p>Select one or more boxes. In the collection view, right click a
-    box to be deleted.</p></item>
-    <item><p><link xref="interface#selection">Selection mode</link>
-    opens. Click additional boxes to select them for deletion.</p></item>
-    <item><p>Click the <gui style="button">Delete</gui> button.</p></item>
-    <item><p>Click the <key>X</key> to confirm.</p></item>
+    <item><p>Επιλέξτε ένα ή περισσότερα πλαίσια. Στην προβολή συλλογής, κάντε δεξί κλικ στο πλαίσιο που θέλετε να διαγράψετε.</p></item>
+    <item><p>Ανοίγει η <link xref="interface#selection">λειτουργία επιλογής</link>. Κάντε κλικ σε επιπλέον πλαίσια που θέλετε να διαγράψετε.</p></item>
+    <item><p>Κάντε κλικ στο κουμπί <gui style="button">Διαγραφή</gui>.</p></item>
+    <item><p>Κάντε κλικ στο <key>X</key> για να επιβεβαίωση.</p></item>
   </steps>
 
 </page>

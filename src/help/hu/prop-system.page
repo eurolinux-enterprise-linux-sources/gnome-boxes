@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="prop-system" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#properties" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>RAM és maximális lemezfoglalás megadása.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Gép rendszerkövetelményeinek módosítása</title>
+
+  <p>A <app>Gépek</app> alkalmazásban minden virtuális gépre saját RAM és maximálisan lefoglalható lemezterület beállítás vonatkozik.</p>
+
+  <steps>
+    <item><p>Nyissa meg a gép <link xref="interface#properties">tulajdonságok nézetét</link>. Ha a gép nyitva van, kattintson a fejlécsávban lévő <gui style="button">Tulajdonságok</gui> gombra. A tulajdonságok nézet elérhető a <link xref="interface#selection">kiválasztási módból</link> is.</p></item>
+    <item><p>Kattintson a <gui>Rendszer</gui> elemre az oldalsávban.</p></item>
+    <item><p>Állítsa be a <gui>Memória</gui> és <gui>Maximális lemezméret</gui> csúszkákat a kívánt értékeknek megfelelően.</p></item>
+  </steps>
+
+</page>

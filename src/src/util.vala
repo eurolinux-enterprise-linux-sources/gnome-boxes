@@ -34,7 +34,11 @@ namespace Boxes {
     }
 
     public string get_user_unattended (string? file_name = null) {
-        return get_cache ("unattended", file_name);
+        var dir = Path.build_filename (get_user_pkgconfig (), "unattended");
+
+        ensure_directory (dir);
+
+        return Path.build_filename (dir, file_name);
     }
 
     public string get_user_pkgcache (string? file_name = null) {
@@ -74,7 +78,11 @@ namespace Boxes {
     }
 
     public string get_user_pkgconfig_source (string? file_name = null) {
-        return get_cache ("sources", file_name);
+        var dir = Path.build_filename (get_user_pkgconfig (), "sources");
+
+        ensure_directory (dir);
+
+        return Path.build_filename (dir, file_name);
     }
 
     public string get_utf8_basename (string path) {
@@ -213,28 +221,6 @@ namespace Boxes {
         }
     }
 
-    public delegate void RunInThreadFunc () throws  GLib.Error;
-    public async void run_in_thread (owned RunInThreadFunc func) throws GLib.Error {
-        GLib.Error e = null;
-        GLib.SourceFunc resume = run_in_thread.callback;
-        new GLib.Thread<void*> (null, () => {
-            try {
-                func ();
-            } catch (GLib.Error err) {
-                e = err;
-            }
-
-            Idle.add ((owned) resume);
-
-            return null;
-        });
-
-        yield;
-
-        if (e != null)
-            throw e;
-    }
-
     public async void exec (string[] argv,
                             Cancellable? cancellable,
                             out string? standard_output = null,
@@ -244,7 +230,7 @@ namespace Boxes {
         // make sure vala makes a copy of argv that will be kept alive until run_in_thread finishes
         string[] argv_copy = argv;
 
-        yield run_in_thread (() => {
+        yield AsyncLauncher.get_default ().launch (() => {
            exec_sync (argv_copy, out std_output, out std_error);
         });
 

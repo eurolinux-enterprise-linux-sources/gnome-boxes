@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Gép vagy szolgáltatás elérése hálózaton keresztül.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Kapcsolódás másik számítógéphez</title>
+
+  <p>A <app>Gépek</app> alkalmazás lehetővé teszi egy távoli fizikai vagy virtuális gép megtekintését és elérését.</p>
+
+  <note style="important">
+    <p>A távoli gép már be kell legyen állítva.</p>
+  </note>
+
+  <steps>
+    <item><p>Az új gépet létrehozó varázsló indításához kattintson a bal felső sarokban az <gui style="button">Új</gui> gombra.</p></item>
+    <item><p>Egy bevezető üzenet jelenik meg. Kattintson a <gui style="button">Folytatás</gui> gombra.</p></item>
+    <item><p>A varázsló <gui>Forrásválasztás</gui> lapján kattintson az <gui style="button">Adja meg az URL-címet</gui> gombra.</p></item>
+
+    <item><p>Adja meg a távoli eszköz vagy szolgáltatás protokollt, IP-címet és portszámot tartalmazó URL-címét. Például:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>A protokoll a következők egyike lehet:</p>
+      <list>
+        <item><p>spice:// – kapcsolódás egy helyi vagy távoli <app>Xspice</app> kiszolgálóhoz.</p></item>
+        <item><p>qemu:// – kapcsolódás egy libvirt példányhoz, amely hozzáférést biztosít minden rajta tárolt virtuális géphez.</p></item>
+        <item><p>vnc:// – kapcsolódás egy távoli <app>vino</app> vagy <app>VNC</app> kiszolgálóhoz.</p></item>
+      </list>
+      <note style="info">
+        <p>A cím és a portszám a távoli gépen található eszköz vagy szolgáltatás konfigurációjában található. Így a <app>Gépek</app> alkalmazásban a <gui style="menu">Tulajdonságok</gui> nézetben tekinthető meg az adott géphez való kapcsolódást lehetővé tevő URL-cím.</p>
+      </note>
+    </item>
+    <item><p>Kattintson a jobb felső sarokban a <gui style="button">Folytatás</gui> gombra.</p></item>
+    <item><p>A gép átnevezéséhez kattintson a <gui style="button">Testreszabás</gui> gombra.</p></item>
+    <item><p>Kattintson a <gui style="button">Felvétel</gui> gombra.</p></item>
+  </steps>
+
+  <p>A távoli gép a gyűjtemény nézetben jelenik meg.</p>
+
+</page>

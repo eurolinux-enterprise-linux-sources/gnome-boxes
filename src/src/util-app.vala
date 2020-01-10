@@ -102,6 +102,28 @@ namespace Boxes {
         }
     }
 
+    public async GVir.StoragePool ensure_storage_pool (GVir.Connection connection) throws GLib.Error {
+        var pool = get_storage_pool (connection);
+        if (pool == null) {
+            debug ("Creating storage pool..");
+            var config = VMConfigurator.get_pool_config ();
+            pool = connection.create_storage_pool (config, 0);
+            yield pool.build_async (0, null);
+            debug ("Created storage pool.");
+        }
+
+        // Ensure pool directory exists in case user deleted it after pool creation
+        var pool_path = get_user_pkgdata ("images");
+        ensure_directory (pool_path);
+
+        if (pool.get_info ().state == GVir.StoragePoolState.INACTIVE)
+            yield pool.start_async (0, null);
+        yield pool.refresh_async (null);
+        pool.set_autostart (true);
+
+        return pool;
+    }
+
     public GVir.StoragePool? get_storage_pool (GVir.Connection connection) {
         return connection.find_storage_pool_by_name (Config.PACKAGE_TARNAME);
     }
@@ -145,9 +167,14 @@ namespace Boxes {
             // Now check if unprivileged qemu is allowed to access it
             var file = File.new_for_path ("/etc/qemu/bridge.conf");
             uint8[] contents;
-            file.load_contents (null, out contents, null);
+            try {
+                file.load_contents (null, out contents, null);
+            } catch (IOError.NOT_FOUND error) {
+                file = File.new_for_path ("/etc/qemu-kvm/bridge.conf");
+                file.load_contents (null, out contents, null);
+            }
 
-            libvirt_bridge_net_available = (Regex.match_simple ("^allow.*virbr0", (string) contents));
+            libvirt_bridge_net_available = (Regex.match_simple ("(?m)^allow.*virbr0", (string) contents));
         } catch (GLib.Error error) {
             debug ("%s", error.message);
 
@@ -157,6 +184,23 @@ namespace Boxes {
         libvirt_bridge_net_checked = true;
 
         return libvirt_bridge_net_available;
+    }
+
+    private static GVir.Connection? system_virt_connection = null;
+
+    public async GVir.Connection get_system_virt_connection () throws GLib.Error {
+        if (system_virt_connection != null)
+            return system_virt_connection;
+
+        system_virt_connection = new GVir.Connection ("qemu+unix:///system");
+
+        yield system_virt_connection.open_read_only_async (null);
+
+        debug ("Connected to system libvirt, now fetching domains..");
+        yield system_virt_connection.fetch_domains_async (null);
+        yield system_virt_connection.fetch_networks_async (null);
+
+        return system_virt_connection;
     }
 
     private string? get_logo_path (Osinfo.Os os, string[] extensions = {".svg", ".png", ".jpg"}) {
@@ -356,19 +400,6 @@ namespace Boxes {
          });
     }
 
-    public async void copy_file (File             src_file,
-                                 File             dest_file,
-                                 ActivityProgress progress,
-                                 Cancellable?     cancellable = null) throws GLib.Error {
-        try {
-            debug ("Copying '%s' to '%s'..", src_file.get_path (), dest_file.get_path ());
-            yield src_file.copy_async (dest_file, 0, Priority.DEFAULT, cancellable, (current, total) => {
-                progress.progress = (double) current / total;
-            });
-            debug ("Copied '%s' to '%s'.", src_file.get_path (), dest_file.get_path ());
-        } catch (IOError.EXISTS error) {}
-    }
-
     // Warning: architecture compability is not computative. e.g "i386" is compatible with "i686" but "i686" is
     // incompatible with "i386".
     public enum CPUArchCompatibility {
@@ -495,6 +526,43 @@ namespace Boxes {
         return tokens[1];
     }
 
+    // Move all configurations from ~/.cache to ~/.config
+    public async void move_configs_from_cache () {
+        yield move_config_from_cache ("unattended");
+        yield move_config_from_cache ("sources");
+    }
+
+    private async void move_config_from_cache (string config_name) {
+        var path = get_cache (config_name);
+        var cache_dir = File.new_for_path (path);
+        var config_path = Path.build_filename (get_user_pkgconfig (), config_name);
+
+        try {
+            var enumerator = yield cache_dir.enumerate_children_async (FileAttribute.STANDARD_NAME, 0);
+            while (true) {
+                var files = yield enumerator.next_files_async (10);
+                if (files == null)
+                    break;
+
+                foreach (var info in files) {
+                    path = Path.build_filename (cache_dir.get_path (), info.get_name ());
+                    var cache_file = File.new_for_path (path);
+                    path = Path.build_filename (config_path, info.get_name ());
+                    var config_file = File.new_for_path (path);
+
+                    cache_file.move (config_file, FileCopyFlags.OVERWRITE);
+                    debug ("moved %s to %s", cache_file.get_path (), config_file.get_path ());
+                }
+            }
+
+            yield cache_dir.delete_async ();
+        } catch (IOError.NOT_FOUND error) {
+            // That just means config doesn't exist in cache dir
+        } catch (GLib.Error error) {
+            warning (error.message);
+        }
+    }
+
     namespace UUID {
         [CCode (cname = "uuid_generate", cheader_filename = "uuid/uuid.h")]
         internal extern static void generate ([CCode (array_length = false)] uchar[] uuid);
@@ -521,5 +589,46 @@ namespace Boxes {
             pix = new GLib.ThemedIcon (name);
 
         return pix;
+    }
+
+    public Gdk.Pixbuf? paint_empty_frame (int width, int height, double radius, Gdk.RGBA border_color, Gdk.RGBA? bg_color) {
+        var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
+        var cr = new Cairo.Context (surface);
+
+        if (bg_color != null) {
+            cr.set_source_rgba (bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha);
+            paint_frame_background (cr, width, height, radius);
+        }
+
+        cr.set_source_rgba (border_color.red, border_color.green, border_color.blue, border_color.alpha);
+        paint_frame_border (cr, width, height, radius);
+
+        return Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
+    }
+
+    private void paint_frame_background (Cairo.Context cr, int width, int height, double radius) {
+        rounded_rectangle (cr, 0.5, 0.5, width - 1, height - 1, radius);
+        cr.fill ();
+    }
+
+    private void paint_frame_border (Cairo.Context cr, int width, int height, double radius) {
+        cr.set_line_width (1.0);
+        // The rectangle is reduced by 0.5px on each side to allow drawing a sharp 1px line and not between two pixels.
+        rounded_rectangle (cr, 0.5, 0.5, width - 1, height - 1, radius);
+        cr.stroke ();
+    }
+
+    private void rounded_rectangle (Cairo.Context cr, double x, double y, double width, double height, double radius) {
+        const double ARC_0 = 0;
+        const double ARC_1 = Math.PI * 0.5;
+        const double ARC_2 = Math.PI;
+        const double ARC_3 = Math.PI * 1.5;
+
+        cr.new_sub_path ();
+        cr.arc (x + width - radius, y + radius,          radius, ARC_3, ARC_0);
+        cr.arc (x + width - radius, y + height - radius, radius, ARC_0, ARC_1);
+        cr.arc (x + radius,         y + height - radius, radius, ARC_1, ARC_2);
+        cr.arc (x + radius,         y + radius,          radius, ARC_2, ARC_3);
+        cr.close_path ();
     }
 }

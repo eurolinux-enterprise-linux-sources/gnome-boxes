@@ -44,6 +44,7 @@ namespace Gd {
 		[NoAccessorMethod]
 		public bool show_close_button { get; set construct; }
 		[NoAccessorMethod]
+		[Version (since = "0.1")]
 		public int timeout { get; set construct; }
 		public virtual signal void dismissed ();
 	}
@@ -106,7 +107,11 @@ namespace Gd {
 	[CCode (cheader_filename = "libgd/gd.h")]
 	public static GLib.Icon create_symbolic_icon (string name, int base_size);
 	[CCode (cheader_filename = "libgd/gd.h")]
+	public static GLib.Icon create_symbolic_icon_for_scale (string name, int base_size, int scale);
+	[CCode (cheader_filename = "libgd/gd.h")]
 	public static Gdk.Pixbuf embed_image_in_frame (Gdk.Pixbuf source_image, string frame_image_url, Gtk.Border slice_width, Gtk.Border border_width);
+	[CCode (cheader_filename = "libgd/gd.h")]
+	public static Cairo.Surface embed_surface_in_frame (Cairo.Surface source_image, string frame_image_url, Gtk.Border slice_width, Gtk.Border border_width);
 	[CCode (cheader_filename = "libgd/gd.h")]
 	public static void ensure_types ();
 	[CCode (cheader_filename = "libgd/gd.h")]

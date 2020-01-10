@@ -24,13 +24,13 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
@@ -39,7 +39,7 @@
   <section id="collection">
   <title>Sammlungsansicht</title>
 
-  <p>Wenn Sie <app>Boxen</app> zum ersten Mal starten, weist Sie die Begrüßung an, auf den Knopf <gui style="button">Neu</gui> zu klicken. Bei weiteren Besuchen öffnet <app>Boxen</app> sofort die <em>Sammlungsansicht</em> und zeigt Ihnen Vorschaubilder Ihrer Boxen in einem Raster. Ihre Favoriten und häufig genutzten Boxen erscheinen am Anfang der Liste. Die Sammlungsansicht ermöglicht es Ihnen:</p>
+  <p>Wenn Sie <app>Boxen</app> zum ersten Mal starten, weist Sie die Begrüßung an, auf den Knopf <gui style="button">Neu</gui> zu klicken. Bei weiteren Besuchen öffnet <app>Boxen</app> sofort die <em>Sammlungsansicht</em> und zeigt Ihnen Vorschaubilder Ihrer Boxen in einem Raster. Ihre Favoriten und häufig genutzten Boxen erscheinen am Anfang der Liste. In der Sammlungsansicht ist Folgendes möglich:</p>
 
   <list>
     <item><p>Klicken Sie auf <gui style="button">Neu</gui>, um eine Box <link xref="create">anzulegen</link>.</p></item>
@@ -86,10 +86,10 @@
   <p>Das Hauptfenster der Eigenschaftenansicht ermöglicht es, Einstellungen anzuzeigen oder zu ändern, abhängig von den folgenden in der Seitenleiste gewählten Kategorien:</p>
 
   <list>
-    <item><p><gui>System</gui>einstellungen: Speicher, maximale zugelassene Datenträgerbelegung und das <gui>Fehlerdiagnose-Protokoll</gui>.</p></item>
-    <item><p><gui>Anzeige</gui>einstellungen: Anzeigeprotokoll, gemeinsam verwendete Zwischenablage, Größenanpassung der Anzeige</p></item>
-    <item><p><gui>Geräte</gui>einstellungen: Zugriff auf USB- oder CD/DVD-Geräte.</p></item>
-    <item><p><gui>Schnappschhüsse</gui>: <link xref="snapshot-create">Erstellen</link> und verwalten von Schnappschüssen der Box.</p></item>
+    <item><p><gui>System</gui>-Einstellungen: Speicher, maximale zugelassene Datenträgerbelegung und das <gui>Fehlerdiagnose-Protokoll</gui>.</p></item>
+    <item><p><gui>Anzeige</gui>-Einstellungen: Anzeigeprotokoll, gemeinsam verwendete Zwischenablage, Größenanpassung der Anzeige</p></item>
+    <item><p><gui>Geräte</gui>-Einstellungen: Zugriff auf USB- oder CD/DVD-Geräte.</p></item>
+    <item><p><gui>Schnappschüsse</gui>: <link xref="snapshot-create">Erstellen</link> und Verwalten von Schnappschüssen der Box.</p></item>
   </list>
 
   <p>Die Eigenschaftenansicht wird auch mit dem Knopf <gui style="button">Anpassen</gui> während der Einrichtung einer Box aufgerufen, als auch durch einen Klick auf den Werkzeugknopf in der Kopfleiste einer laufenden Sitzung.</p>

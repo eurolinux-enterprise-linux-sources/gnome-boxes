@@ -15,16 +15,16 @@
     <desc><app>박스</app>에서 사용할 수 있는 자원을 확인합니다.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Seong-ho Cho</mal:name>
+      <mal:name>조성호</mal:name>
       <mal:email>shcho@gnome.org</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014, 2016.</mal:years>
     </mal:credit>
   </info>
 
   <title>프로세서 하드웨어 가상화 사용하기</title>
 
   <p>프로세서 가상화 하드웨어 확장기능을 컴퓨터에서 지원하는지 확인하려면, 그리고 시스템 바이오스에서 활성화 했는지도 확인하려면 다음 명령을 터미널 창에서 실행하십시오:</p>
-  <p><cmd>gnome-shell --checks</cmd></p>
+  <p><cmd>gnome-boxes --checks</cmd></p>
   <p>필요하다면 <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">바이오스 설정</link>에서 확장 기능을 바꾸십시오.</p>
 
 </page>

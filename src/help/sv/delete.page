@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="delete" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Ta bort en box som du inte längre behöver.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Ta bort en box</title>
+
+  <p>När en box inte längre behövs kan den tas bort från <app>Boxes</app>.</p>
+
+  <steps>
+    <item><p>Välj en eller flera boxar. I samlingsvyn, högerklicka på en box som ska tas bort.</p></item>
+    <item><p><link xref="interface#selection">Valläget</link> öppnas. Klicka på ytterligare boxar för att välja dem för borttagning.</p></item>
+    <item><p>Klicka på knappen <gui style="button">Ta bort</gui>.</p></item>
+    <item><p>Klicka på <key>X</key> för att bekräfta.</p></item>
+  </steps>
+
+</page>

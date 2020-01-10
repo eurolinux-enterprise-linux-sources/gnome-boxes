@@ -25,7 +25,7 @@ private class Boxes.OvirtBroker : Boxes.Broker {
         }
     }
 
-    public override async void add_source (CollectionSource source) {
+    public override async void add_source (CollectionSource source) throws GLib.Error {
         if (proxies.lookup (source.name) != null)
             return;
 
@@ -50,7 +50,7 @@ private class Boxes.OvirtBroker : Boxes.Broker {
                 proxy.password = password;
                 auth.unpause ();
             };
-            Notification.CancelFunc cancel_cb = () => {
+            Notification.DismissFunc cancel_cb = () => {
                 // Make sure we are not stuck waiting for authentication to
                 // finish, otherwise yield add_source() will never return
                 auth.unpause ();

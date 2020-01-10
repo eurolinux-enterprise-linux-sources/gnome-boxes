@@ -10,31 +10,29 @@
       <years>2014</years>
     </credit>
 
-    <desc>Diagnose problems with your box using the log file.</desc>
+    <desc>Diagnostique problemas com a sua máquina usando o arquivo de registro (log).</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>View the trouble log of a box</title>
+  <title>Vendo o registro de erros de uma máquina</title>
 
-  <p>If a box is having a problem starting up or running, clues to help you fix
-  the problem may be found in the trouble log. The trouble log displays the
-  virtual machine state, the virtual machine libvirt configuration, and the
-  QEMU hypervisor log.</p>
+  <p>Se uma máquina está tendo um problema para inicializar ou executar, pistas para lhe ajudar a corrigir o mesmo podem ser encontrados no registro (log) de problemas. O registro exibe: o estado da máquina virtual, a configuração do libvirt da máquina virtual, e o log do hypervisor QEMU.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>System</gui> in the sidebar.</p></item>
-    <item><p>Click the <gui style="button">Trouble Log</gui> button to view the
-    log.</p></item>
+    <item><p>Abra a <link xref="interface#properties">visão de propriedades</link> da máquina. Quando a máquina estiver aberta, clique no botão <gui style="button">Propriedades</gui> na barra de cabeçalho. A visão de propriedades também pode ser acessada a partir do <link xref="interface#selection">modo de seleção</link>.</p></item>
+    <item><p>Clique em <gui>Sistema</gui> na barra lateral.</p></item>
+    <item><p>Clique no botão de <gui style="button">Log de resolução de problemas</gui> para ver o registro.</p></item>
   </steps>
 
 </page>

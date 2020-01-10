@@ -16,7 +16,7 @@ private class Boxes.WizardScrolled : Gtk.ScrolledWindow {
     [GtkChild]
     public Gtk.Box vbox;
 
-    private int num_visible;
+    private int num_visible { get; set; }
 
     // Ideally, we shouldn't need this fuction but is there a way to connect
     // vscrollbar signals from the UI template?
@@ -114,10 +114,6 @@ private class Boxes.WizardSource: Gtk.Stack {
     [GtkChild]
     private Boxes.WizardScrolled media_scrolled;
     [GtkChild]
-    private Gtk.Label url_description_label;
-    [GtkChild]
-    private Gtk.Image url_image;
-    [GtkChild]
     private Gtk.Box url_entry_vbox;
     [GtkChild]
     public Gtk.Entry url_entry;
@@ -185,13 +181,36 @@ private class Boxes.WizardSource: Gtk.Stack {
         assert (window != null);
 
         this.window = window;
+
+        var os_db = media_manager.os_db;
+        os_db.get_all_media_urls_as_store.begin ((db, result) => {
+            try {
+                var url_store = os_db.get_all_media_urls_as_store.end (result);
+                var completion = new Gtk.EntryCompletion ();
+                completion.text_column = 0;
+                completion.model = url_store;
+                weak Gtk.CellRendererText cell = completion.get_cells ().nth_data (0) as Gtk.CellRendererText;
+                cell.ellipsize = Pango.EllipsizeMode.MIDDLE;
+                completion.set_match_func ((store, key, iter) => {
+                    string url;
+
+                    url_store.get (iter, 0, out url);
+
+                    return url.contains (key);
+                });
+                url_entry.completion = completion;
+            } catch (OSDatabaseError error) {
+                debug ("Failed to get all known media URLs: %s", error.message);
+            }
+        });
     }
 
     public void cleanup () {
         install_media = null;
         libvirt_sys_import = false;
         selected = null;
-        uri = "";
+        if(page != SourcePage.URL)
+            uri = "";
     }
 
     [GtkCallback]
@@ -208,11 +227,6 @@ private class Boxes.WizardSource: Gtk.Stack {
     private void on_url_back_button_clicked () {
         selected = null;
         page = SourcePage.MAIN;
-    }
-
-    public void update_url_page(string title, string text, string icon_name) {
-        url_description_label.set_markup ("<b>"  + title + "</b>\n\n" + text);
-        url_image.icon_name = icon_name;
     }
 
     private async void add_media_entries () {
@@ -279,27 +293,14 @@ private class Boxes.WizardSource: Gtk.Stack {
 
     [GtkCallback]
     private void on_select_file_button_clicked () {
-        var dialog = new Gtk.FileChooserDialog (_("Select a device or ISO file"),
-                                                window,
-                                                Gtk.FileChooserAction.OPEN,
-                                                _("_Cancel"), Gtk.ResponseType.CANCEL,
-                                                _("_Open"), Gtk.ResponseType.ACCEPT);
-        dialog.show_hidden = false;
-        dialog.local_only = false;
-        dialog.filter = new Gtk.FileFilter ();
-        dialog.filter.add_mime_type ("application/x-cd-image");
-        foreach (var extension in InstalledMedia.supported_extensions)
-            dialog.filter.add_pattern ("*" + extension);
-        if (dialog.run () == Gtk.ResponseType.ACCEPT) {
-            uri = dialog.get_uri ();
+        window.wizard_window.show_file_chooser ((uri) => {
+            this.uri = uri;
             // clean install_media as this may be set already when going back in the wizard
             install_media = null;
             activated ();
 
             selected = select_file_button;
-        }
-
-        dialog.destroy ();
+        });
     }
 
     [GtkCallback]

@@ -10,33 +10,32 @@
       <years>2014</years>
     </credit>
 
-    <desc>Change back to the state of a saved snapshot.</desc>
+    <desc>Volver al estado de una instantánea guardada.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
-  <title>Revert the state of a box</title>
+  <title>Revertir el estado de una caja</title>
 
-  <p><em>Reverting</em> to a snapshot restores the state of the virtual machine
-  saved in that snapshot.</p>
+  <p><em>Revertir</em> a una instantánea retorna una máquina virtual al estado almacenado en esa instantánea.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Snapshots</gui> in the sidebar.</p></item>
-    <item><p>Select the snapshot from the list to which to revert.</p></item>
-    <item><p>Click the menu button on the right and select
-    <gui>Revert to this state</gui>.</p></item>
+    <item><p>Abra la <link xref="interface#properties">vista de propiedades</link> para la caja. Si la caja está abierta, pulse el botón <gui style="button">Propiedades</gui> en la barra de cabecera. También se puede acceder a la vista de propiedades desde el <link xref="interface#selection">modo de selección</link>.</p></item>
+    <item><p>Pulse <gui style="menuitem">Instantáneas</gui> en la barra lateral.</p></item>
+    <item><p>Seleccione la instantánea de la lista a la que revertir el estado.</p></item>
+    <item><p>Pulse el botón de menú de la derecha y seleccione <gui>Revertir a este estado</gui>.</p></item>
   </steps>
 
-  <p>Changes made to the virtual machine since the snapshot was saved are
-  discarded.</p>
+  <p>Los cambios realizados en la máquina virtual desde que se tomó la instantánea se descartarán.</p>
 
 </page>

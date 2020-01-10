@@ -27,7 +27,7 @@
       <years>2013</years>
     </credit>
 
-    <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+    <desc>Jaký hardware je požadován pro běh virtuálního stroje pomocí <app>Boxů</app>.</desc>
   </info>
 
   <title>Začínáme s virtuálními stroji</title>
@@ -38,10 +38,7 @@
     <item>
       <p>20 GB jako maximum úložného prostoru</p>
       <note style="advanced">
-      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
-         when creating the virtual machine. The actual disk space used by
-         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
-         space used by the virtual machine itself.</p>
+      <p>To neznamená, že <app>Boxy</app> při vytváření virtuálního stroje obsadí 20 GB prostoru. Diskové místo aktuálně použité <app>Boxy</app> bude běžně menší než (nebo v nejhorším případě stejné jako) diskové místo použité virtuálním strojem.</p>
       </note>
     </item>
     <item>
@@ -50,9 +47,7 @@
   </list>
 
   <note style="advanced">
-    <p><app>Boxes</app> performs best if your computer processor supports
-    hardware <link xref="virtualization">virtualization extensions</link> and
-    these are enabled in the system BIOS.</p>
+    <p><app>Boxy</app> fungují nejlépe, když procesor ve vašem počítači podporuje hardwarové <link xref="virtualization">rozšíření pro virtualizaci</link> a to je povoleno v systému BIOS.</p>
   </note>
 
 </page>

@@ -3,16 +3,18 @@ using Ovirt;
 using Gtk;
 
 private class Boxes.OvirtMachine: Boxes.Machine {
+    public override bool can_restart { get { return false; } }
+    public override bool can_clone { get { return false; } }
+
     private Ovirt.Vm vm;
     private Ovirt.Proxy proxy;
 
     public OvirtMachine (CollectionSource source,
                          Ovirt.Proxy proxy,
                          Ovirt.Vm vm) throws GLib.Error {
-        base (source, vm.name);
+        base (source, vm.name, vm.guid);
 
         debug ("new ovirt machine: " + name);
-        create_display_config (vm.guid);
         this.proxy = proxy;
         this.vm = vm;
 
@@ -20,6 +22,9 @@ private class Boxes.OvirtMachine: Boxes.Machine {
 
         load_screenshot ();
         set_screenshot_enable (true);
+        update_info ();
+
+        source.notify["uri"].connect (update_info);
     }
 
     public override async void connect_display (Machine.ConnectFlags flags) throws GLib.Error {
@@ -34,6 +39,8 @@ private class Boxes.OvirtMachine: Boxes.Machine {
                 this.update_state ();
             } catch (IOError.CANCELLED error) {
                 debug ("connection to %s was cancelled", name);
+
+                return;
             } catch (GLib.Error error) {
                 throw new Boxes.Error.INVALID ("Couldn't start oVirt VM '%s': %s", vm.name, error.message);
             }
@@ -56,26 +63,30 @@ private class Boxes.OvirtMachine: Boxes.Machine {
         }
     }
 
-    public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page, ref PropertyCreationFlag flags) {
+    public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page) {
         var list = new List<Boxes.Property> ();
 
         switch (page) {
-        case PropertiesPage.LOGIN:
-            add_string_property (ref list, _("Virtualizer"), source.uri);
-            add_string_property (ref list, _("URI"), display.uri);
-            break;
-
-        case PropertiesPage.DISPLAY:
+        case PropertiesPage.GENERAL:
+            add_string_property (ref list, _("Broker"), source.name);
             add_string_property (ref list, _("Protocol"), display.protocol);
+            add_string_property (ref list, _("URL"), display.uri);
             break;
         }
 
-        list.concat (display.get_properties (page, ref flags));
+        list.concat (display.get_properties (page));
 
         return list;
     }
 
     public override void restart () {} // See FIXME on RemoteMachine.restart
+    public override async void clone () {}
+
+    private void update_info () {
+        var uri = Xml.URI.parse (source.uri);
+
+        info = _("host: %s").printf (uri.server);
+    }
 
     private Display create_display_connection () throws GLib.Error {
         if (vm.display.address == null || vm.display.address == "")

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="usb-redirection" xml:lang="hu">
+  <info>
+
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-24" status="candidate"/>
+
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Engedélyezze a gépnek az USB elérését.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>USB átirányítás</title>
+
+  <p>Az <sys>USB</sys> az az univerzális hardverbusz protokoll, amely lehetővé teszi tetszőleges eszköz csatlakoztatását a számítógéphez. Az <sys>USB átirányítás</sys> elérhetővé teszi a helyi számítógépbe bedugott eszközöket a <app>Gépek</app> alkalmazáson keresztül csatlakoztatott gépeknek. Egy USB pen drive vagy webkamera úgy fog megjelenni, mintha a távoli vagy virtuális géphez lenne csatlakoztatva.</p>
+
+  <steps>
+    <title>A gazda USB eszközei elérésének engedélyezéséhez egy gépnek:</title>
+    <item><p>Kattintson a jobb egérgombbal a gépre a gyűjtemény nézetben, vagy ha a gép már nyitva van, akkor kattintson a tulajdonságok gombra az eszköztáron.</p></item>
+    <item><p>Kattintson az <gui style="menuitem">Eszközök</gui> elemre az oldalsávban.</p></item>
+    <item><p>Győződjön meg róla, hogy az <gui>Új USB eszközök átirányítása</gui> lehetőség <gui style="switch">BE</gui> van kapcsolva. A gazda géphez csatlakoztatott <gui>USB eszközök</gui> egy listában jelennek meg.</p></item>
+    <item><p>Állítsa a kívánt eszközök melletti kapcsolókat <gui style="switch">BE</gui> állásba.</p></item>
+  </steps>
+
+</page>

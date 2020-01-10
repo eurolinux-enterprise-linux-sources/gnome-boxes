@@ -3,19 +3,69 @@ using Gdk;
 using Gtk;
 
 private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesProvider {
+    const uint AUTOSAVE_TIMEOUT = 60; // seconds
+
     public Boxes.CollectionSource source;
     public Boxes.BoxConfig config;
     public Gdk.Pixbuf? pixbuf { get; set; }
+    public MachineThumbnailer thumbnailer { get; private set; }
     public bool stay_on_display;
-    public string? info { get; set; }
+    public string? info { get; protected set; }
     public string? status { get; set; }
-    public bool suspend_at_exit;
+    public virtual bool suspend_at_exit { get { return false; } }
 
     public virtual bool can_save { get { return false; } }
-    public bool can_delete { get; protected set; default = true; }
+    public abstract bool can_restart { get; }
+    public abstract bool can_clone { get; }
+    public bool can_delete { get; set; default = true; }
     public bool under_construction { get; protected set; default = false; }
 
     public signal void got_error (string message);
+
+    protected virtual bool should_autosave {
+        get {
+            return (can_save && is_running && autosave_timeout_id == 0);
+        }
+    }
+
+    public bool is_connected {
+        get {
+            if (display == null)
+                return false;
+
+            return display.connected;
+        }
+    }
+
+    public bool is_running {
+        get {
+            return state == MachineState.RUNNING;
+        }
+    }
+
+    public bool is_on {
+        get {
+            return state == MachineState.RUNNING ||
+                state == MachineState.PAUSED ||
+                state == MachineState.SLEEPING;
+        }
+    }
+
+    public bool is_stopped {
+        get {
+            return state == Machine.MachineState.FORCE_STOPPED || state == Machine.MachineState.STOPPED;
+        }
+    }
+
+    public virtual bool is_local {
+        get {
+            // If the adress is in the 127.0.0.0 block or is localhost, then it is local
+            if (/:\/\/(127\.\d+\.\d+\.\d+|localhost)/i.match (source.uri))
+                return true;
+
+            return false;
+        }
+    }
 
     private ulong show_id;
     private ulong hide_id;
@@ -25,12 +75,18 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
     private ulong ui_state_id;
     private ulong got_error_id;
     private uint screenshot_id;
-    public static const int SCREENSHOT_WIDTH = 180;
-    public static const int SCREENSHOT_HEIGHT = 134;
+    public const int SCREENSHOT_WIDTH = 180;
+    public const int SCREENSHOT_HEIGHT = 134;
+    public const int CENTERED_EMBLEM_SIZE = 32;
+    public const int EMBLEM_SIZE = 16;
+    public const Gdk.RGBA FRAME_BORDER_COLOR = { 0x3b / 255.0, 0x3c / 255.0, 0x38 / 255.0, 1.0 };
+    public const Gdk.RGBA FRAME_BACKGROUND_COLOR = { 0x2d / 255.0, 0x2d / 255.0, 0x2d / 255.0, 1.0 };
     private static Cairo.Surface grid_surface;
     private bool updating_screenshot;
     private string username;
     private string password;
+
+    private uint autosave_timeout_id;
 
     public Cancellable connecting_cancellable { get; protected set; }
 
@@ -70,6 +126,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             // state, we got to exit, as there is no way for the user
             // to progress in the vm display anymore
             if (display != null && !stay_on_display &&
+                window != null && // This being null would mean app is exitting & no window exists anymore
                 window.current_item == this &&
                 value != MachineState.RUNNING &&
                 window.ui_state != UIState.PROPERTIES &&
@@ -98,7 +155,6 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         case Boxes.UIState.DISPLAY:
             var widget = display.get_display (0);
             widget_remove (widget);
-            display.set_enable_inputs (widget, true);
             window.display_page.show_display (display, widget);
             widget.grab_focus ();
 
@@ -107,7 +163,6 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         case Boxes.UIState.PROPERTIES:
             var widget = display.get_display (0);
             widget_remove (widget);
-            display.set_enable_inputs (widget, true);
             window.display_page.replace_display (display, widget);
             break;
         }
@@ -137,12 +192,13 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
                 return;
 
             // Translators: The %s will be expanded with the name of the vm
-            status = _("Connecting to %s").printf (name);
+            window.topbar.status = _("Connecting to %s").printf (name);
 
             show_id = _display.show.connect ((id) => { show_display (); });
 
             hide_id = _display.hide.connect ((id) => {
-                window.display_page.remove_display ();
+                if (window != null)
+                    window.display_page.remove_display ();
             });
 
             got_error_id = _display.got_error.connect ((message) => {
@@ -151,6 +207,9 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
 
             disconnected_id = _display.disconnected.connect ((failed) => {
                 message (@"display $name disconnected");
+                if (window == null) // App exitting & no window exists anymore
+                    return;
+
                 if (window.ui_state == UIState.CREDS || window.ui_state == UIState.DISPLAY) {
                     if (!stay_on_display && window.current_item == this)
                         window.set_state (Boxes.UIState.COLLECTION);
@@ -160,6 +219,8 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
                 }
 
                 load_screenshot ();
+
+                disconnect_display ();
             });
 
             need_password_id = _display.notify["need-password"].connect (handle_auth);
@@ -184,12 +245,10 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         cr.fill ();
     }
 
-    public Machine (Boxes.CollectionSource source, string name) {
+    public Machine (Boxes.CollectionSource source, string name, string? uuid = null) {
         this.name = name;
         this.source = source;
         this.connecting_cancellable = new Cancellable ();
-
-        pixbuf = draw_fallback_vm ();
 
         notify["ui-state"].connect (ui_state_changed);
         ui_state_id = App.app.main_window.notify["ui-state"].connect (() => {
@@ -199,14 +258,20 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
                 set_screenshot_enable (true);
         });
 
-        notify["name"].connect (() => {
-            status = this.name;
-        });
+        create_display_config (uuid);
+
+        // This needs to be set after the 'config' prop has been set.
+        thumbnailer = new MachineThumbnailer (this,
+                                              SCREENSHOT_WIDTH, SCREENSHOT_HEIGHT,
+                                              CENTERED_EMBLEM_SIZE, EMBLEM_SIZE,
+                                              FRAME_BORDER_COLOR, FRAME_BACKGROUND_COLOR);
     }
 
     protected void load_screenshot () {
         try {
-            var screenshot = new Gdk.Pixbuf.from_file (get_screenshot_filename ());
+            var screenshot = (state != MachineState.STOPPED && state != MachineState.FORCE_STOPPED) ?
+                             new Gdk.Pixbuf.from_file (get_screenshot_filename ()) :
+                             null;
             set_screenshot (screenshot, false);
         } catch (GLib.Error error) {
         }
@@ -237,19 +302,44 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         return Boxes.get_screenshot_filename (config.uuid);
     }
 
+    private bool saving;
     public async void save () throws GLib.Error {
         if (state == Machine.MachineState.SAVED) {
-            debug ("Not saving '%s' since its already in saved state.", name);
+            debug ("Not saving '%s' since it's already in saved state.", name);
             return;
         }
 
-        var info = this.info;
-        this.info = (info != null)? info + "\n" : "";
-        this.info += _("Saving…");
+        saving = true;
+        update_status ();
 
-        yield save_real ();
+        try {
+            yield save_real ();
+        } finally {
+            saving = false;
+            update_status ();
+        }
+    }
 
-        this.info = info;
+    public void schedule_autosave () {
+        if (!should_autosave)
+            return;
+
+        debug ("Scheduling autosave for '%s'", name);
+        autosave_timeout_id = Timeout.add_seconds (AUTOSAVE_TIMEOUT, () => {
+            try_save.begin ();
+            autosave_timeout_id = 0;
+
+            return false;
+        });
+    }
+
+    public void unschedule_autosave () {
+        if (autosave_timeout_id == 0)
+            return;
+
+        debug ("Unscheduling autosave for '%s'", name);
+        Source.remove (autosave_timeout_id);
+        autosave_timeout_id = 0;
     }
 
     protected virtual async void save_real () throws GLib.Error {
@@ -268,17 +358,11 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         return display.get_pixbuf (0);
     }
 
-    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page, ref PropertyCreationFlag flags);
-
-    public bool is_connected () {
-        if (display == null)
-            return false;
-
-        return display.connected;
-    }
+    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page);
 
     public abstract async void connect_display (ConnectFlags flags) throws GLib.Error;
     public abstract void restart ();
+    public abstract async void clone ();
 
     public virtual void disconnect_display () {
         if (display == null)
@@ -305,7 +389,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         window = null;
     }
 
-    protected void create_display_config (string? uuid = null)
+    private void create_display_config (string? uuid = null)
         requires (this.config == null)
         ensures (this.config != null) {
 
@@ -327,14 +411,11 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         config.save ();
     }
 
-    public bool is_running () {
-        return state == MachineState.RUNNING;
-    }
-
-    public bool is_on () {
-        return state == MachineState.RUNNING ||
-            state == MachineState.PAUSED ||
-            state == MachineState.SLEEPING;
+    protected virtual void update_status () {
+        if (saving)
+            status = _("Saving…");
+        else
+            status = null;
     }
 
     private void save_pixbuf_as_screenshot (Gdk.Pixbuf? pixbuf) {
@@ -394,8 +475,6 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
 
             orig_pixbuf = small_screenshot;
             pixbuf = draw_vm (small_screenshot, SCREENSHOT_WIDTH, SCREENSHOT_HEIGHT);
-            if (window.current_item == this)
-                window.sidebar.props_sidebar.screenshot.set_from_pixbuf (pixbuf);
             if (save)
                 save_pixbuf_as_screenshot (small_screenshot);
 
@@ -445,7 +524,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         context.set_operator (Cairo.Operator.SOURCE);
         context.paint ();
 
-        if (!is_running ()) {
+        if (!is_running) {
             context.set_source_rgba (1, 1, 1, 1);
             context.set_operator (Cairo.Operator.HSL_SATURATION);
             context.paint ();
@@ -467,40 +546,6 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         return Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
     }
 
-    private static Gdk.Pixbuf? default_fallback = null;
-    private static Gdk.Pixbuf draw_fallback_vm (int width = SCREENSHOT_WIDTH,
-                                                int height = SCREENSHOT_HEIGHT,
-                                                bool force = false) {
-        Gdk.Pixbuf pixbuf = null;
-
-        if (width == SCREENSHOT_WIDTH && height == SCREENSHOT_HEIGHT && !force)
-            if (default_fallback != null)
-                return default_fallback;
-            else
-                default_fallback = draw_fallback_vm (width, height, true);
-
-        try {
-            var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-            var context = new Cairo.Context (surface);
-
-            int size = (int) (height * 0.6);
-            var icon_info = IconTheme.get_default ().lookup_icon ("computer-symbolic", size,
-                                                                  IconLookupFlags.GENERIC_FALLBACK);
-            Gdk.cairo_set_source_pixbuf (context, icon_info.load_icon (),
-                                         (width - size) / 2, (height - size) / 2);
-            context.rectangle ((width - size) / 2, (height - size) / 2, size, size);
-            context.fill ();
-            pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
-        } catch {
-        }
-
-        if (pixbuf != null)
-            return pixbuf;
-
-        var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-        return Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
-    }
-
     public virtual void delete (bool by_user = true) {
         deleted = true;
 
@@ -518,7 +563,16 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         }
     }
 
+    private GLib.Binding? name_status_bind;
+
     private void ui_state_changed () {
+        if (name_status_bind != null) {
+            var topbar = name_status_bind.target as Topbar;
+            topbar.status = null;
+            name_status_bind.unbind ();
+            name_status_bind = null;
+        }
+
         switch (ui_state) {
         case UIState.CREDS:
             window.below_bin.set_visible_child_name ("connecting-page");
@@ -528,6 +582,8 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         case Boxes.UIState.DISPLAY:
             if (previous_ui_state == UIState.PROPERTIES)
                 window.below_bin.set_visible_child_name ("display-page");
+            if (window.current_item == this)
+                name_status_bind = bind_property ("name", window.topbar, "status", BindingFlags.SYNC_CREATE);
 
             break;
 
@@ -535,27 +591,6 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             if (auth_notification != null)
                 auth_notification.dismiss ();
             disconnect_display ();
-
-            break;
-        case UIState.PROPERTIES:
-            Gdk.Pixbuf pixbuf = null;
-            if (previous_ui_state == UIState.WIZARD) {
-                var theme = Gtk.IconTheme.get_for_screen (window.get_screen ());
-                pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, true, 8,
-                                         Machine.SCREENSHOT_WIDTH, Machine.SCREENSHOT_HEIGHT);
-                pixbuf.fill (0x00000000); // Transparent
-                try {
-                    var icon = theme.load_icon ("media-optical", Machine.SCREENSHOT_HEIGHT, 0);
-                    // Center icon in pixbuf
-                    icon.copy_area (0, 0, Machine.SCREENSHOT_HEIGHT, Machine.SCREENSHOT_HEIGHT, pixbuf,
-                                    (Machine.SCREENSHOT_WIDTH - Machine.SCREENSHOT_HEIGHT) / 2, 0);
-                } catch (GLib.Error err) {
-                    warning (err.message);
-                }
-            } else {
-                pixbuf = this.pixbuf;
-            }
-            window.sidebar.props_sidebar.screenshot.set_from_pixbuf (pixbuf);
 
             break;
         }
@@ -602,7 +637,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             auth_notification = null;
             try_connect_display.begin ();
         };
-        Notification.CancelFunc cancel_func = () => {
+        Notification.DismissFunc dismiss_func = () => {
             auth_notification = null;
             window.set_state (UIState.COLLECTION);
         };
@@ -611,7 +646,7 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
         var auth_string = _("'%s' requires authentication").printf (name);
         auth_notification = window.notificationbar.display_for_auth (auth_string,
                                                                          (owned) auth_func,
-                                                                         (owned) cancel_func,
+                                                                         (owned) dismiss_func,
                                                                          need_username);
     }
 
@@ -620,5 +655,13 @@ private abstract class Boxes.Machine: Boxes.CollectionItem, Boxes.IPropertiesPro
             return config.compare ((other as Machine).config);
         else
             return -1; // Machines are listed before non-machines
+    }
+
+    private async void try_save () {
+        try {
+            yield save ();
+        } catch (GLib.Error error) {
+            warning ("Failed to save '%s': %s", name, error.message);
+        }
     }
 }

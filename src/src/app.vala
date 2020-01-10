@@ -2,7 +2,7 @@
 
 private abstract class Boxes.Broker : GLib.Object {
     // Overriding subclass should chain-up at the end of its implementation
-    public virtual async void add_source (CollectionSource source) {
+    public virtual async void add_source (CollectionSource source) throws GLib.Error {
         var used_configs = new GLib.List<BoxConfig> ();
         foreach (var item in App.app.collection.items.data) {
             if (!(item is Machine))
@@ -28,7 +28,6 @@ private class Boxes.App: Gtk.Application {
 
     public string? uri { get; set; }
     public Collection collection;
-    public CollectionFilter filter;
 
     private bool is_ready;
     public signal void ready ();
@@ -40,30 +39,31 @@ private class Boxes.App: Gtk.Application {
     private HashTable<string,CollectionSource> sources;
     public GVir.Connection default_connection { owned get { return LibvirtBroker.get_default ().get_connection ("QEMU Session"); } }
     public CollectionSource default_source { get { return sources.get (DEFAULT_SOURCE_NAME); } }
+    public AsyncLauncher async_launcher;
 
     public App () {
         application_id = "org.gnome.Boxes";
         flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
 
         app = this;
+        async_launcher = AsyncLauncher.get_default ();
         windows = new List<Boxes.AppWindow> ();
         sources = new HashTable<string,CollectionSource> (str_hash, str_equal);
         brokers = new HashTable<string,Broker> (str_hash, str_equal);
-        filter = new Boxes.CollectionFilter ();
         var action = new GLib.SimpleAction ("quit", null);
         action.activate.connect (() => { quit_app (); });
         add_action (action);
 
         action = new GLib.SimpleAction ("select-all", null);
-        action.activate.connect (() => { main_window.view.select (SelectionCriteria.ALL); });
+        action.activate.connect (() => { main_window.view.select_by_criteria (SelectionCriteria.ALL); });
         add_action (action);
 
         action = new GLib.SimpleAction ("select-running", null);
-        action.activate.connect (() => { main_window.view.select (SelectionCriteria.RUNNING); });
+        action.activate.connect (() => { main_window.view.select_by_criteria (SelectionCriteria.RUNNING); });
         add_action (action);
 
         action = new GLib.SimpleAction ("select-none", null);
-        action.activate.connect (() => { main_window.view.select (SelectionCriteria.NONE); });
+        action.activate.connect (() => { main_window.view.select_by_criteria (SelectionCriteria.NONE); });
         add_action (action);
 
         action = new GLib.SimpleAction ("help", null);
@@ -78,6 +78,10 @@ private class Boxes.App: Gtk.Application {
         });
         add_action (action);
 
+        action = new GLib.SimpleAction ("launch-box", GLib.VariantType.STRING);
+        action.activate.connect ((param) => { open_name (param.get_string ()); });
+        add_action (action);
+
         action = new GLib.SimpleAction ("about", null);
         action.activate.connect (() => {
             string[] authors = {
@@ -87,8 +91,10 @@ private class Boxes.App: Gtk.Application {
                 "Zeeshan Ali (Khattak) <zeeshanak@gnome.org>"
             };
             string[] artists = {
+                "Allan Day <aday@gnome.org>",
                 "Jon McCann <jmccann@redhat.com>",
-                "Jakub Steiner <jsteiner@redhat.com>"
+                "Jakub Steiner <jsteiner@redhat.com>",
+                "Dave Jones <eevblog@yahoo.com.au>"
             };
 
             Gtk.show_about_dialog (main_window,
@@ -100,7 +106,7 @@ private class Boxes.App: Gtk.Application {
                                    "license-type", Gtk.License.LGPL_2_1,
                                    "logo-icon-name", "gnome-boxes",
                                    "version", Config.VERSION,
-                                   "website", "http://live.gnome.org/Boxes",
+                                   "website", Config.PACKAGE_URL,
                                    "wrap-license", true);
         });
         add_action (action);
@@ -114,6 +120,7 @@ private class Boxes.App: Gtk.Application {
         Gtk.init (ref args2);
 
         var menu = new GLib.Menu ();
+        menu.append (_("Keyboard Shortcuts"), "win.kbd-shortcuts");
         menu.append (_("Help"), "app.help");
         menu.append (_("About"), "app.about");
         menu.append (_("Quit"), "app.quit");
@@ -123,10 +130,10 @@ private class Boxes.App: Gtk.Application {
         collection = new Collection ();
 
         collection.item_added.connect ((item) => {
-            main_window.view.add_item (item);
+            main_window.foreach_view ((view) => { view.add_item (item); });
         });
         collection.item_removed.connect ((item) => {
-            main_window.view.remove_item (item);
+            main_window.foreach_view ((view) => { view.remove_item (item); });
         });
 
         brokers.insert ("libvirt", LibvirtBroker.get_default ());
@@ -159,11 +166,7 @@ private class Boxes.App: Gtk.Application {
         var window = add_new_window ();
         window.set_state (UIState.COLLECTION);
 
-        setup_sources.begin ((obj, result) => {
-            setup_sources.end (result);
-            is_ready = true;
-            ready ();
-        });
+        activate_async.begin ();
     }
 
     static bool opt_fullscreen;
@@ -171,7 +174,7 @@ private class Boxes.App: Gtk.Application {
     static string opt_open_uuid;
     static string[] opt_uris;
     static string[] opt_search;
-    static const OptionEntry[] options = {
+    const OptionEntry[] options = {
         { "version", 0, 0, OptionArg.NONE, null, N_("Display version number"), null },
         { "help", 'h', OptionFlags.HIDDEN, OptionArg.NONE, ref opt_help, null, null },
         { "full-screen", 'f', 0, OptionArg.NONE, ref opt_fullscreen, N_("Open in full screen"), null },
@@ -179,7 +182,7 @@ private class Boxes.App: Gtk.Application {
         { "open-uuid", 0, 0, OptionArg.STRING, ref opt_open_uuid, N_("Open box with UUID"), null },
         { "search", 0, 0, OptionArg.STRING_ARRAY, ref opt_search, N_("Search term"), null },
         // A 'broker' is a virtual-machine manager (local or remote). Currently libvirt and ovirt are supported.
-        { "", 0, 0, OptionArg.STRING_ARRAY, ref opt_uris, N_("URI to display, broker or installer media"), null },
+        { "", 0, 0, OptionArg.STRING_ARRAY, ref opt_uris, N_("URL to display, broker or installer media"), null },
         { null }
     };
 
@@ -234,11 +237,11 @@ private class Boxes.App: Gtk.Application {
 
                 if (file.query_exists ()) {
                     if (is_uri)
-                        main_window.wizard.open_with_uri (arg);
+                        main_window.wizard_window.wizard.open_with_uri (arg);
                     else
-                        main_window.wizard.open_with_uri (file.get_uri ());
+                        main_window.wizard_window.wizard.open_with_uri (file.get_uri ());
                 } else if (is_uri)
-                    main_window.wizard.open_with_uri (arg);
+                    main_window.wizard_window.wizard.open_with_uri (arg);
                 else
                     open_name (arg);
             });
@@ -261,6 +264,9 @@ private class Boxes.App: Gtk.Application {
     public bool quit_app () {
         foreach (var window in windows)
             window.hide ();
+        // Ensure windows are hidden before returning from this function
+        var display = Gdk.Display.get_default ();
+        display.flush ();
 
         Idle.add (() => {
             quit ();
@@ -275,9 +281,10 @@ private class Boxes.App: Gtk.Application {
         base.shutdown ();
 
         foreach (var window in windows) {
-            window.notificationbar.cancel ();
-            window.wizard.cleanup ();
+            window.notificationbar.dismiss_all ();
+            window.wizard_window.wizard.cleanup ();
         }
+        async_launcher.await_all ();
         suspend_machines ();
     }
 
@@ -324,12 +331,16 @@ private class Boxes.App: Gtk.Application {
         }
     }
 
-    private void open_in_new_window (Machine machine) {
+    public void open_in_new_window (Machine machine) {
         if (machine.window != main_window) {
             machine.window.present ();
 
             return;
         }
+
+        // machine.window == main_window could just mean machine is not running on any window so lets make sure..
+        if (machine.ui_state == UIState.DISPLAY)
+            machine.window.set_state (UIState.COLLECTION);
 
         var window = add_new_window ();
         window.connect_to (machine);
@@ -340,7 +351,7 @@ private class Boxes.App: Gtk.Application {
         collection.remove_item (machine);
     }
 
-    public async void add_collection_source (CollectionSource source) {
+    public async void add_collection_source (CollectionSource source) throws GLib.Error {
         if (!source.enabled)
             return;
 
@@ -376,7 +387,18 @@ private class Boxes.App: Gtk.Application {
         }
     }
 
-    private async void setup_sources () {
+    private async void activate_async () {
+        yield move_configs_from_cache ();
+
+        yield setup_default_source ();
+
+        is_ready = true;
+        ready ();
+
+        setup_sources.begin ();
+    }
+
+    private async void setup_default_source () {
         var path = get_user_pkgconfig_source (DEFAULT_SOURCE_NAME);
         var create_session_source = true;
         try {
@@ -400,20 +422,49 @@ private class Boxes.App: Gtk.Application {
             }
         }
 
+        try {
+            var source = new CollectionSource.with_file (DEFAULT_SOURCE_NAME);
+            yield add_collection_source (source);
+        } catch (GLib.Error error) {
+            printerr ("Error setting up default broker: %s\n", error.message);
+            release (); // will end application
+        }
+
+        assert (default_connection != null);
+    }
+
+    public void notify_machine_installed (Machine machine) {
+        if (machine.window.is_active) {
+            debug ("Window is focused, no need for system notification");
+
+            return;
+        }
+
+        var msg = _("Box '%s' installed and ready to use").printf (machine.name);
+        var notification = new GLib.Notification (msg);
+        notification.add_button ("Launch", "app.launch-box::" + machine.name);
+
+        send_notification (null, notification);
+    }
+
+    private async void setup_sources () {
         var dir = File.new_for_path (get_user_pkgconfig_source ());
         var new_sources = new GLib.List<CollectionSource> ();
         yield foreach_filename_from_dir (dir, (filename) => {
+            if (filename == DEFAULT_SOURCE_NAME)
+                return false;
+
             var source = new CollectionSource.with_file (filename);
             new_sources.append (source);
             return false;
         });
 
-        foreach (var source in new_sources)
-            yield add_collection_source (source);
-
-        if (default_connection == null) {
-            printerr ("Missing or failing default libvirt connection\n");
-            release (); // will end application
+        foreach (var source in new_sources) {
+            try {
+                yield add_collection_source (source);
+            } catch (GLib.Error error) {
+                warning ("Failed to add '%s': %s", source.name, error.message);
+            }
         }
     }
 
@@ -462,14 +513,25 @@ private class Boxes.App: Gtk.Application {
      * Deletes specified items, while allowing user to undo it.
      *
      * @param items the list of machines
-     * @param message The message to be shown together with the undo button
+     * @param message optional message to be shown together with the undo button. If not provided, an appropriate
+     *                messsage is created.
      * @param callback optional function that, if provided, is called after the undo operation
      *
      * @attention the ownership for items is required since GLib.List is a compact class.
      */
     public void delete_machines_undoable (owned List<CollectionItem> items,
-                                          string                     message,
+                                          string?                    message = null,
                                           owned UndoNotifyCallback?  undo_notify_callback = null) {
+        var num_items = items.length ();
+        if (num_items == 0)
+            return;
+
+        var msg = message;
+        if (msg == null)
+            msg = (num_items == 1) ? _("Box '%s' has been deleted").printf (items.data.name) :
+                                     ngettext ("%u box has been deleted",
+                                               "%u boxes have been deleted",
+                                               num_items).printf (num_items);
         foreach (var item in items)
             collection.remove_item (item);
 
@@ -483,33 +545,26 @@ private class Boxes.App: Gtk.Application {
                 undo_notify_callback ();
         };
 
-        Notification.CancelFunc really_remove = () => {
+        Notification.DismissFunc really_remove = () => {
             debug ("User did not cancel deletion. Deleting now...");
             foreach (var item in items) {
-                var machine = item as Machine;
-                if (machine != null)
-                    // Will also delete associated storage volume if by_user is 'true'
-                    machine.delete (true);
+                if (!(item is Machine))
+                    continue;
+
+                // Will also delete associated storage volume if by_user is 'true'
+                (item as Machine).delete (true);
             }
         };
 
-        main_window.notificationbar.display_for_action (message, _("_Undo"), (owned) undo, (owned) really_remove);
+        main_window.notificationbar.display_for_action (msg, _("_Undo"), (owned) undo, (owned) really_remove);
     }
 
     public void remove_selected_items () {
         var selected_items = main_window.view.get_selected_items ();
-        var num_selected = selected_items.length ();
-        if (num_selected == 0)
-            return;
 
         main_window.selection_mode = false;
 
-        var message = (num_selected == 1) ? _("Box '%s' has been deleted").printf (selected_items.data.name) :
-                                            ngettext ("%u box has been deleted",
-                                                      "%u boxes have been deleted",
-                                                      num_selected).printf (num_selected);
-
-        delete_machines_undoable ((owned) selected_items, message);
+        delete_machines_undoable ((owned) selected_items);
     }
 
     public AppWindow add_new_window () {
@@ -525,6 +580,9 @@ private class Boxes.App: Gtk.Application {
     }
 
     public new bool remove_window (AppWindow window) {
+        if (windows.length () == 1)
+            return quit_app ();
+
         var initial_windows_count = windows.length ();
         bool window_was_main = (window == main_window);
 
@@ -532,19 +590,20 @@ private class Boxes.App: Gtk.Application {
             (window.current_item as Machine).window = null;
 
         window.hide ();
+
         windows.remove (window);
         base.remove_window (window);
-
-        if (windows.length () == 0)
-            return quit_app ();
 
         // If the main window have been removed,
         // populate the new main window's collection view.
         if (window_was_main)
-            collection.populate (main_window.view);
+            main_window.foreach_view ((view) => { collection.populate (view); });
 
         notify_property ("main-window");
 
         return initial_windows_count != windows.length ();
     }
 }
+
+[GtkTemplate (ui = "/org/gnome/Boxes/ui/kbd-shortcuts-window.ui")]
+private class Boxes.KbdShortcutsWindow: Gtk.ShortcutsWindow {}

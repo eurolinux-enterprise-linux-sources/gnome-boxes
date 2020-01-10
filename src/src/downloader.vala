@@ -2,11 +2,13 @@
 
 private class Boxes.Download {
     public string uri;
+    public File remote_file;
     public File cached_file;
     public ActivityProgress progress;
 
-    public Download (string uri, File cached_file, ActivityProgress progress) {
-        this.uri = uri;
+    public Download (File remote_file, File cached_file, ActivityProgress progress) {
+        this.remote_file = remote_file;
+        this.uri = remote_file.get_uri ();
         this.cached_file = cached_file;
         this.progress = progress;
     }
@@ -52,6 +54,8 @@ private class Boxes.Downloader : GLib.Object {
 
         session = new Soup.Session ();
         session.add_feature_by_type (typeof (Soup.ProxyResolverDefault));
+        if (Environment.get_variable ("SOUP_DEBUG") != null)
+            session.add_feature (new Soup.Logger (Soup.LoggerLogLevel.HEADERS, -1));
     }
 
     /**
@@ -77,25 +81,21 @@ private class Boxes.Downloader : GLib.Object {
             // Already being downloaded
             return yield await_download (download, cached_path, progress);
 
-        GLib.File cached_file;
-        foreach (var path in cached_paths) {
-            cached_file = File.new_for_path (path);
-            if (cached_file.query_exists ()) {
-                debug ("'%s' already available locally at '%s'. Not downloading.", uri, path);
-                return cached_file;
-            }
-        }
+        var cached_file = get_cached_file (remote_file, cached_paths);
+        if (cached_file != null)
+            return cached_file;
 
-        cached_file = GLib.File.new_for_path (cached_path);
+        var tmp_path = cached_path + "~";
+        var tmp_file = GLib.File.new_for_path (tmp_path);
         debug ("Downloading '%s'...", uri);
-        download = new Download (uri, cached_file, progress);
+        download = new Download (remote_file, tmp_file, progress);
         downloads.set (uri, download);
 
         try {
             if (remote_file.has_uri_scheme ("http") || remote_file.has_uri_scheme ("https"))
                 yield download_from_http (download, cancellable);
             else
-                yield copy_file (remote_file, cached_file, progress, cancellable);
+                yield download_from_filesystem (download, cancellable);
         } catch (GLib.Error error) {
             download_failed (download, error);
 
@@ -104,7 +104,11 @@ private class Boxes.Downloader : GLib.Object {
             downloads.remove (uri);
         }
 
-        debug ("Downloaded '%s' and its now locally available at '%s'.", uri, cached_path);
+        cached_file = GLib.File.new_for_path (cached_path);
+        tmp_file.move (cached_file, FileCopyFlags.NONE, cancellable);
+        download.cached_file = cached_file;
+
+        debug ("Downloaded '%s' and it's now locally available at '%s'.", uri, cached_path);
         downloaded (download);
 
         return cached_file;
@@ -132,7 +136,9 @@ private class Boxes.Downloader : GLib.Object {
             total_num_bytes =  msg.response_headers.get_content_length ();
         });
 
-        var cached_file_stream = yield download.cached_file.create_async (FileCreateFlags.NONE);
+        var cached_file_stream = yield download.cached_file.replace_async (null,
+                                                                           false,
+                                                                           FileCreateFlags.REPLACE_DESTINATION);
 
         int64 current_num_bytes = 0;
         // FIXME: Reduce lambda nesting by splitting out downloading to Download class
@@ -163,6 +169,8 @@ private class Boxes.Downloader : GLib.Object {
 
         if (cancelled_id != 0)
             cancellable.disconnect (cancelled_id);
+
+        yield cached_file_stream.close_async (Priority.DEFAULT, cancellable);
 
         if (msg.status_code != Soup.Status.OK) {
             download.cached_file.delete ();
@@ -256,5 +264,35 @@ private class Boxes.Downloader : GLib.Object {
             cached_file = downloaded_file;
 
         return cached_file;
+    }
+
+    private async void download_from_filesystem (Download     download,
+                                                 Cancellable? cancellable = null) throws GLib.Error {
+        var src_file = download.remote_file;
+        var dest_file = download.cached_file;
+
+        try {
+            debug ("Copying '%s' to '%s'..", src_file.get_path (), dest_file.get_path ());
+            yield src_file.copy_async (dest_file,
+                                       FileCopyFlags.OVERWRITE,
+                                       Priority.DEFAULT,
+                                       cancellable,
+                                       (current, total) => {
+                download.progress.progress = (double) current / total;
+            });
+            debug ("Copied '%s' to '%s'.", src_file.get_path (), dest_file.get_path ());
+        } catch (IOError.EXISTS error) {}
+    }
+
+    private File? get_cached_file (File remote_file, string[] cached_paths) {
+        foreach (var path in cached_paths) {
+            var cached_file = File.new_for_path (path);
+            if (cached_file.query_exists ()) {
+                debug ("'%s' already available locally at '%s'. Not downloading.", remote_file.get_uri (), path);
+                return cached_file;
+            }
+        }
+
+        return null;
     }
 }

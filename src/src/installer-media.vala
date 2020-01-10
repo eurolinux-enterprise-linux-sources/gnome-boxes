@@ -79,6 +79,9 @@ private class Boxes.InstallerMedia : GLib.Object {
         // FIXME: these values could be made editable somehow
         var architecture = this.architecture ?? "i686";
         resources = media_manager.os_db.get_resources_for_os (os, architecture);
+        resources.ram = (architecture == "i686" || architecture == "i386") ?
+                        resources.ram.clamp (Osinfo.MEBIBYTES, uint32.MAX) :
+                        resources.ram.clamp (Osinfo.MEBIBYTES, int64.MAX);
     }
 
     public virtual void set_direct_boot_params (DomainOs os) {}
@@ -86,7 +89,7 @@ private class Boxes.InstallerMedia : GLib.Object {
                                        Cancellable?     cancellable = null) {
         return true;
     }
-    public virtual async void prepare_for_installation (string vm_name, Cancellable? cancellable) throws GLib.Error {}
+    public virtual async void prepare_for_installation (string vm_name, Cancellable? cancellable) {}
     public virtual void prepare_to_continue_installation (string vm_name) {}
     public virtual void clean_up () {
         clean_up_preparation_cache ();
@@ -113,8 +116,8 @@ private class Boxes.InstallerMedia : GLib.Object {
 
     public bool is_architecture_compatible (string architecture) {
         if (this.architecture == null)
-            // Architecture unknown, Lets say all architectures are compatible so caller can choose the best available
-            // architecture instead. Although this is bound to fail but its still much better than us hard coding an
+            // Architecture unknown: let's say all architectures are compatible so caller can choose the best available
+            // architecture instead. Although this is bound to fail, it's still much better than us hard coding an
             // architecture.
             return true;
 
@@ -129,7 +132,7 @@ private class Boxes.InstallerMedia : GLib.Object {
 
     protected void add_cd_config (Domain         domain,
                                   DomainDiskType type,
-                                  string         iso_path,
+                                  string?        iso_path,
                                   string         device_name,
                                   bool           mandatory = false) {
         var disk = new DomainDisk ();
@@ -139,7 +142,8 @@ private class Boxes.InstallerMedia : GLib.Object {
         disk.set_driver_name ("qemu");
         disk.set_driver_format (DomainDiskFormat.RAW);
         disk.set_target_dev (device_name);
-        disk.set_source (iso_path);
+        if (iso_path != null)
+            disk.set_source (iso_path);
         disk.set_target_bus (DomainDiskBus.IDE);
         if (mandatory)
             disk.set_startup_policy (DomainDiskStartupPolicy.MANDATORY);

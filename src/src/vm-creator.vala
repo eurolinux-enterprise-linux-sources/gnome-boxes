@@ -5,10 +5,16 @@ using GVir;
 
 private class Boxes.VMCreator {
     // Seems installers aren't very consistent about exact number of bytes written so we ought to leave some margin
-    // of error. Its better to report '100%' done while its not exactly 100% than reporting '99%' done forever..
+    // of error. It's better to report '100%' done while it's not exactly 100% than reporting '99%' done forever..
     private const int INSTALL_COMPLETE_PERCENT = 99;
 
     public InstallerMedia? install_media { get; protected set; }
+    public bool express_install {
+        get {
+            return ((install_media is UnattendedInstaller) &&
+                    (install_media as UnattendedInstaller).setup_box.express_install);
+        }
+    }
 
     protected Connection? connection { owned get { return App.app.default_connection; } }
     private ulong state_changed_id;
@@ -42,14 +48,7 @@ private class Boxes.VMCreator {
 
         string title, name;
         yield create_domain_name_and_title_from_media (out name, out title);
-        try {
-            yield install_media.prepare_for_installation (name, cancellable);
-        } catch (GLib.Error error) {
-            var msg = _("An error occurred during installation preparation. Express Install disabled.");
-            App.app.main_window.notificationbar.display_error (msg);
-            debug("Disabling unattended installation: %s", error.message);
-        }
-
+        yield install_media.prepare_for_installation (name, cancellable);
 
         var volume = yield create_target_volume (name, install_media.resources.storage);
         var config = yield create_domain_config (name, title, volume, cancellable);
@@ -63,9 +62,8 @@ private class Boxes.VMCreator {
         return machine;
     }
 
-    public virtual void launch_vm (LibvirtMachine machine) throws GLib.Error {
-        if (!(install_media is UnattendedInstaller) ||
-            !(install_media as UnattendedInstaller).setup_box.express_install) {
+    public virtual void launch_vm (LibvirtMachine machine, int64 access_last_time = -1) throws GLib.Error {
+        if (!express_install) {
             ulong signal_id = 0;
 
             var window = App.app.main_window;
@@ -83,8 +81,7 @@ private class Boxes.VMCreator {
             machine.domain.start (0);
 
         state_changed_id = machine.notify["state"].connect (on_machine_state_changed);
-        machine.config.access_last_time = get_real_time ();
-        update_machine_info (machine);
+        machine.config.access_last_time = (access_last_time > 0)? access_last_time : get_real_time ();
     }
 
     protected virtual async void continue_installation (LibvirtMachine machine) {
@@ -110,7 +107,6 @@ private class Boxes.VMCreator {
 
         state_changed_id = machine.notify["state"].connect (on_machine_state_changed);
         machine.vm_creator = this;
-        update_machine_info (machine);
 
         on_machine_state_changed (machine);
 
@@ -125,10 +121,8 @@ private class Boxes.VMCreator {
     private void on_machine_state_changed (GLib.Object object, GLib.ParamSpec? pspec = null) {
         var machine = object as LibvirtMachine;
 
-        if (machine.is_on ())
+        if (machine.is_on)
             return;
-
-        var domain = machine.domain;
 
         if (machine.deleted) {
             machine.disconnect (state_changed_id);
@@ -144,8 +138,14 @@ private class Boxes.VMCreator {
             return;
         }
 
+        if (machine.state == Machine.MachineState.FORCE_STOPPED) {
+            debug ("'%s' has forced stopped, no need for post-installation setup on it", machine.name);
+            return;
+        }
+
         increment_num_reboots (machine);
 
+        var domain = machine.domain;
         if (guest_installed_os (machine)) {
             set_post_install_config (machine);
             install_media.clean_up ();
@@ -155,12 +155,12 @@ private class Boxes.VMCreator {
                 warning ("Failed to start domain '%s': %s", domain.get_name (), error.message);
             }
             machine.disconnect (state_changed_id);
-            if (VMConfigurator.is_live_config (machine.domain_config) || !install_trackable ())
-                machine.info = null;
+            App.app.notify_machine_installed (machine);
             machine.vm_creator = null;
+            machine.schedule_autosave ();
+            try_create_snapshot.begin (machine);
         } else {
-            if (VMConfigurator.is_live_config (machine.domain_config) &&
-                machine.state != Machine.MachineState.FORCE_STOPPED) {
+            if (VMConfigurator.is_live_config (machine.domain_config)) {
                 // No installation during live session, so lets delete the VM
                 machine.disconnect (state_changed_id);
                 install_media.clean_up ();
@@ -183,13 +183,12 @@ private class Boxes.VMCreator {
         }
     }
 
-    protected virtual void update_machine_info (LibvirtMachine machine) {
-        if (VMConfigurator.is_install_config (machine.domain_config)) {
-            machine.info = _("Installing…");
-
-            track_install_progress (machine);
-        } else
-            machine.info = _("Live");
+    private async void try_create_snapshot (LibvirtMachine machine) {
+        try {
+            yield machine.create_snapshot ("Just installed ");
+        } catch (GLib.Error error) {
+            warning ("Failed to create snapshot for domain '%s': %s", machine.name, error.message);
+        }
     }
 
     protected void set_post_install_config (LibvirtMachine machine) {
@@ -201,26 +200,6 @@ private class Boxes.VMCreator {
         } catch (GLib.Error error) {
             warning ("Failed to set post-install configuration on '%s': %s", machine.name, error.message);
         }
-    }
-
-    protected async StoragePool get_storage_pool () throws GLib.Error {
-        var pool = Boxes.get_storage_pool (connection);
-        if (pool == null) {
-            debug ("Creating storage pool..");
-            var config = VMConfigurator.get_pool_config ();
-            pool = connection.create_storage_pool (config, 0);
-            yield pool.build_async (0, null);
-            yield pool.start_async (0, null);
-            yield pool.refresh_async (null);
-            debug ("Created storage pool.");
-        } else if (pool.get_info ().state == StoragePoolState.INACTIVE) {
-            // Ensure pool directory exists in case user deleted it after pool creation
-            DirUtils.create_with_parents (GLib.Path.build_filename (get_user_pkgdata (), "images", null), 0775);
-            yield pool.start_async (0, null);
-            yield pool.refresh_async (null);
-        }
-
-        return pool;
     }
 
     protected virtual async GVirConfig.Domain create_domain_config (string       name,
@@ -235,7 +214,7 @@ private class Boxes.VMCreator {
         return config;
     }
 
-    // Ensure name is less than 12 characters as its also used as the hostname of the guest OS in case of
+    // Ensure name is less than 12 characters as it's also used as the hostname of the guest OS in case of
     // express installation and some OSes (you know who you are) don't like hostnames with more than 15
     // characters (we later add a '-' and a number to the name if name is not unique so we leave 3 characters
     // or that).
@@ -272,10 +251,7 @@ private class Boxes.VMCreator {
         var volume = machine.storage_volume;
 
         try {
-            if (install_trackable ())
-                // Great! We know how much storage installed guest consumes
-                return get_progress (volume) == INSTALL_COMPLETE_PERCENT;
-            else if (install_media.os_media != null && VMConfigurator.is_install_config (machine.domain_config))
+            if (install_media.os_media != null && VMConfigurator.is_install_config (machine.domain_config))
                 return (num_reboots == install_media.os_media.installer_reboots);
             else {
                 var info = volume.get_info ();
@@ -289,69 +265,6 @@ private class Boxes.VMCreator {
         }
     }
 
-    int prev_progress = 0;
-    bool updating_install_progress;
-    private void track_install_progress (LibvirtMachine machine) {
-        if (!install_trackable ())
-            return;
-
-        return_if_fail (machine.storage_volume != null);
-
-        Timeout.add_seconds (6, () => {
-            if (prev_progress == 100) {
-                machine.info = null;
-
-                return false;
-            }
-
-            if (!updating_install_progress)
-                update_install_progress.begin (machine);
-
-            return true;
-        });
-    }
-
-    private async void update_install_progress (LibvirtMachine machine) {
-        updating_install_progress = true;
-
-        int progress = 0;
-        try {
-            yield run_in_thread (() => {
-                progress = get_progress (machine.storage_volume);
-            });
-        } catch (GLib.Error error) {
-            warning ("Failed to get information from volume '%s': %s",
-                     machine.storage_volume.get_name (),
-                     error.message);
-        }
-        if (progress < 0)
-            return;
-
-        // This string is about automatic installation progress
-        machine.info = ngettext ("%d%% Installed", "%d%% Installed", progress).printf (progress);
-        prev_progress = progress;
-        updating_install_progress = false;
-    }
-
-    private bool install_trackable () {
-        return (install_media.installed_size > 0);
-    }
-
-    private int get_progress (GVir.StorageVol volume) throws GLib.Error {
-        var volume_info = volume.get_info ();
-
-        var percent = (int) (volume_info.allocation * 100 /  install_media.installed_size);
-
-        // Make sure we don't display some rediculous figure in case we are wrong about installed size or libvirt
-        // gives us incorrect value for bytes written to disk.
-        percent = percent.clamp (0, INSTALL_COMPLETE_PERCENT);
-
-        if (percent == INSTALL_COMPLETE_PERCENT)
-            percent = 100;
-
-        return percent;
-    }
-
     private async void create_domain_name_and_title_from_media (out string name, out string title) throws GLib.Error {
         string base_name, base_title;
 
@@ -359,7 +272,7 @@ private class Boxes.VMCreator {
 
         name = base_name;
         title = base_title;
-        var pool = yield get_storage_pool ();
+        var pool = yield Boxes.ensure_storage_pool (connection);
         for (var i = 2;
              connection.find_domain_by_name (name) != null ||
              connection.find_domain_by_name (title) != null || // We used to use title as name
@@ -371,7 +284,7 @@ private class Boxes.VMCreator {
     }
 
     private async StorageVol create_target_volume (string name, int64 storage) throws GLib.Error {
-        var pool = yield get_storage_pool ();
+        var pool = yield Boxes.ensure_storage_pool (connection);
 
         var config = VMConfigurator.create_volume_config (name, storage);
         debug ("Creating volume '%s'..", name);

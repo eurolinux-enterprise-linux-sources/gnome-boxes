@@ -24,19 +24,19 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Tastenkombinationen</title>
 
-  <p>Verschiedene Tastaturkombinationen können zur Bedienung von Boxen verwendet werden. Neben Mnemonics stehen die folgenden Tastenkombinationen zur Verfügung:</p>
+  <p>Verschiedene Tastaturkombinationen können zur Bedienung von Boxen verwendet werden. Neben Mnemonics (Menükürzelbuchstaben) stehen die folgenden Tastenkombinationen zur Verfügung:</p>
 
   <table rules="rows" frame="top bottom">
     <thead>
@@ -60,7 +60,7 @@
       </tr>
       <tr>
         <td>
-          <p>Suchleiste ein-/ausblenden</p>
+          <p>Suche aktivieren</p>
         </td>
         <td>
           <p><keyseq><key>Strg</key><key>F</key></keyseq></p>
@@ -92,7 +92,7 @@
       </tr>
       <tr>
         <td>
-          <p>Maus- und Tastatureinfang freigeben</p>
+          <p>Maus- und Tastaturfang freigeben</p>
         </td>
         <td>
           <p><keyseq><key>Strg</key><key>Alt</key></keyseq></p>

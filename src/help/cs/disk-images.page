@@ -15,12 +15,8 @@
     <desc/>
   </info>
 
-  <title>Where does Boxes store disk images?</title>
+  <title>Kde Boxy uchovávají obrazy disků?</title>
 
-  <p>By default, <app>Boxes</app> stores disk images in the folder
-  <file>~/.local/share/gnome-boxes/images/</file>. If you are using other
-  software that interfaces with libvirt, such as <app>virt-manager</app>, then
-  <app>Boxes</app> will also read from the folder that software uses to store
-  its images.</p>
+  <p>Standardně uchovávají <app>Boxy</app> obrazy disku ve složce <file>~/.local/share/gnome-boxes/images/</file>. Pokud používáte ještě nějaký další software, který je propojený s libvirt, třeba <app>virt-manager</app>, pak budou <app>Boxy</app> číst i ze složky, kterou používá k uchování obrazů tento software.</p>
 
 </page>

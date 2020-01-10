@@ -16,18 +16,21 @@
     <desc>Acceso rápido a una caja por su nombre.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>Buscar una caja</title>
 
-  <p>If there is more than one box, you can locate or filter boxes by name in
-  the <link xref="interface#collection">collection view</link> or
-  <link xref="interface#selection">selection mode</link>. Click the search
-  icon, or just start typing to initiate a search.</p>
+  <p>Si hay más de una caja, puede encontrar una caja por su nombre en la <link xref="interface#collection">vista de colecciones</link> o en el <link xref="interface#selection">modo de selección</link>. Pulse en el icono de búsqueda o simplemente empiece a escribir para iniciar la búsqueda.</p>
 
   <p>Pulse <key>Esc</key> para descartar la búsqueda.</p>
 

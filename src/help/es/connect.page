@@ -16,15 +16,21 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>Conectarse a otro equipo</title>
 
-  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+  <p><app>Cajas</app> se puede usar para ver y acceder a una máquina remota física o virtual.</p>
 
   <note style="important">
     <p>La máquina remota debe estar configurada.</p>

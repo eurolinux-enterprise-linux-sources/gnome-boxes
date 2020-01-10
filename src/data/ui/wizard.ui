@@ -8,59 +8,6 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
 
-    <!-- Introduction -->
-    <child>
-      <object class="GtkBox" id="intro_box">
-        <property name="visible">True</property>
-        <style>
-          <class name="content-bg"/>
-        </style>
-
-        <child>
-          <object class="GtkBox" id="intro_hbox">
-            <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="spacing">10</property>
-            <property name="margin-start">10</property>
-            <property name="margin-end">10</property>
-            <property name="halign">center</property>
-
-            <child>
-              <object class="GtkImage" id="intro_image">
-                <property name="visible">True</property>
-                <property name="resource">/org/gnome/Boxes/icons/boxes-create.png</property>
-                <property name="hexpand">True</property>
-                <property name="halign">end</property>
-              </object>
-            </child>
-
-            <child>
-              <object class="GtkLabel" id="intro_label">
-                <property name="visible">True</property>
-                <property name="wrap">True</property>
-                <!-- Work around clutter size allocation issue (bz#677260) -->
-                <property name="max-width-chars">40</property>
-                <property name="use-markup">True</property>
-                <property name="label" translatable="yes">Creating a Box will allow you to use another operating system directly from your existing login.
-
-You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&gt;&lt;/b&gt; or create a &lt;b&gt;&lt;i&gt;virtual machine&lt;/i&gt;&lt;/b&gt; that runs locally on your own.</property>
-                <property name="use-markup">True</property>
-                <property name="hexpand">True</property>
-                <property name="halign">start</property>
-                <style>
-                  <class name="boxes-wizard-label"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-
-      <packing>
-        <property name="name">introduction</property>
-      </packing>
-    </child>
-
     <!-- Source -->
     <child>
       <object class="GtkBox" id="source_box">
@@ -70,59 +17,15 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
         </style>
 
         <child>
-          <object class="GtkBox" id="source_vbox">
+          <object class="BoxesWizardSource" id="wizard_source">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">5</property>
             <property name="margin-start">10</property>
             <property name="margin-end">10</property>
             <property name="valign">center</property>
-
-            <child>
-              <object class="GtkLabel" id="instruction_label">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Insert operating system installation media or select a source below</property>
-                <property name="wrap">True</property>
-                <property name="halign">start</property>
-                <style>
-                  <class name="boxes-wizard-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
-
-            <child>
-              <object class="BoxesWizardSource" id="wizard_source">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
-
-            <child>
-              <object class="GtkLabel" id="trademark_label">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Any trademarks shown above are used merely for identification of software products you have already obtained and are the property of their respective owners.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <style>
-                  <class name="boxes-logo-notice-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
           </object>
 
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">False</property>
           </packing>
         </child>
@@ -156,10 +59,6 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
                 <property name="label" translatable="yes">Preparing to create new box</property>
                 <property name="wrap">True</property>
                 <property name="halign">start</property>
-
-                <style>
-                  <class name="boxes-wizard-label"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -213,9 +112,6 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
                       <object class="GtkLabel" id="prep_status_label">
                         <property name="visible">True</property>
                         <property name="halign">start</property>
-                        <style>
-                          <class name="boxes-wizard-label"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -297,8 +193,6 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">0</property>
-            <property name="margin-start">10</property>
-            <property name="margin-end">10</property>
             <style>
               <class name="content-bg"/>
             </style>
@@ -319,13 +213,15 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
                         <property name="visible">True</property>
                         <property name="icon-name">dialog-warning</property>
                         <property name="icon-size">3</property>
+                        <property name="pixel-size">48</property>
                       </object>
                     </child>
 
                     <child>
                       <object class="GtkLabel" id="nokvm_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Virtualization extensions are unavailable on your system. If your system is recent (post 2008), check your BIOS settings to enable them.</property>
+                        <property name="label" translatable="yes">Virtualization extensions are unavailable on your system.
+Check your BIOS settings to enable them.</property>
                         <property name="wrap">True</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
@@ -355,9 +251,6 @@ You may connect to an existing machine &lt;b&gt;&lt;i&gt;over the network&lt;/i&
                     <property name="halign">start</property>
                     <property name="wrap">True</property>
                     <property name="width-chars">30</property>
-                    <style>
-                      <class name="boxes-wizard-label"/>
-                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>

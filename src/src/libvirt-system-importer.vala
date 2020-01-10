@@ -8,18 +8,21 @@ errordomain Boxes.LibvirtSystemImporterError {
 
 private class Boxes.LibvirtSystemImporter: GLib.Object {
     private GVir.Connection connection;
+
     private GLib.List<GVir.Domain> domains;
+    private string[] disk_paths;
+    private GVirConfig.Domain[] configs;
 
     public string wizard_menu_label {
         owned get {
             var num_domains = domains.length ();
 
             if (num_domains == 1)
-                return _("Import '%s' from system broker").printf (domains.data.get_name ());
+                return _("_Import '%s' from system broker").printf (domains.data.get_name ());
             else
                 // Translators: %u here is the number of boxes available for import
-                return ngettext ("Import %u box from system broker",
-                                 "Import %u boxes from system broker",
+                return ngettext ("_Import %u box from system broker",
+                                 "_Import %u boxes from system broker",
                                  num_domains).printf (num_domains);
         }
     }
@@ -39,35 +42,36 @@ private class Boxes.LibvirtSystemImporter: GLib.Object {
     }
 
     public async LibvirtSystemImporter () throws GLib.Error {
-        connection = new GVir.Connection ("qemu+unix:///system");
+        connection = yield get_system_virt_connection ();
 
-        yield connection.open_read_only_async (null);
-        debug ("Connected to system libvirt, now fetching domains..");
-        yield connection.fetch_domains_async (null);
-
-        domains = connection.get_domains ();
-        debug ("Fetched %u domains from system libvirt.", domains.length ());
-        if (domains.length () == 0)
-            throw new LibvirtSystemImporterError.NO_IMPORTS (_("No boxes to import"));
-    }
-
-    public async void import () {
-        GVirConfig.Domain[] configs = {};
-        string[] disk_paths = {};
+        var domains = system_virt_connection.get_domains ();
 
         foreach (var domain in domains) {
-            GVirConfig.Domain config;
-            string disk_path;
-
             try {
+                string disk_path;
+                var config = new GVirConfig.Domain ();
+
                 get_domain_info (domain, out config, out disk_path);
-                configs += config;
-                disk_paths += disk_path;
+
+                var file = File.new_for_path (disk_path);
+                if (file.query_exists ()) {
+                    this.domains.append (domain);
+                    disk_paths += disk_path;
+                    configs += config;
+                } else {
+                    debug ("Could not find a valid disk image for %s", domain.get_name ());
+                }
             } catch (GLib.Error error) {
                 warning ("%s", error.message);
             }
         }
 
+        debug ("Fetched %u domains from system libvirt.", this.domains.length ());
+        if (this.domains.length () == 0)
+            throw new LibvirtSystemImporterError.NO_IMPORTS (_("No boxes to import"));
+    }
+
+    public async void import () {
         try {
             yield ensure_disks_readable (disk_paths);
         } catch (GLib.Error error) {
@@ -77,13 +81,7 @@ private class Boxes.LibvirtSystemImporter: GLib.Object {
         }
 
         for (var i = 0; i < configs.length; i++)
-            import_domain.begin (configs[i], disk_paths[i], null, (obj, result) => {
-                try {
-                    import_domain.end (result);
-                } catch (GLib.Error error) {
-                    warning ("Failed to import '%s': %s", configs[i].name, error.message);
-                }
-            });
+            import_domain.begin (configs[i], disk_paths[i], null);
     }
 
     private void get_domain_info (Domain domain,
@@ -97,13 +95,17 @@ private class Boxes.LibvirtSystemImporter: GLib.Object {
 
     private async void import_domain (GVirConfig.Domain config,
                                       string            disk_path,
-                                      Cancellable?      cancellable = null) throws GLib.Error {
+                                      Cancellable?      cancellable = null) {
         debug ("Importing '%s' from system libvirt..", config.name);
 
-        var media = new LibvirtSystemMedia (disk_path, config);
-        var vm_importer = media.get_vm_creator ();
-        var machine = yield vm_importer.create_vm (cancellable);
-        vm_importer.launch_vm (machine);
+        try {
+            var media = new LibvirtMedia (disk_path, config);
+            var vm_importer = media.get_vm_creator ();
+            var machine = yield vm_importer.create_vm (cancellable);
+            vm_importer.launch_vm (machine);
+        } catch (GLib.Error error) {
+            warning ("Failed to import '%s': %s", config.name, error.message);
+        }
     }
 
     private string get_disk_path (GVirConfig.Domain config) throws LibvirtSystemImporterError.NO_SUITABLE_DISK {
@@ -135,8 +137,21 @@ private class Boxes.LibvirtSystemImporter: GLib.Object {
         argv += "pkexec";
         argv += "chmod";
         argv += "a+r";
-        foreach (var disk_path in disk_paths)
-            argv += disk_path;
+
+        foreach (var disk_path in disk_paths) {
+            var file = File.new_for_path (disk_path);
+            var info = yield file.query_info_async (FileAttribute.ACCESS_CAN_READ,
+                                                    FileQueryInfoFlags.NONE,
+                                                    Priority.DEFAULT,
+                                                    null);
+            if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_READ)) {
+                debug ("'%s' not readable, gotta make it readable..", disk_path);
+                argv += disk_path;
+            }
+        }
+
+        if (argv.length == 3)
+            return;
 
         debug ("Making all libvirt system disks readable..");
         yield exec (argv, null);

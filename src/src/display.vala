@@ -3,11 +3,12 @@ using Gtk;
 
 private abstract class Boxes.Display: GLib.Object, Boxes.IPropertiesProvider {
     public abstract string protocol { get; }
-    public abstract string uri { owned get; }
+    public abstract string? uri { owned get; }
 
-    public BoxConfig? config { get; set; }
+    public BoxConfig? config { get; protected set; }
     public bool can_grab_mouse { get; protected set; }
     public bool mouse_grabbed { get; protected set; }
+    public bool keyboard_grabbed { get; protected set; }
     public bool need_password { get; protected set; }
     public bool need_username { get; protected set; }
     public string? password { get; set; }
@@ -19,22 +20,24 @@ private abstract class Boxes.Display: GLib.Object, Boxes.IPropertiesProvider {
     public signal void disconnected (bool connection_failed);
     public signal void got_error (string message);
 
+    public delegate int OpenFDFunc ();
+
     public abstract Gtk.Widget get_display (int n);
     public abstract Gdk.Pixbuf? get_pixbuf (int n) throws Boxes.Error;
-    public abstract void set_enable_inputs (Gtk.Widget widget, bool enable);
     public abstract void set_enable_audio (bool enable);
 
     public virtual bool should_keep_alive () {
         return false;
     }
 
-    public abstract void connect_it () throws GLib.Error;
+    public abstract void connect_it (owned OpenFDFunc? open_fd = null) throws GLib.Error;
     public abstract void disconnect_it ();
 
     public virtual void collect_logs (StringBuilder builder) {
     }
+    public abstract void send_keys (uint[] keyvals);
 
-    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page, ref PropertyCreationFlag flags);
+    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page);
 
     protected HashTable<int, Gtk.Widget?> displays;
 

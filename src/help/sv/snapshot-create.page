@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-create" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Spara tillståndet för en box för användning senare.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Skapa en ögonblicksavbild</title>
+
+  <p>Om din virtuella maskin fungerar perfekt i en önskad konfiguration kan du vilja spara inställningen innan den går sönder på grund av programuppdateringar eller konfigurationsändringar. Att ta en ögonblicksavbild av boxen bevarar det aktuella tillståndet så att du kan återgår till det när du vill.</p>
+
+  <steps>
+    <item><p>Öppna <link xref="interface#properties">egenskapsvyn</link> för boxen. Om boxen är öppen, klicka på knappen <gui style="button">Egenskaper</gui> i rubrikfältet. Egenskapsvyn kan också nås från <link xref="interface#selection">valläget</link>.</p></item>
+    <item><p>Klicka på <gui>Ögonblicksavbilder</gui> i sidopanelen.</p></item>
+    <item><p>Klicka på <key>+</key> under listan <gui>Ögonblicksavbilder</gui>.</p></item>
+  </steps>
+
+  <p>En ögonblicksavbild sparas som reflekterar det aktuella tillståndet för din box. Den visas i listan.</p>
+
+</page>

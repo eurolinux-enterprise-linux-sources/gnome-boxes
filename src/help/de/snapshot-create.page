@@ -21,19 +21,19 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Einen Schnappschuss anlegen</title>
 
-  <p>Wenn Ihre virtuelle Maschine perfekt im gewünschten Zustand arbeitet, dann bietet es sich an, den Zustand zu speichern, bevor er sich z.B. durch eine Software-Aktualisierung oder einer Konfigurationsänderung verschlechtert. Ein Schnappschuss einer Box bewahrt den aktuellen Zustand und ermöglicht beliebig oft eine Rückkehr in diesen.</p>
+  <p>Wenn Ihre virtuelle Maschine perfekt im gewünschten Zustand arbeitet, dann bietet es sich an den Zustand zu speichern, bevor er sich z.B. durch eine Software-Aktualisierung oder einer Konfigurationsänderung verschlechtert. Ein Schnappschuss einer Box bewahrt den aktuellen Zustand und ermöglicht beliebig oft eine Rückkehr in diesen.</p>
 
   <steps>
     <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
@@ -41,6 +41,6 @@
     <item><p>Klicken Sie auf <key>+</key> unterhalb der Liste <gui>Schnappschüsse</gui>.</p></item>
   </steps>
 
-  <p>Ein Schnappschuss spiegelt den aktuellen Zustand Ihrer Box wieder. Er wird in der Liste aufgeführt.</p>
+  <p>Ein Schnappschuss spiegelt den aktuellen Zustand Ihrer Box wider. Er wird in der Liste aufgeführt.</p>
 
 </page>

@@ -12,28 +12,33 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Use the clipboard with <app>Boxes</app>.</desc>
+    <desc>Usar el portapapeles en <app>Cajas</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>Compartir el portapapeles</title>
 
-  <p>The clipboard of the host machine can be shared with the guest in
-  <app>Boxes</app>.</p>
+  <p>El portapapeles del equipo anfitrión se puede compartir con el invitado en <app>Cajas</app>.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Display</gui> in the sidebar.</p></item>
-    <item><p>Switch <gui>Share clipboard</gui> to <gui>ON</gui>.</p></item>
+    <item><p>Abra la <link xref="interface#properties">vista de propiedades</link> para la caja. Si la caja está abierta, pulse el botón <gui style="button">Propiedades</gui> en la barra de cabecera. También se puede acceder a la vista de propiedades desde el <link xref="interface#selection">modo de selección</link>.</p></item>
+    <item><p>Pulse <gui>Mostrar</gui> en la barra lateral.</p></item>
+    <item><p><gui>Active</gui> la opción <gui>Compartir portapapeles</gui>.</p></item>
   </steps>
+
+  <note style="important">
+    <p>Aunque la instalación rápida normalmente se encarga de usar un portapapeles compartido, este tipo de instalación no está disponible para todos los sistemas operativos. En estos casos, o si elige la instalación manual, para que funcione el portapapeles compartido el vdagent SPICE debe estar instalado en el equipo invitado. En la mayoría de los sistemas operativos basados en Linux el paquete se llama <em>spice-vdagent</em>. Si el equipo invitado ejecuta un sistema operativo diferente, compruebe la <link href="http://www.spice-space.org/download.html">página de descargar de SPICE</link>.</p>
+  </note>
 
 </page>

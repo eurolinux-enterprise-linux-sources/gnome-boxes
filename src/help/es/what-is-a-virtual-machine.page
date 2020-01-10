@@ -22,15 +22,21 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>¿Qué es una máquina virtual?</title>
 
   <p>Una máquina virtual es un ordenador simulado ejecutándose dentro de otro equipo. El equipo simulado se llama <em>invitado</em>, mientras que la máquina real se llama <em>anfitrión</em>.</p>
-  <p>Con la <em>virtualización</em>, el invitado tiene acceso al hardware real del equipo en el que se ejecuta. Si el invitado se puede ejecutar sobre hardware no real, se denomina <em>emulación</em>.</p>
+  <p>Con la <em>virtualización</em>, el invitado tiene acceso al hardware real del equipo en el que se ejecuta. Si el invitado se ejecuta sobre hardware no real, se denomina <em>emulación</em>.</p>
 
 </page>

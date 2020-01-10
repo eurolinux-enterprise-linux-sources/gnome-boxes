@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="disk-images" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#faq"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Var lagrar Boxes diskavbilder?</title>
+
+  <p>Som standard lagrar <app>Boxes</app> diskavbilder i mappen <file>~/.local/share/gnome-boxes/images/</file>. Om du använder annan programvara som interagerar med libvirt, så som <app>virt-manager</app> då kan <app>Boxes</app> också läsa från mappen som det programmet använder för att lagra sina avbilder.</p>
+
+</page>

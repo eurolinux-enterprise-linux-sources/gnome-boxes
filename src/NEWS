@@ -1,116 +1,1158 @@
-3.14.3.1 - Feb 11, 2015
-=======================
+3.22.4 - Feb 6, 2017
+====================
 
-Brown paperbag release to fix the generated C files in 3.14.3 using latest gtk+
-symbols.
+Unplanned release to fix a possibly exploitable vulnerability.
 
-3.14.3 - Feb 10, 2015
-=====================
-
-Changes since 3.14.2:
-
-- Fix express installation for Fedora and RHEL.
-- Add automated tests.
-- Fix import of VMs from system libvirt broker.
+- Store the user password in the keyring during an express installation.
+- Fix typo in debug string in vm-configurator.
+- Fix printf format strings in the selectiontoolbar.
 - Added/updated/fixed translations:
-  - Dutch
+  - Polish
+  - Brazilian Portuguese
+  - Swedish
   - German
-  - Simplified Chinese
-
-All contributors to this release:
-
-Christian Kirbach <Christian.Kirbach@gmail.com>
-Erwin Poeze <donnut@outlook.com>
-Vladimir Benes <vbenes@redhat.com>
-YunQiang Su <yqsu@src.gnome.org>
-Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
-
-3.14.2 - Nov 11, 2014
-=====================
-
-Changes since 3.14.1.2:
-
-- Remove redundant revealer from snapshots view.
-- Fix a potential crash on snapshot deletion.
-- Print a more descriptive warning on failing to rename a snapshot.
-- Report ovirt support in configure summary.
-
-3.14.1.2 - Oct 27, 2014
-=======================
-
-Changes since 3.14.1.1:
-
-- Fix crash on launching a VNC box.
-- Fix exit of wizard when going back from customization screen.
-- Don't start the VM after reverting to a snapshot unless it was running in
-  foreground before the reversion operation.
-- Always show "Reverting to SNAPSHOT_NAME" message when reverting as we can
-  never be sure about the speed of the operation.
-- Fix the the issue of pause button still being available to user when a
-  selected box(es) is already being paused and Boxes leading into interesting
-  scenerios if user clicks on the button.
-- Fix the issue of change of box name from toolbar title not getting saved.
-- Fix cancellation of media setup and therefore wizard jumping to setup page
-  even after user has cancelled creation of corresponding VM.
-- Continue wizard to next step on user hitting 'Enter' in URL entry.
-- Correctly handle HTTP(S) redirection.
-- Remove a now redundant work around.
-- Added/updated/fixed translations:
-  - Arabic
-
-All contributors to this release:
-
-Mosaab Alzoubi <moceap@hotmail.com>
-Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
-
-3.14.1.1 - Oct 15, 2014
-=======================
-
-Changes since 3.14.1:
-
-- Fix express installation for Microsoft Windows.
-- Fix handling of downloads of unknown size.
-
-3.14.1 - Oct 12, 2014
-=====================
-
-Changes since 3.14.0:
-
-- Documentation improvements.
-- Fix gnome-shell search provider by updating .desktop ID.
-- Add padding to left and right of display header bar.
-- Fix handling of remote non-ISO (import) images.
-- Update CPU model also for boxes created through old Boxes on startup.
-- Replace user interface with bridge in existing domains on startup.
-- Fix download of logo files by direct use of actual HTTPS URLs as redirection
-  is currently not handled by Boxes.
-- Added/updated/fixed translations:
-  - Chinese (Taiwan)
-  - French
-  - Hindi
-  - Italian
-  - Latvian
-  - Telugu
 
 Dependencies changed:
 
-Explicitly require libosinfo >= 0.2.11
+libsecret-1 (new dependency)
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Christian Kirbach <Christian.Kirbach@gmail.com>
+Debarshi Ray <debarshir@gnome.org>
+Jürg Billeter <j@bitron.ch>
+Piotr Drąg <piotrdrag@gmail.com>
+Rafael Fontenelle <rafaelff@gnome.org>
+
+3.22.3 - Nov 21, 2016
+=====================
+
+- Fix thread leaks.
+- Fix issue of primary window closing along with last secondary window.
+- Added/updated/fixed translations:
+  - Italian
+
+All contributors to this release:
+
+Gianvito Cavasoli <gianvito@gmx.it>
+Sebastien Nobert <sebastien.nobert@gmail.com>
+Visarion Alexandru <viorel.visarion@gmail.com>
+
+3.22.2 - Nov 05, 2016
+=====================
+
+- Work around a libvirt-glib bug to avoid a crash during startup.
+- Added/updated/fixed translations:
+  - Chinese (Taiwan)
+  - Finnish
+  - Friulian
+  - German
+  - Italian
+  - Norwegian bokmål
+  - Simplified Chinese (China)
+
+All contributors to this release:
+
+Cédric Bosdonnat <cbosdonnat@suse.com>
+Cheng-Chia Tseng <pswo10680@gmail.com>
+Christian Kirbach <Christian.Kirbach@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Gianvito Cavasoli <gianvito@gmx.it>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Mario Blättermann <mario.blaettermann@gmail.com>
+YunQiang Su <yqsu@src.gnome.org>
+
+3.22.1 - Oct 07, 2016
+=====================
+
+- Fix some glitches on display resize.
+- Fix build agianst latest valac.
+
+All contributors to this release:
+
+Rico Tzschichholz <ricotz@ubuntu.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.22.0 - Sep 20, 2016
+=====================
+
+Added/updated/fixed translations:
+  - Basque
+  - Catalan
+  - Czech
+  - Greek
+  - Italian
+  - Ukrainian
+
+All contributors to this release:
+
+Daniel Korostil <ted.korostiled@gmail.com>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jordi Mas <jmas@softcatala.org>
+Marek Černocký <marek@manet.cz>
+Milo Casagrande <milo@ubuntu.com>
+Tom Tryfonidis <tomtryf@gnome.org>
+
+3.21.92 - Sep 13, 2016
+======================
+
+Changes since 3.21.3:
+
+- Limit concurrent notifications to 5.
+- Fix check for "our" VMs.
+- Only update configuration of "our" VMs on startup.
+- Use URL in strings instead of URI.
+- Stricter validation of SPICE URLs.
+- Inform user if SPICE agent is not installed in guest.
+- Enable USB redirection for VMs running in background.
+- Drop redundant check for QXL support by guest OS.
+- Drop now redundant USB redirection and smartcard hacks for < Qemu 1.3.
+- Fix "Keyboard Shortcuts" placement and capitalization in global menu.
+- Distribute README.logos.
+- Added/updated/fixed translations:
+  - Add Swedish help translation
+  - Brazilian Portuguese
+  - British English
+  - Czech
+  - Danish
+  - Dutch
+  - Finnish
+  - French
+  - Friulian
+  - Galician
+  - German
+  - Hebrew
+  - Hungarian
+  - Indonesian
+  - Kazakh
+  - Korean
+  - Latvian
+  - Lithuanian
+  - Norwegian bokmål
+  - Polish
+  - Portuguese
+  - Russian
+  - Serbian
+  - Slovak
+  - Spanish
+  - Swedish
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Andika Triwidada <atriwidada@gnome.org>
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Úr <urbalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Charles Monzat <superboa@hotmail.fr>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+David King <amigadave@amigadave.com>
+Dušan Kazik <prescott66@gmail.com>
+Enrico Nicoletto <liverig@gmail.com>
+Fabio Tomat <f.t.public@gmail.com>
+Flo H <gnu.l10n.de@gmail.com>
+Fran Dieguez <fran.dieguez@mabishu.com>
+Hannie Dumoleyn <hannie@ubuntu-nl.org>
+Ingmars Dirins <melhiors14@gmail.com>
+Jeremy Bicha <jbicha@ubuntu.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Michael Catanzaro <mcatanzaro@gnome.org>
+Pavel Grunt <pgrunt@redhat.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Radu Stochitoiu <radu.stochitoiu@gmail.com>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Sebastian Rasmussen <sebras@gmail.com>
+Seong-ho Cho <shcho@gnome.org>
+Stas Solovey <whats_up@tut.by>
+Tiago Santos <tiagofsantos81@sapo.pt>
+Visarion Alexandru <viorel.visarion@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Мирослав Николић <miroslavnikolic@rocketmail.com>
+
+3.21.3 - Jun 20, 2016
+=====================
+
+Changes since 3.20.0, that  were not included in any subsequent stable releases:
+
+- Add cloning option.
+- Remove "Pause" action from the popover menu, in display mode.
+- Add a "Restart" action in the display mode popover-menu.
+- Preserve order of boxes over restarts.
+- Don't use characters in hostnames that Microsoft Windows find offensive.
+- Don't allow launching or saving of under-import VMs.
+- Handle spice+unix SPICE URLs.
+- Remember 'read-only' property for VNC boxes.
+- Ensure new VMs do not expose the SPICE connection to all users.
+- Ensure Boxes can connect to local VMs through file descriptor.
+- Ensure "Back" button is not made sensitive on the first wizard page.
+- Don't launch polkit dialog on startup.
+- Sort medias in wizard by vendor.
+- Sort medias in wizard in (intended) reverse-chronological order.
+- Fix a test for availability of bridge networking.
+- Support non-srcdir builds.
+- Added/updated/fixed translations:
+  - Basque
+  - Brazilian Portuguese
+  - Catalan
+  - Chinese (Taiwan)
+  - Friulian
+  - German
+  - Hungarian
+  - Indonesian
+  - Occitan
+  - Portuguese
+  - Simplified Chinese (zh_CN)
+  - Slovak
+  - Slovenian
+  - Spanish
+  - Turkish
+  - Ukrainian
+
+All contributors to this release:
+
+Alain Kalker <a.c.kalker@gmail.com>
+Andika Triwidada <atriwidada@gnome.org>
+Balázs Meskó <meskobalazs@gmail.com>
+Cédric Valmary <cvalmary@yahoo.fr>
+Cheng-Chia Tseng <pswo10680@gmail.com>
+Christian Kirbach <Christian.Kirbach@gmail.com>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dingzhong Chen <wsxy162@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Emmanuele Bassi <ebassi@gnome.org>
+Enrico Nicoletto <liverig@gmail.com>
+Fabiano Fidêncio <fidencio@redhat.com>
+Fabio Tomat <f.t.public@gmail.com>
+Flo H <gnu.l10n.de@gmail.com>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jordi Mas <jmas@softcatala.org>
+Marc-André Lureau <marcandre.lureau@gmail.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Muhammet Kara <muhammetk@gmail.com>
+Pavel Grunt <pgrunt@redhat.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Radu Stochitoiu <radu.stochitoiu@gmail.com>
+Tiago Santos <tiagofsantos81@sapo.pt>
+Visarion Alexandru <viorel.visarion@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.20.0 - Mar 22, 2016
+=====================
+
+Changes since 3.19.92:
+
+- Added/updated/fixed translations:
+  - Danish
+  - Italian
+  - Japanese
+
+All contributors to this release:
+
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Jiro Matsuzawa <jmatsuzawa@gnome.org>
+Milo Casagrande <milo@ubuntu.com>
+
+3.19.92 - Mar 16, 2016
+======================
+
+Changes since 3.19.91:
+
+- Fix two crashes in VNC-related code.
+- Fix Boxes quitting on failure to connect to default broker (session libvirt).
+- Fix removal of box configuration on failure to connect to it's broker.
+- Fix regression of configuration data being saved in ~.cache rather than
+  ~/.config.
+- Fix resource graph drawing code against latest gtk+.
+- Fix typo in the title of a keyboard shortcut.
+- Added/updated/fixed translations:
+  - Brazilian Portuguese
+  - French
+  - German
+  - Greek
+  - Hungarian
+  - Kazakh
+  - Korean
+  - Lithuanian
+  - Portuguese
+  - Serbian
+  - Serbian Latin
+  - Slovenian
+  - Spanish
+  - Swedish
+- A few internal changes.
+
+All contributors to this release:
+
+Alain Lojewski <allomervan@gmail.com>
+Alexandre Franke <alexandre.franke@gmail.com>
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Artur de Aquino Morais <aamorais93.estudos@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Úr <urbalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Bernd Homuth <dev@hmt.im>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Duarte Loreto <happyguy_pt@hotmail.com>
+Efstathios Iosifidis <eiosifidis@gnome.org>
+Martin Srebotnjak <miles@filmsi.net>
+Seong-ho Cho <shcho@gnome.org>
+Thomas Hindoe Paaboel Andersen <phomes@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Марко Костић <marko.m.kostic@gmail.com>
+Милош Поповић <gpopac@gmail.com>
+
+3.19.91 - Mar 02, 2016
+======================
+
+Changes since 3.19.4:
+
+- Add context to some translated strings.
+- Fix AppData file.
+- Added/updated/fixed translations:
+  - Brazilian Portuguese
+  - Chinese (Taiwan)
+  - Czech
+  - Dutch
+  - Finnish
+  - Galician
+  - German
+  - Hebrew
+  - Hungarian
+  - Kazakh
+  - Latvian
+  - Norwegian bokmål
+  - Occitan
+  - Polish
+  - Serbian
+  - Slovak
+  - Spanish
+  - Swedish
+  - Ukrainian
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Balázs Meskó <meskobalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Cédric Valmary <cvalmary@yahoo.fr>
+Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Fran Dieguez <fran.dieguez@mabishu.com>
+Gábor Kelemen <kelemeng@openscope.org>
+hanniedu <lafeber-dumoleyn2@zonnet.nl>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Rafael Fontenelle <rffontenelle@gmail.com>
+Richard Hughes <richard@hughsie.com>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Tom Tryfonidis <tomtryf@gnome.org>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Мирослав Николић <miroslavnikolic@rocketmail.com>
+
+3.19.4 - Jan 18, 2016
+=====================
+
+Changes since 3.19.3:
+
+- Automatically create a snapshot after a VM is installed, to serve as a reset
+  mechanism.
+- Fix translation comments in UI files.
+- Added/updated/fixed translations:
+  - Brazilian Portuguese
+  - Czech
+  - Finnish
+  - German
+  - Greek
+  - Japanese
+  - Lithuanian
+  - Norwegian bokmål
+
+All contributors to this release:
+
+Aurimas Černius <aurisc4@gmail.com>
+Fábio Nogueira <fnogueira@gnome.org>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Jiro Matsuzawa <jmatsuzawa@gnome.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Mario Blättermann <mario.blaettermann@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Tom Tryfonidis <tomtryf@gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.19.3 - Dec 16, 2015
+=====================
+
+Changes since 3.19.1:
+
+- On restoring a libvirt VM from saved state, try to sync the guest clock with
+  host clock. This requires Qemu guest agent in the VM.
+- Keyboard shorcuts:
+  - Add shortcuts help window.
+  - Fix shortcuts for RTL locales.
+  - Drop alt+a shortcut.
+- Add kudos in appdata file.
+- Added/updated/fixed translations:
+  - Finnish
+  - Hebrew
+  - Hungarian
+  - Kazakh
+  - Lithuanian
+  - Norwegian bokmål
+  - Portuguese
+  - Slovak
+  - Spanish
+  - Swedish
+
+Dependencies changed:
+
+- Require gtk+ >= 3.19.4
+- Require libvirt-glib >= 0.2.3
+
+All contributors to this release:
+
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Meskó <meskobalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Pedro Albuquerque <palbuquerque73@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Sebastian Rasmussen <sebras@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.19.1 - Oct 27, 2015
+=====================
+
+Changes since 3.17.92:
+
+- All changes in 3.18.0 and 3.18.1 releases.
+- Add note about spice-vdagent in help pages.
+- Add missing accessibility labels on buttons.
+- Better accessibility label for 'Exit fullscreen' button.
+- Fix the issue of VM not starting if bridge networking is no longer available.
+- Added/updated/fixed translations:
+  - Arabic
+  - Basque
+  - Czech
+  - Danish
+  - Dutch
+  - Finnish
+  - Greek
+  - Romanian
+  - Serbian
+  - Swedish
+  - Ukrainian
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Șerbănescu <daniel@serbanescu.dk>
+Federico Bruni <fede@inventati.org>
+Hannie Dumoleyn <hannie@ubuntu-nl.org>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jiri Grönroos <jiri.gronroos@iki.fi>
+Kenneth Nielsen <k.nielsen81@gmail.com>
+Khaled Hosny <khaledhosny@eglug.org>
+Marek Černocký <marek@manet.cz>
+Petr Kovar <pkovar@redhat.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Tom Tryfonidis <tomtryf@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Марко Костић <marko.m.kostic@gmail.com>
+Милош Поповић <gpopac@gmail.com>
+
+3.17.92 - Sep 16, 2015
+======================
+
+Changes since 3.17.91:
+
+- Don't show launching status in overview.
+- Theme:
+  - Drop most of custom CSS.
+  - Fix and improve custom CSS.
+- Add some comments for translators.
+- Added/updated/fixed translations:
+  - Catalan
+  - Finnish
+  - French
+  - Galician
+  - German
+  - Greek
+  - Indonesian
+  - Italian
+  - Kazakh
+  - Korean
+  - Latvian
+  - Lithuanian
+  - Norwegian bokmål
+  - Portuguese
+  - Spanish
+  - Turkish
 
 All contributors to this release:
 
 Alexandre Franke <alexandre.franke@gmail.com>
+Andika Triwidada <andika@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Bernd Homuth <dev@hmt.im>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Fran Dieguez <fran@openhost.es>
+Jiri Grönroos <jiri.gronroos+l10n@iki.fi>
+Jordi Mas <jmas@softcatala.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Lapo Calamandrei <calamandrei@gmail.com>
+Luca Ferretti <lferrett@gnome.org>
+Osman Karagöz <osmank3@gmail.com>
+Pedro Albuquerque <palbuquerque73@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Seong-ho Cho <shcho@gnome.org>
+Tom Tryfonidis <tomtryf@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.91 - Sep 01, 2015
+======================
+
+Changes since 3.17.90:
+
+- Add a list view.
+- Many internal cleanups and fixes.
+- Added/updated/fixed translations:
+  - Catalan
+  - Chinese (Taiwan)
+  - French
+  - Galician
+  - Greek
+  - Hebrew
+  - Hungarian
+  - Japanese
+  - Lithuanian
+  - Polish
+  - Portuguese
+  - Slovak
+  - Spanish
+
+All contributors to this release:
+
+Adrien Plazas <kekun.plazas@laposte.net>
+Alexandre Franke <alexandre.franke@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Fran Dieguez <fran@openhost.es>
+Gábor Kelemen <kelemeng@openscope.org>
+Hajime Taira <htaira@redhat.com>
+Jordi Mas <jmas@softcatala.org>
+Pedro Albuquerque <palbuquerque73@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Tom Tryfonidis <tomtryf@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.90 - Aug 18, 2015
+======================
+
+Changes since 3.17.4:
+
+- Add toggle buttons to titlebar to easily filter the main view to show:
+  - All
+  - Remote or
+  - Local boxes
+- Show IP/hostname of remote libvirt and oVirt boxes in main icon view.
+- Improve accessibility
+  - Add mnemonics to various UI components.
+  - Allow switching settings pages through Alt+Left/Right.
+- Fix SPICE connection leaks.
+- Better handle box launch cancellation.
+- Port/fix tests.
+- Add tests for Fedora 21 and 22 express installation.
+- Added/updated/fixed translations:
+  - Brazilian Portuguese
+  - Catalan
+  - Czech
+  - Esperanto
+  - Greek
+  - Norwegian bokmål
+  - Portuguese
+  - Slovak
+  - Spanish
+
+All contributors to this release:
+
+Adrien Plazas <kekun.plazas@laposte.net>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dimitris Spingos <dmtrs32@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Felipe Braga <fbobraga@gmail.com>
+Jordi Mas <jmas@softcatala.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>
+Marek Černocký <marek@manet.cz>
+Pedro Albuquerque <palbuquerque73@gmail.com>
+Vladimir Benes <benesv@email.cz>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.4 - July 22, 2015
+======================
+
+Changes since 3.17.3:
+
+- Show guest IP on 'General' page for local VMs.
+- Show IP/hostname of remote desktop boxes in main icon view.
+- Add a switch to allow disabling autosaving for a box in the 'System' page of
+  properties window.
+- Improved
+  - favourite emblem.
+  - stopped boxes and fallback, thumbnails.
+- Fix the issue of secondary windows ending up in weird unusable state on
+  closing of properties window over main window.
+- More reliable setup of storage pool.
+- Fix import of system libvirt VMs that use device nodes as main disk.
+- Fix crash on failure to import system libvirt VMs.
+- Fix transparency of underflow and overflow indicators.
+- Make values of text properties, selectable.
+- Only autosave VMs on default connection.
+- Smaller markers on resource properties' scales.
+- Avoid some criticals warnings on console.
+- More vertical spacing between resource scales in customization view.
+- More reliable test for raw images.
+- Fix alignment of resource properties' values.
+- Prefix display properties' labels with "Display " to make the context clear.
+- Added/updated/fixed translations:
+  - Hebrew
+  - Hungarian
+  - Portuguese
+  - Slovak
+  - Spanish
+
+Dependencies changed:
+
+- Require libvirt-glib >= 0.2.2
+
+All contributors to this release:
+
+Adrien Plazas <kekun.plazas@laposte.net>
+Balázs Úr <urbalazs@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Pedro Albuquerque <palbuquerque73@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.3 - June 24, 2015
+======================
+
+Changes since 3.17.2:
+
+- Add CD-ROM device to imported VMs too.
+- Make storage pool autostart on boot.
+- Fix issue of "ghost" VMs appearing when going back and forth in wizard.
+- Automated tests
+  - Port to new UI.
+  - Add a test for sending key combos to box.
+  - Speed up many tests.
+  - Improve reliability of many tests.
+- Added/updated/fixed translations:
+  - Czech
+  - German
+  - Hungarian
+  - Occitan
+  - Turkish
+
+Dependencies changed:
+
+- Require libvirt-glib >= 0.2.1
+
+All contributors to this release:
+
+Balázs Úr <urbalazs@gmail.com>
+Benjamin Steinwender <b@stbe.at>
+Cédric Valmary <cvalmary@yahoo.fr>
+Marek Černocký <marek@manet.cz>
+Necdet Yücel <necdetyucel@gmail.com>
+Vladimir Benes <benesv@email.cz>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.2 - May 28, 2015
+=====================
+
+Changes since 3.17.1:
+
+- Adapt to new libosinfo API to be able to offer express installation for
+  Fedora 21 and 22.
+- Display system notification on install completion.
+- Assign 2G RAM by default to new VMs.
+- Stack up notifications vertically, instead of displaying them in the same
+  place and ending up with all but one being obstructed.
+- Asynchronously setup non-default sources at startup to not block UI.
+- Look for bridge.conf in /etc/qemu-kvm directory too.
+- Selection bar
+  - Drop "Properties" button
+  - Move "Delete" button at the end and apply destructive theme to it.
+- Adapt to Gtk+ Vala API change.
+- Added/updated/fixed translations:
+  - Indonesian
+  - Italian
+  - Simplified Chinese
+  - Slovak
+  - Spanish
+  - Turkish
+
+Dependencies changed:
+
+- Require libosinfo >= 0.2.12
+- Require Vala >= 0.28.0.16
+
+All contributors to this release:
+
+Adrien Plazas <kekun.plazas@laposte.net>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dean Chen <wsxy162@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Federico Bruni <fede@inventati.org>
+Muhammet Kara <muhammetk@gmail.com>
+Will Thompson <will@willthompson.co.uk>
+Zamani Karmana <zamani.karmana@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.17.1 - Apr 28, 2015
+=====================
+
+Changes since 3.16.0:
+
+- Add "Restart" button to properties view, for libvirt machines.
+- Add "Force shutdown" option in context and hamburger menu.
+- Provide a symbolic icon.
+- Dismiss properties window on restart and force shutdown.
+- Check files' extensions in a case-insensitive way. This fixes support for
+  latest Windows ISOs that have filenames in all caps.
+- Revert the changes to only add USB input devices if guest was known to support
+  them. I-e always add USB input devices to new VMs.
+- Ensure "Saving…" status goes away on saving operation failure.
+- Only autosave running machines.
+- Don't show "Delete" option in the hamburger menu. Showing it there when box is
+  in foreground, looks odd.
+- Other minor UI improvements.
+- All code changes included in 3.16.1.
+- Added/updated/fixed translations:
+  - Czech
+  - Greek
+
+All contributors to this release:
+
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Christophe Fergeau <cfergeau@redhat.com>
+Marek Černocký <marek@manet.cz>
+Michael Catanzaro <mcatanzaro@gnome.org>
+Tom Tryfonidis <tomtryf@gmail.com>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.16.0 - March 23, 2015
+=======================
+
+Changes since 3.15.92:
+
+- Ensure wizard page titles are translated.
+- Added/updated/fixed translations:
+  - Basque
+  - French
+  - German
+  - Italian
+  - Slovenian
+  - Spanish
+
+All contributors to this release:
+
+Alex Puchades <alex94puchades@gmail.com>
+Bernd Homuth <dev@hmt.im>
+Christian Kirbach <Christian.Kirbach@gmail.com>
+Christophe Fergeau <cfergeau@redhat.com>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Milo Casagrande <milo@ubuntu.com>
+
+3.15.92 - March 16, 2015
+========================
+
+Changes since 3.15.91:
+
+- Notifications no longer timeout when mouse is hovering above them.
+- Show correct favorite option in box actions popup menu.
+- Only show resolution overlay on actual resize.
+- Added/updated/fixed translations:
+  - Bosnian
+  - Brazilian Portuguese
+  - Chinese (Taiwan)
+  - Czech
+  - Danish
+  - Finnish
+  - Galician
+  - Greek
+  - Hebrew
+  - Hungarian
+  - Kazakh
+  - Korean
+  - Lithuanian
+  - Norwegian bokmål
+  - Polish
+  - Russian
+  - Serbian
+  - Slovak
+  - Spanish
+  - Swedish
+  - Ukrainian
+
+All contributors to this release:
+
+Alex Puchades <alex94puchades@gmail.com>
+Anders Jonsson <anders.jonsson@norsjovallen.se>
+Ask Hjorth Larsen <asklarsen@gmail.com>
+Aurimas Černius <aurisc4@gmail.com>
+Balázs Úr <urbalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
 Cheng-Chia Tseng <pswo10680@gmail.com>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Efstathios Iosifidis <iefstathios@gmail.com>
+Enrico Nicoletto <liverig@gmail.com>
+Fran Dieguez <fran.dieguez@mabishu.com>
+Jiri Grönroos <jiri.gronroos+l10n@iki.fi>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Paweł Żołnowski <pawel@zolnowski.name>
+Samir Ribic <samir.ribic@etf.unsa.ba>
+Seong-ho Cho <shcho@gnome.org>
+Stas Solovey <whats_up@tut.by>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+Мирослав Николић <miroslavnikolic@rocketmail.com>
+
+3.15.91 - March 03, 2015
+========================
+
+Changes since 3.15.90:
+
+- Cache express install toggle, username, password and product key for every
+  media. No need to keep product keys in a separate file and having to paste
+  them each time you create a windows box anymore. \o/
+- Beautify
+  - USB devices list
+  - Snapshots list
+  - Resource graphs
+- Friendlier 'no snapshots' view.
+- Fix invisible separators in menus.
+- Fix some label alignments.
+- Fix main window hanging in weird blank state on launching new windows.
+- Don't present useless 'Open in new window' option when box already has its
+  own window.
+- Connect to local libvirt machines' SPICE display through a file descriptor.
+  While this alone doesn't fix the issue of spice connection being exposed to
+  other local users yet, all work in Boxes is done for that.
+- Mark a few forgotten UI strings for translation.
+- Fix a few UI strings.
+- Ellipsize URL in the middle to ensure the hostname and filename are visible.
+- Fix criticals and warnings on console.
+- Added/updated/fixed translations:
+  - Brazilian Portuguese
+  - Chinese (Taiwan)
+  - French
+  - Galician
+  - Greek
+  - Hebrew
+  - Hungarian
+  - Kazakh
+  - Russian
+  - Slovak
+  - Slovenian
+  - Spanish
+  - Ukrainian
+
+All contributors to this release:
+
+Adrien Plazas <kekun.plazas@laposte.net>
+Alexandre Franke <alexandre.franke@gmail.com>
+Balázs Úr <urbalazs@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>
+Cheng-Chia Tseng <pswo10680@gmail.com>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dimitris Spingos <dmtrs32@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Efstathios Iosifidis <iefstathios@gmail.com>
+Fran Dieguez <fran.dieguez@mabishu.com>
+Jiro Matsuzawa <jmatsuzawa@gnome.org>
+Kalev Lember <kalevlember@gmail.com>
+Matej Urbančič <mateju@svn.gnome.org>
+Rafael Ferreira <rafael.f.f1@gmail.com>
+Stas Solovey <whats_up@tut.by>
+Tom Tryfonidis <tomtryf@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Yuri Myasoedov <ymyasoedov@yandex.ru>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.15.90 - Feb 18, 2015
+======================
+
+Changes since 3.15.4:
+
+- New cool first experience screen.
+- Drop intro page from wizard now that we have a cool first experience screen.
+- Show step titles rather than numbers in wizard titlebar.
+- Ensure titlebar always has a title.
+- Inform users how to release the keyboard grab.
+- Don't autosave a VM when view/editing its propties.
+- Show normal entries for editable string properties instead of our custom
+  widget that shows a button to edit.
+- Ensure selection-mode exit on launching properties view.
+- URL entry in wizard
+  - Provide completion based on media URLs known to libosinfo.
+  - More thorough validation of local URLs.
+  - Don't enable 'Continue' for invalid URLs.
+  - Better explain expected URLs.
+- Fix and improve snapshot naming.
+- Add automated UI tests.
+- Import of system libvirt VMs
+  - Fix import failing with a weird 'Empty location' error message.
+  - Don't needlessly chmod disk (and hence launch annoying policykit dialog).
+  - Replace network interface so imported VM can be started successfully.
+- Set proper accessible name on windows.
+- Added/updated/fixed translations:
+  - Czech
+  - Hebrew
+  - Hungarian
+  - Norwegian bokmål
+  - Russian
+  - Slovak
+  - Spanish
+- Many other minor UI fixes/improvements.
+
+All contributors to this release:
+
+Balázs Úr <urbalazs@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dušan Kazik <prescott66@gmail.com>
+Fabiano Fidêncio <fidencio@redhat.com>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Pavel Grunt <pgrunt@redhat.com>
+Vladimir Benes <benesv@email.cz>
+Vladimir Benes <vbenes@redhat.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Yuri Myasoedov <ymyasoedov@yandex.ru>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.15.4 - Jan 20, 2015
+=====================
+
+Changes since 3.15.3:
+
+- Fix express installation for Fedora and RHEL.
+- Fixes to user documentation.
+- Added/updated/fixed translations:
+  - Basque
+  - Brazilian Portuguese
+  - Czech
+  - Galician
+  - German
+  - Greek
+  - Hebrew
+  - Hungarian
+  - Japanese
+  - Russian
+  - Spanish
+  - Ukrainian
+
+All contributors to this release:
+
+Balázs Úr <urbalazs@gmail.com>
+Bernd Homuth <dev@hmt.im>
+Daniel Korostil <ted.korostiled@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Dimitris Spingos <dmtrs32@gmail.com>
+Ekaterina Gerasimova <kittykat3756@gmail.com>
+Fran Dieguez <fran.dieguez@mabishu.com>
+Gabor Kelemen <kelemeng@gnome.hu>
+Inaki Larranaga Murgoitio <dooteo@zundan.com>
+Jiro Matsuzawa <jmatsuzawa@gnome.org>
+Marek Černocký <marek@manet.cz>
+Rafael Ferreira <rafael.f.f1@gmail.com>
+Ricardo Barbosa <barbosa.cisco@gmail.com>
+Stas Solovey <whats_up@tut.by>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.15.3 - Dec 15, 2014
+=====================
+
+Changes since 3.15.2:
+
+- Add a menu button that, when clicked pops up a menu to allow user to send
+  system key combos to guest. Currently supported combos are:
+  - Ctrl+Alt+Backspace
+  - Ctrl+Alt+F1
+  - Ctrl+Alt+F2
+  - Ctrl+Alt+F7
+- Drop all nested dialogs by use of notifications and GtkStack widget. This also
+  implies that we now only allow customization of resources before a box is
+  created.
+- As a USB device is no longer available on the host after being redirected
+  to guest, do not present keyboards and mice to user for redirection.
+- Place fullscreen button before others in display headerbar. This is for
+  consistency with UI mockups and other apps.
+- Show correct number of steps in wizard title.
+- Show notifications on correct window in properties and wizard views.
+- Apply appropriate theme to 'Force shutdown' button.
+- Correctly restore notebook page in properties view.
+- Don't show empty pages in properties view.
+- Bigger properties and wizard windows.
+- Add a USB keyboard to new domains.
+- Added/updated/fixed translations:
+  - Czech
+  - Dutch
+  - German
+  - Hebrew
+  - Hungarian
+  - Japanese
+  - Norwegian bokmål
+  - Spanish
+  - Turkish
+
+Dependencies changed:
+
+- Require spice-gtk >= 0.27
+- Require libusb explicitly
+
+All contributors to this release:
+
+Balázs Úr <urbalazs@gmail.com>
+Christian Kirbach <Christian.Kirbach@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
+Fabiano Fidêncio <fidencio@redhat.com>
+Hajime Taira <htaira@redhat.com>
+Hannie Dumoleyn <hannie@ubuntu-nl.org>
+Kjartan Maraas <kmaraas@gnome.org>
+Marek Černocký <marek@manet.cz>
+Muhammet Kara <muhammetk@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
+Yaşar Şentürk <yasarix@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
+
+3.15.2 - Nov 25, 2014
+=====================
+
+Changes since 3.14.0, that were not included in any subsequent stable releases:
+
+- Properties view rework:
+  - Now a separate dialog-like window.
+  - Rename 'Login' section to 'General'.
+  - Merge 'Display' secion into 'General' section.
+  - Replace sidebar with:
+    - system stats and controls in the 'System' section.
+    - notebook tabs for each section.
+  - Remove the vague 'Resize guest' property and instead tell SPICE to always
+    try to scale the guest display to allocated size.
+  - Remove vague auto-usbredirection option.
+  - Replace use of vague term 'Virtualizer' with a more friendlier (and
+    consistent) term, 'Broker'.
+  - Show broker name instead of URL in properties view but do show broker URL
+    in troubleshooting log.
+- Wizard view rework:
+  - Now a separate dialog-like window.
+  - Replace sidebar with step info in the title.
+- Present a popover with item-specific actions menu that includes:
+  - Open in new window
+  - Favorite
+  - Pause
+  - Delete
+  - Properties
+  when user:
+  - right-clicks (or hits menu key) over an item.
+  - clicks a new menu button in display view that replaces the 'properties'
+    button.
+- Show box display resolution on window resize.
+- Automatically save/pause VMs running in background, except for ones under
+  express installation.
+- Tell SPICE to also upscale the display when needed so that we don't end up
+  with a very tiny box display on hidpi screens when no autoresolution is in
+  effect (e.g boot loader screen or guests with no qxl/agent).
+- Download files to temporary location first. This fixes the issue of Boxes
+  trying to use partially downloaded files.
+- Set 'USB' bus for mouse since the default PS/2 bus has been reported to be
+  much slower.
+- Correctly handle the case of user clicking on a box that is being saved.
+- Explicitly disable HPET, based on input from libvirt and Qemu developers.
+- Report ovirt support in the configure summary.
+- Don't spin spinner on paused machines.
+- If Boxes is launched with SOUP_DEBUG environment variable set, attach a
+  logger to libsoup session.
+- Added/updated/fixed translations:
+  - Arabic
+  - Czech
+  - French
+  - Greek
+  - Hebrew
+  - Hindi
+  - Italian
+  - Kazakh
+  - Latvian
+  - Norwegian bokmål
+  - Simplified Chinese
+  - Spanish
+  - Telugu
+  - Turkish
+
+All contributors to this release:
+
+Abderrahim Kitouni <a.kitouni@gmail.com>
+Alain Lojewski <allomervan@gmail.com>
+Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Daniel Mustieles <daniel.mustieles@gmail.com>
 Florian Müllner <fmuellner@gnome.org>
+Kjartan Maraas <kmaraas@gnome.org>
 Krishnababu Krothapalli <k.meetme@gmail.com>
+Lasse Schuirmann <lasse.schuirmann@gmail.com>
+Marek Černocký <marek@manet.cz>
 Michael Hill <mdhill@gnome.org>
 Milo Casagrande <milo@ubuntu.com>
+Mosaab Alzoubi <moceap@hotmail.com>
+Osman Karagöz <osmank3@gmail.com>
+Piotr Drąg <piotrdrag@gmail.com>
 Rajesh Ranjan <rajeshkajha@yahoo.com>
+Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Tom Tryfonidis <tomtryf@gmail.com>
+Yosef Or Boczko <yoseforb@src.gnome.org>
+YunQiang Su <yqsu@src.gnome.org>
 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>
 
 3.14.0 - Sep 23, 2014
 =====================
 
-Changes since 3.13.92:
+Changes since 3.14.0:
 
 - Documentation improvements
 - Translation updates:

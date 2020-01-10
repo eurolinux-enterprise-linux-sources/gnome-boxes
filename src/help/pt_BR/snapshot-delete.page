@@ -10,30 +10,31 @@
       <years>2014</years>
     </credit>
 
-    <desc>Remove a snapshot that you no longer need.</desc>
+    <desc>Remova uma captura que você não precise mais.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>Delete a snapshot</title>
+  <title>Excluindo uma captura</title>
 
-  <p>A snapshot that is no longer needed can be removed from the list.</p>
+  <p>Uma captura que você não precise mais pode ser removida da lista.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Snapshots</gui> in the sidebar.</p></item>
-    <item><p>Select the snapshot to be deleted from the list.</p></item>
-    <item><p>Click the menu button on the right and select
-    <gui>Delete</gui>.</p></item>
-    <item><p>Confirm to permanently delete the snapshot.</p></item>
+    <item><p>Abra a <link xref="interface#properties">visão de propriedades</link> da máquina. Quando a máquina estiver aberta, clique no botão <gui style="button">Propriedades</gui> na barra de cabeçalho. A visão de propriedades também pode ser acessada a partir do <link xref="interface#selection">modo de seleção</link>.</p></item>
+    <item><p>Clique em <gui>Capturas</gui> na barra lateral.</p></item>
+    <item><p>Selecione a captura para ser removida da lista.</p></item>
+    <item><p>Clique no botão de menu à direita e selecione <gui>Excluir</gui>.</p></item>
+    <item><p>Confirme para excluir permanentemente a captura.</p></item>
   </steps>
 
 </page>

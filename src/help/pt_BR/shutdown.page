@@ -10,30 +10,29 @@
       <years>2014</years>
     </credit>
 
-    <desc>Shut down a box that has stopped working.</desc>
+    <desc>Desliga uma máquina que parou de funcionar.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>Force a box to shut down</title>
+  <title>Forçando uma máquina a ser desligada</title>
 
-  <p>If a box stops responding, you can force it to shut down. This allows you
-  to restart the virtual machine in the hope of returning it to its working
-  state.</p>
+  <p>Se uma máquina pára de responder, você pode forçá-la a desligar. Isto lhe permite reiniciar a máquina virtual na esperança de retorná-la ao seu estado de funcionamento.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui style="button">Force Shutdown</gui> in the lower left
-    corner.</p></item>
-    <item><p>Click <gui style="button">Shutdown</gui> to confirm.</p></item>
+    <item><p>Abra a <link xref="interface#properties">visão de propriedades</link> da máquina. Quando a máquina estiver aberta, clique no botão <gui style="button">Propriedades</gui> na barra de cabeçalho. A visão de propriedades também pode ser acessada a partir do <link xref="interface#selection">modo de seleção</link>.</p></item>
+    <item><p>Clique em <gui style="button">Forçar desligamento</gui> no canto inferior esquerdo.</p></item>
+    <item><p>Clique em <gui style="button">Desligar</gui> para confirmar.</p></item>
   </steps>
 
 </page>

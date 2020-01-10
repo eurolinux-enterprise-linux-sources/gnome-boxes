@@ -49,21 +49,37 @@ private class Boxes.Collection: GLib.Object {
         item_removed (item);
     }
 
-    public void populate (CollectionView view) {
+    public void populate (ICollectionView view) {
         for (uint i = 0 ; i < items.length ; i++)
             view.add_item (items[i]);
     }
 }
 
 private class Boxes.CollectionFilter: GLib.Object {
+    // Need a signal cause delegate properties aren't real properties and hence are not notified.
+    public signal void filter_func_changed ();
+
     private string [] terms;
 
+    private string _text;
     public string text {
+        get { return _text; }
         set {
+            _text = value;
             terms = value.split(" ");
             for (int i = 0; i < terms.length; i++)
                 terms[i] = canonicalize_for_search (terms[i]);
         }
+    }
+
+    private unowned Boxes.CollectionFilterFunc _filter_func;
+    public unowned Boxes.CollectionFilterFunc filter_func {
+        get { return _filter_func; }
+        set {
+            _filter_func = value;
+            filter_func_changed ();
+        }
+        default = null;
     }
 
     public bool filter (CollectionItem item) {
@@ -72,9 +88,15 @@ private class Boxes.CollectionFilter: GLib.Object {
             if (! (term in name))
                 return false;
         }
+
+        if (filter_func != null)
+            return filter_func (item);
+
         return true;
     }
 }
+
+private delegate bool Boxes.CollectionFilterFunc (Boxes.CollectionItem item);
 
 private class Boxes.Category: GLib.Object {
     public enum Kind {

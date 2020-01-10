@@ -36,8 +36,6 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
     public InstallConfig config;
     public InstallScriptList scripts;
 
-    private string? product_key_format;
-
     private GLib.List<UnattendedFile> unattended_files;
     private GLib.List<UnattendedFile> secondary_unattended_files;
     private UnattendedAvatarFile avatar_file;
@@ -52,6 +50,17 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
     private Osinfo.DeviceList additional_devices;
 
     private static Fdo.Accounts? accounts;
+
+    private InstallScriptInjectionMethod injection_method {
+        private get {
+            foreach (var unattended_file in unattended_files) {
+                if (unattended_file is UnattendedScriptFile)
+                    return (unattended_file as UnattendedScriptFile).injection_method;
+            }
+
+            return InstallScriptInjectionMethod.DISK;
+        }
+    }
 
     private static string escape_mkisofs_path (string path) {
         var str = path.replace ("\\", "\\\\");
@@ -83,7 +92,7 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
         resources = media.resources;
 
         this.scripts = scripts;
-        config = new InstallConfig ("http://live.gnome.org/Boxes/unattended");
+        config = new InstallConfig ("https://wiki.gnome.org/Boxes/unattended");
 
         unattended_files = new GLib.List<UnattendedFile> ();
         secondary_unattended_files = new GLib.List<UnattendedFile> ();
@@ -100,9 +109,9 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
         timezone = get_timezone ();
         lang = get_preferred_language ();
         kbd = lang;
-        product_key_format = get_product_key_format ();
 
-        setup_box = new UnattendedSetupBox (os_media.live, product_key_format, needs_internet, label);
+        var product_key_format = get_product_key_format ();
+        setup_box = new UnattendedSetupBox (this, product_key_format, needs_internet);
         setup_box.notify["ready-to-create"].connect (() => {
             notify_property ("ready-to-create");
         });
@@ -114,7 +123,11 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
     }
 
     public override void prepare_to_continue_installation (string vm_name) {
-        this.hostname = vm_name.replace (" ", "-");
+        /*
+         * A valid hostname format should be provided by libosinfo.
+         * See: https://bugzilla.redhat.com/show_bug.cgi?id=1328236
+         */
+        this.hostname = replace_regex(vm_name, "[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]", "");
 
         var path = get_user_unattended ("unattended.img");
         disk_file = File.new_for_path (path);
@@ -131,7 +144,9 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
         }
     }
 
-    public override async void prepare_for_installation (string vm_name, Cancellable? cancellable) throws GLib.Error {
+    public override async void prepare_for_installation (string vm_name, Cancellable? cancellable) {
+        setup_box.save_settings ();
+
         if (!setup_box.express_install) {
             debug ("Unattended installation disabled.");
 
@@ -174,8 +189,9 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
             // installation will work. When this happens, just disable unattended installs, and let the caller decide
             // if it wants to retry a non-automatic install or to just abort the box creation..
             setup_box.express_install = false;
-
-            throw error;
+            var msg = _("An error occurred during installation preparation. Express Install disabled.");
+            App.app.main_window.notificationbar.display_error (msg);
+            debug ("Disabling unattended installation: %s", error.message);
         }
     }
 
@@ -259,7 +275,7 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
         setup_box.show ();
     }
 
-    public override GLib.List<Pair> get_vm_properties () {
+    public override GLib.List<Pair<string,string>> get_vm_properties () {
         var properties = base.get_vm_properties ();
 
         if (setup_box.express_install) {
@@ -278,7 +294,7 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
 
         domain_os.set_kernel (kernel_file.get_path ());
         domain_os.set_ramdisk (initrd_file.get_path ());
-        domain_os.set_cmdline (script.generate_command_line (os, config));
+        domain_os.set_cmdline (script.generate_command_line_for_media (os_media, config));
     }
 
     public override void clean_up () {
@@ -338,9 +354,8 @@ private class Boxes.UnattendedInstaller: InstallerMedia {
         disk.set_driver_format (DomainDiskFormat.RAW);
         disk.set_source (disk_file.get_path ());
 
-        // FIXME: Ideally, we shouldn't need to check for distro
-        if (os.distro == "win") {
-            disk.set_target_dev ((path_format == PathFormat.DOS)? "A" : "fd");
+        if (injection_method == InstallScriptInjectionMethod.FLOPPY) {
+            disk.set_target_dev ((path_format == PathFormat.DOS)? "A" : "fd0");
             disk.set_guest_device_type (DomainDiskGuestDeviceType.FLOPPY);
             disk.set_target_bus (DomainDiskBus.FDC);
         } else {

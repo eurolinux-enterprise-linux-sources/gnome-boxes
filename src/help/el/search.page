@@ -16,13 +16,19 @@
     <desc>Γρήγορη πρόσβαση ενός πλαισίου κατά όνομα.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -30,10 +36,7 @@
 
   <title>Αναζητήστε ένα πλαίσιο</title>
 
-  <p>If there is more than one box, you can locate or filter boxes by name in
-  the <link xref="interface#collection">collection view</link> or
-  <link xref="interface#selection">selection mode</link>. Click the search
-  icon, or just start typing to initiate a search.</p>
+  <p>Αν υπάρχουν πάνω από ένα πλαίσια, μπορείτε να εντοπίσετε ένα πλαίσιο κατά όνομα στην <link xref="interface#collection">προβολή συλλογής</link> ή στην <link xref="interface#selection">λειτουργία επιλογής</link>. Κάντε κλικ στο εικονίδιο αναζήτησης , ή απλά πληκτρολογήστε για να ξεκινήσει η αναζήτηση.</p>
 
   <p>Πατήστε <key>Esc</key> για να απορρίψετε την αναζήτηση.</p>
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="connect" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-23" status="candidate"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Att få åtkomst till en box eller tjänst över nätverket.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Anslut till en annan dator</title>
+
+  <p><app>Boxes</app> kan användas för att visa och komma åt en virtuell eller en fysisk maskin på avstånd.</p>
+
+  <note style="important">
+    <p>Fjärrmaskinen bör redan vara konfigurerad.</p>
+  </note>
+
+  <steps>
+    <item><p>Klicka på <gui style="button">Ny</gui> i övre vänstra hörnet för att starta guiden för att skapa boxen.</p></item>
+    <item><p>Ett introduktionsmeddelanden visas. Klicka på <gui style="button">Fortsätt</gui>.</p></item>
+    <item><p>På guidens skärm <gui>Val av källa</gui>, klicka på <gui style="button">Ange URL</gui>.</p></item>
+
+    <item><p>Ange en URL som innehåller protokollet, IP-adressen och portnumret för fjärrenheten eller tjänsten. Till exempel:</p>
+      <code>spice://192.168.122.1?port=5906;</code>
+      <p>Protokollet är:</p>
+      <list>
+        <item><p>spice:// för att ansluta till en lokal eller fjärr <app>Xspice</app>-server.</p></item>
+        <item><p>qemu:// för att ansluta till en libvirt-instans som tillhandahåller tillgång till alla virtuella maskiner den är värd för.</p></item>
+        <item><p>vnc:// för att ansluta till en fjärr <app>vino</app>- eller <app>VNC</app>-server.</p></item>
+      </list>
+      <note style="info">
+        <p>Adressen och portnummer bör finnas tillgängligt från konfigurationen av enheten eller tjänsten på fjärrmaskinen. Till exempel kan du i <gui style="menu">Egenskaper</gui> i <app>Boxes</app> se URL:en du kan använda för att ansluta till den boxen.</p>
+      </note>
+    </item>
+    <item><p>Klicka på <gui style="button">Fortsätt</gui> i övre högra hörnet.</p></item>
+    <item><p>Klicka på <gui style="button">Anpassa</gui> om du önskar byta namn på boxen.</p></item>
+    <item><p>Klicka på <gui style="button">Skapa</gui>.</p></item>
+  </steps>
+
+  <p>Fjärrboxen kommer att öppnas i samlingsvyn.</p>
+
+</page>

@@ -27,7 +27,13 @@
       <years>2013</years>
     </credit>
 
-    <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+    <desc>Απαιτήσεις υλικού που απαιτούνται για να τρέξει μια εικονική μηχανή στα <app>Πλαίσια</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -36,7 +42,7 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -50,10 +56,7 @@
     <item>
       <p>20 GB μέγιστου αποθηκευτικού χώρου.</p>
       <note style="advanced">
-      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
-         when creating the virtual machine. The actual disk space used by
-         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
-         space used by the virtual machine itself.</p>
+      <p>Αυτό δε σημαίνει πως τα <app>Πλασία</app> θα κατανέμουν 20 GB κατά τη δημιουργία μιας εικονικής μηχανής. Ο πραγματικός χώρος του δίσκου που θα χρησιμοποιηθεί από τα <app>Πλασία</app> θα είναι λιγότερος (ή στην χειρότερη περίπτωση ίσος) από τον χώρο που θα χρησιμοποιηθεί από την εικονική μηχανή.</p>
       </note>
     </item>
     <item>
@@ -62,9 +65,7 @@
   </list>
 
   <note style="advanced">
-    <p><app>Boxes</app> performs best if your computer processor supports
-    hardware <link xref="virtualization">virtualization extensions</link> and
-    these are enabled in the system BIOS.</p>
+    <p>Τα <app>Πλαίσια</app> αποδίδουν καλύτερα αν ο επεξεργαστής του υπολογιστή σας υποστηρίζει <link xref="virtualization">εικονικοποίηση</link> υλικού και αν τα πρόσθετα εικονικοποίησης είναι ενεργοποιημένα στο BIOS του συστήματος.</p>
   </note>
 
 </page>

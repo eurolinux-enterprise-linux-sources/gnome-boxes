@@ -17,8 +17,6 @@ private class Boxes.InstalledMedia : Boxes.InstallerMedia {
     public override bool ready_to_create { get { return true; } }
     public override bool live { get { return false; } }
 
-    public string format { get { return device_file.has_suffix (".qcow2")? "qcow2" : "raw"; } }
-
     protected override string? architecture {
         owned get {
             // Many distributors provide arch name on the image file so lets try to use that if possible
@@ -37,13 +35,17 @@ private class Boxes.InstalledMedia : Boxes.InstallerMedia {
         }
     }
 
-    public InstalledMedia (string path) throws GLib.Error {
+    public InstalledMedia (string path, bool known_qcow2 = false) throws GLib.Error {
         var supported = false;
-        foreach (var extension in supported_extensions) {
-            supported = path.has_suffix (extension);
-            if (supported)
-                break;
-        }
+
+        if (known_qcow2 || path.has_prefix ("/dev/"))
+            supported = true; // Let's assume it's device file in raw format
+        else
+            foreach (var extension in supported_extensions) {
+                supported = path.has_suffix (extension);
+                if (supported)
+                    break;
+            }
 
         if (!supported)
             throw new IOError.NOT_SUPPORTED (_("Unsupported disk image format."));
@@ -96,7 +98,9 @@ private class Boxes.InstalledMedia : Boxes.InstallerMedia {
         }
     }
 
-    public override void setup_domain_config (Domain domain) {}
+    public override void setup_domain_config (Domain domain) {
+        add_cd_config (domain, from_image? DomainDiskType.FILE : DomainDiskType.BLOCK, null, "hdc", false);
+    }
 
     public override GLib.List<Pair<string,string>> get_vm_properties () {
         var properties = new GLib.List<Pair<string,string>> ();

@@ -23,13 +23,19 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
@@ -43,8 +49,8 @@
     <title>Για να ενεργοποιήσετε συσκευές USB σε ένα πλαίσιο:</title>
     <item><p>Κάντε δεξί κλικ σε ένα πλαίσιο στην προβολή συλλογής, ή αν το πλαίσιο είναι ήδη ανοιχτό, στην εργαλειοθήκη πατήστε το κουμπί ιδιότητες.</p></item>
     <item><p>Στην πλευρική στήλη κάντε κλικ στις <gui style="menuitem">Συσκευές</gui>.</p></item>
-    <item><p>Βεβαιωθείτε ότι η <gui>Ανακατεύθυνση των νέων συσκευών USB</gui> είναι αλλαγμένη σε <gui style="switch">ON</gui>. <gui>Συσκευές USB</gui> που είναι συνδεδεμένες στο κεντρικό σύστημα θα εμφανιστούν σε μια λίστα.</p></item>
-    <item><p>Ορίστε τον διακόπτη δίπλα από κάθε επιθυμητή συσκευή σε <gui style="switch">ON</gui>.</p></item>
+    <item><p>Βεβαιωθείτε ότι η <gui>Ανακατεύθυνση των νέων συσκευών USB</gui> είναι αλλαγμένη σε <gui style="switch">ΝΑΙ</gui>. <gui>Συσκευές USB</gui> που είναι συνδεδεμένες στο κεντρικό σύστημα θα εμφανιστούν σε μια λίστα.</p></item>
+    <item><p>Ορίστε τον διακόπτη δίπλα από κάθε επιθυμητή συσκευή σε <gui style="switch">ΝΑΙ</gui>.</p></item>
   </steps>
 
 </page>

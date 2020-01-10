@@ -18,7 +18,7 @@
 
   <title>Připojení k jinému počítači</title>
 
-  <p><app>Boxes</app> can be used to view and access a remote physical or virtual machine.</p>
+  <p><app>Boxy</app> je možné použít k zobrazení a k přístupu ke vzdálenému fyzickému stroji nebo ke vzdálenému virtuálnímu stroji.</p>
 
   <note style="important">
     <p>Vzdálený stroj by již měl být nastaven.</p>

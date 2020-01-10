@@ -22,14 +22,20 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>¿Para qué necesito una máquina virtual?</title>
 
-  <p>Una máquina virtual puede ser útil cuando necesita ejecutar aplicaciones que sólo funcionan en otro sistema operativo, por ejemplo en Microsoft Windows™. También puede usar una máquina virtual durante el desarrollo de un software, para probarlo en un entorno limpio.</p>
+  <p>Una máquina virtual puede ser útil cuando necesita ejecutar aplicaciones que sólo funcionan en otro sistema operativo, por ejemplo en Microsoft Windows™. También puede usar una máquina virtual durante el desarrollo de software, para probarlo en un entorno limpio.</p>
 
 </page>

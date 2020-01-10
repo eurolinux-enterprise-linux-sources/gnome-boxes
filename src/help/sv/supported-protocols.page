@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="supported-protocols" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#faq"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2012</years>
+    </credit>
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Vilken teknologi används av Boxes?</title>
+
+
+  <p>Boxes använder <app>qemu-kvm</app>, <app>libvirt-glib</app> och <app>spice-gtk</app> för att enkelt möjliggöra för användare att hantera virtuella maskiner och ansluta till fjärrmaskiner.</p>
+
+<section>
+
+<title>QEMU med KVM</title>
+
+  <p><app>QEMU</app> är en maskinemulator och virtualiserare. Som maskinemulator kan det köra operativsystem och program gjorda för en maskin (t.ex. en ARM-bräda) på en annan maskin (t.ex. din egen PC). Som en virtualiserare uppnår QEMU nära nog originalprestanda genom att exekvera gästkoden direkt på värd-CPU:n via KVM.</p>
+
+  <p><app>KVM</app> (Kärnbaserad Virtuell Maskin) är en Linux-kärnmodul som låter ett program i användarrymden använda hårdvarufunktioner för virtualisering av diverse processorer.</p>
+
+</section>
+<section>
+
+<title>libvirt</title>
+
+  <p><app>libvirt</app> är en verktygslåda för säker manipulering (skapande, borttagning och modifiering) samt övervakning av virtuella maskiner på fjärrvärdar.</p>
+
+  <p><app>libvirt-glib</app> omsveper libvirt för att tillhandahålla ett objektorienterat högnivå-API lämpligt för glib-baserade program.</p>
+
+</section>
+<section>
+
+<title>SPICE</title>
+
+  <p><app>SPICE</app>, Simple Protocol for Independent Computing Environments (enkelt protokoll för oberoende databehandlingsmiljöer), är ett system för att ge åtkomst till och kontrollera fjärrskrivbord över ett nätverk.</p>
+
+  <p>SPICE-servern är ett bibliotek som kör inuti QEMU-binären. Det är i huvudsak ansvarigt för autentisering av klientanslutningar, att reläa grafikutmatning för gästoperativsystemet till klienten samt reläa användarindata (mus och tangentbord) från klienten till gästen.</p>
+
+  <p><app>spice-gtk</app> är SPICE-klienten som tillhandahåller en vy in i gästoperativsystemet.</p>
+
+</section>
+<section>
+
+<title>VNC</title>
+
+  <p><app>VNC</app>, Virtual Network Computing (virtuell databehandling över nätverk), endast använt för fjärrvisning, är ett välkänt protokoll men ganska begränsat och långsamt.</p>
+
+</section>
+</page>

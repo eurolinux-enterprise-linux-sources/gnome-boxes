@@ -26,9 +26,15 @@
     <desc>Aprenda cómo configurar máquinas virtuales locales y cómo conectarse a máquinas virtuales remotas. También puede usar <app>Cajas</app> para conectarse a escritorios remotos.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
@@ -63,7 +69,7 @@
   </section>
 
   <section id="advanced" style="2column">
-    <title>Advanced topics</title>
+    <title>Temas avanzados</title>
   </section>
 
 </page>

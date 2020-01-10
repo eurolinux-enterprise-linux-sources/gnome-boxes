@@ -31,22 +31,22 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>USB-Weiterleitung</title>
 
-  <p><sys>USB</sys> ist ein universelles Hardware Busprotokoll, das für Verbindungen von vielen Geräten mit Ihrem Rechner verwendet wird. <sys>USB-Umleitung</sys> macht in Ihrem lokalen Rechner eingesteckte Geräte für die verbundenen Maschinen in <app>Boxen</app> verfügbar. Zum Beispiel erscheint ein USB-Speichermedium oder eine Webcam direkt im entfernten oder virtuellen Rechner.</p>
+  <p><sys>USB</sys> ist ein universelles Hardware-Busprotokoll, das für Verbindungen von vielen Geräten mit Ihrem Rechner verwendet wird. <sys>USB-Umleitung</sys> macht in Ihrem lokalen Rechner eingesteckte Geräte für die verbundenen Maschinen in <app>Boxen</app> verfügbar. Zum Beispiel erscheint ein USB-Speichermedium oder eine Webcam direkt im entfernten oder virtuellen Rechner.</p>
 
   <steps>
-    <title>So aktivieren Sie Gast USB-Geräte in einer Box:</title>
+    <title>So aktivieren Sie Gast-USB-Geräte in einer Box:</title>
     <item><p>Klicken Sie mit der rechten Maustaste auf die Box in der Sammlungsansicht oder wenn die Box bereits geöffnet ist, klicken Sie auf den Eigenschaften-Knopf in der Werkzeugleiste.</p></item>
     <item><p>Klicken Sie auf <gui style="menuitem">Geräte</gui> in der Seitenleiste.</p></item>
     <item><p>Stellen Sie sicher, dass <gui>Neue USB-Geräte umleiten</gui> auf <gui style="switch">AN</gui> gestellt ist. Mit dem Gastgeber verbundene <gui>USB-Geräte</gui> werden in einer Liste angezeigt.</p></item>

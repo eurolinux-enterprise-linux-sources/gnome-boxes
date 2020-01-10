@@ -10,38 +10,37 @@
       <years>2014</years>
     </credit>
 
-    <desc>Give the snapshot a meaningful name.</desc>
+    <desc>Darle a una instantánea un nombre significativo.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
-  <title>Rename a snapshot</title>
+  <title>Renombrar una instantánea</title>
 
-  <p>By default, a snapshot is given a generic name based on the timestamp,
-  like:</p>
+  <p>De manera predeterminada, se le da a cada instantánea un nombre genérico basado en el momento en que se toma, por ejemplo:</p>
 
     <p><file>09/14/2014, 11:54:36 AM</file></p>
 
-  <p>You may want to change the name to something more meaningful, such as:</p>
+  <p>Puede que quiera cambiar el nombre por uno más significativo, por ejemplo:</p>
 
-    <p><file>Fedora_22_with_jhbuild</file> or
-    <file>Windows 7 plus GTK+ 3.6.4</file>.</p>
+    <p><file>Fedora_22_with_jhbuild</file> o <file>Windows 7 plus GTK+ 3.6.4</file>.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Snapshots</gui> in the sidebar.</p></item>
-    <item><p>Select the snapshot to be renamed from the list.</p></item>
-    <item><p>Click the menu button on the right and select
-    <gui>Rename</gui>.</p></item>
-    <item><p>Type the desired name and press <key>Enter</key>.</p></item>
+    <item><p>Abra la <link xref="interface#properties">vista de propiedades</link> para la caja. Si la caja está abierta, pulse el botón <gui style="button">Propiedades</gui> en la barra de cabecera. También se puede acceder a la vista de propiedades desde el <link xref="interface#selection">modo de selección</link>.</p></item>
+    <item><p>Pulse <gui style="menuitem">Instantáneas</gui> en la barra lateral.</p></item>
+    <item><p>Seleccione la instantánea que quiera renombrar de la lista.</p></item>
+    <item><p>Pulse el botón de menú de la derecha y seleccione <gui>Renombrar</gui>.</p></item>
+    <item><p>Introduzca el nombre que quiera y pulse <key>Intro</key>.</p></item>
   </steps>
 
 </page>

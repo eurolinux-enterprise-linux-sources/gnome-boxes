@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="system-requirements" xml:lang="hu">
+
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Zeeshan Ali (Khattak)</name>
+      <email>zeeshanak@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>A <app>Gépek</app> alkalmazásban virtuális gép futtatásához szükséges hardver.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Kezdő lépések a virtuális gépek használatához</title>
+
+  <p>A számítógépnek bizonyos feltételeket teljesítenie kell a legjobb teljesítmény érdekében a virtuális gépek <app>Gépek</app> alkalmazásban való létrehozásához és futtatásához. Ezeket a követelményeket az operációs rendszerek szállítói adják meg. A <app>Gépek</app> automatikusan, a szállítók ajánlásai alapján társítja az erőforrásokat a virtuális gépekhez. Ha nem érhetők el ilyen információk, a <app>Gépek</app> a következőket foglalja le:</p>
+
+  <list>
+    <item>
+      <p>Maximum 20 GB tárhely.</p>
+      <note style="advanced">
+      <p>Ez nem azt jelenti, hogy a <app>Gépek</app> lefoglal 20 GB helyet a virtuális gép létrehozásakor. A <app>Gépek</app> által ténylegesen használt lemezterület kevesebb lesz (vagy legrosszabb esetben épp annyi), mint a virtuális gép által használt.</p>
+      </note>
+    </item>
+    <item>
+      <p>500 MB memória.</p>
+    </item>
+  </list>
+
+  <note style="advanced">
+    <p>A <app>Gépek</app> akkor a leghatékonyabb, ha a számítógép processzora támogatja a hardveres <link xref="virtualization">virtualizációs kiterjesztéseket</link>, és ezek be vannak kapcsolva a rendszer BIOS-ában.</p>
+  </note>
+
+</page>

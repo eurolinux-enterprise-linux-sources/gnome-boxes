@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="delete" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Fölöslegessé vált gépek eltávolítása.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Gép törlése</title>
+
+  <p>Ha egy gépre már nincs szüksége, törölheti a <app>Gépekből</app>.</p>
+
+  <steps>
+    <item><p>Jelöljön ki legalább egy gépet. A gyűjtemény nézetben kattintson a jobb egérgombbal egy törlendő gépre.</p></item>
+    <item><p>Megnyílik a <link xref="interface#selection">kijelölési mód</link>. Kattintson a további törlendő gépekre.</p></item>
+    <item><p>Kattintson a <gui style="button">Törlés</gui> gombra.</p></item>
+    <item><p>Kattintson az <gui>X</gui> gombra a megerősítéshez.</p></item>
+  </steps>
+
+</page>

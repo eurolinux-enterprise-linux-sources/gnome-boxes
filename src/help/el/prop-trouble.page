@@ -10,7 +10,13 @@
       <years>2014</years>
     </credit>
 
-    <desc>Diagnose problems with your box using the log file.</desc>
+    <desc>Διαγνώστε προβλήματα του πλαισίου σας χρησιμοποιώντας το αρχείο καταγραφής.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -19,28 +25,20 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>View the trouble log of a box</title>
+  <title>Προβολή της καταγραφής σφαλμάτων ενός πλαισίου</title>
 
-  <p>If a box is having a problem starting up or running, clues to help you fix
-  the problem may be found in the trouble log. The trouble log displays the
-  virtual machine state, the virtual machine libvirt configuration, and the
-  QEMU hypervisor log.</p>
+  <p>Αν ένα πλαίσιο έχει πρόβλημα στην εκκίνηση ή στην εκτέλεση του, μπορείτε να δείτε το αρχείο καταγραφής για βοήθεια. Το αρχείο καταγραφής προβλημάτων εμφανίζει την κατάσταση της εικονικής μηχανής, τις ρυθμίσεις του libvirt και την καταγραφή του QEMU hypervisor.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>System</gui> in the sidebar.</p></item>
-    <item><p>Click the <gui style="button">Trouble Log</gui> button to view the
-    log.</p></item>
+    <item><p>Ανοίξτε την <link xref="interface#properties">προβολή ιδιοτήτων</link> του πλαισίου. Αν το πλαίσιο είναι ανοιχτό, κάντε κλικ στο κουμπί click the <gui style="button">Ιδιότητες</gui> στη γραμμή κεφαλίδας. Η προβολή ιδιοτήτων μπορεί επίσης να προσπελαστεί από τη <link xref="interface#selection">λειτουργία επιλογής</link>.</p></item>
+    <item><p>Κάντε κλικ στο <gui>Σύστημα</gui> στην πλευρική στήλη.</p></item>
+    <item><p>Κάντε κλικ στο κουμπί <gui style="button">Αρχείο καταγραφής αντιμετώπισης προβλημάτων</gui> για να δείτε την καταγραφή.</p></item>
   </steps>
 
 </page>

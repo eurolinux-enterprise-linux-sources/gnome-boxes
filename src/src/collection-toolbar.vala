@@ -8,9 +8,15 @@ private class Boxes.CollectionToolbar: HeaderBar {
     [GtkChild]
     private Button select_btn;
     [GtkChild]
+    private Button list_btn;
+    [GtkChild]
+    private Button grid_btn;
+    [GtkChild]
     private Button back_btn;
     [GtkChild]
     private Button new_btn;
+    [GtkChild]
+    private CollectionFilterSwitcher filter_switcher;
 
     private AppWindow window;
 
@@ -25,10 +31,15 @@ private class Boxes.CollectionToolbar: HeaderBar {
         App.app.collection.item_added.connect (update_search_btn);
         App.app.collection.item_removed.connect (update_search_btn);
 
+        var view_type = (AppWindow.ViewType) window.settings.get_enum ("view");
+        update_view_type (view_type);
+
         search_btn.bind_property ("active", window.searchbar, "search-mode-enabled", BindingFlags.BIDIRECTIONAL);
 
         window.notify["ui-state"].connect (ui_state_changed);
         App.app.notify["main-window"].connect (ui_state_changed);
+
+        filter_switcher.setup_ui (window);
     }
 
     public void click_back_button () {
@@ -54,6 +65,16 @@ private class Boxes.CollectionToolbar: HeaderBar {
     }
 
     [GtkCallback]
+    private void on_list_btn_clicked () {
+        update_view_type (AppWindow.ViewType.LIST);
+    }
+
+    [GtkCallback]
+    private void on_grid_btn_clicked () {
+        update_view_type (AppWindow.ViewType.ICON);
+    }
+
+    [GtkCallback]
     private void on_select_btn_clicked () {
         window.selection_mode = true;
     }
@@ -66,6 +87,13 @@ private class Boxes.CollectionToolbar: HeaderBar {
         select_btn.sensitive = App.app.collection.items.length != 0;
     }
 
+    private void update_view_type (AppWindow.ViewType view_type) {
+        window.view_type = view_type;
+        window.settings.set_enum ("view", view_type);
+
+        ui_state_changed ();
+    }
+
     private void ui_state_changed () {
         switch (window.ui_state) {
         case UIState.COLLECTION:
@@ -73,6 +101,9 @@ private class Boxes.CollectionToolbar: HeaderBar {
             select_btn.show ();
             search_btn.show ();
             new_btn.show ();
+            grid_btn.visible = window.view_type != AppWindow.ViewType.ICON;
+            list_btn.visible = window.view_type != AppWindow.ViewType.LIST;
+            custom_title = filter_switcher;
             break;
 
         case UIState.CREDS:
@@ -80,6 +111,9 @@ private class Boxes.CollectionToolbar: HeaderBar {
             back_btn.visible = (window == App.app.main_window);
             select_btn.hide ();
             search_btn.hide ();
+            grid_btn.hide ();
+            list_btn.hide ();
+            custom_title = null;
             break;
 
         default:

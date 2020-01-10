@@ -26,11 +26,17 @@
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
   <title>O que é uma máquina virtual?</title>
 
   <p>Uma máquina virtual é um computador simulado funcionando dentro de outro computador. O computador simulado é normalmente chamado de <em>convidado</em>, enquanto a máquina real é chamada de <em>hospedeiro</em>.</p>
-  <p>Com <em>virtualização</em>, o convidado tem acesso ao hardware real no qual hospedeiro está funcionando. Se o convidado pode executar em hardware falso, isos é chamado de <em>emulação</em>.</p>
+  <p>Com a <em>virtualização</em>, o convidado tem acesso ao hardware real no qual o hospedeiro está funcionando. Se o convidado pode ser executado em um hardware falso, isso é chamado de <em>emulação</em>.</p>
 
 </page>

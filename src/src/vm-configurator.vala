@@ -9,17 +9,20 @@ private errordomain Boxes.VMConfiguratorError {
 
 private class Boxes.VMConfigurator {
     private const string BOXES_NS = "boxes";
-    private const string BOXES_NS_URI = "http://live.gnome.org/Boxes/";
+    private const string BOXES_NS_URI = Config.PACKAGE_URL;
+    private const string BOXES_OLD_NS_URI = "http://live.gnome.org/Boxes/";
     private const string BOXES_XML = "<gnome-boxes>%s</gnome-boxes>";
     private const string LIVE_STATE = "live";
     private const string INSTALLATION_STATE = "installation";
     private const string IMPORT_STATE = "importing";
     private const string LIBVIRT_SYS_IMPORT_STATE = "libvirt-system-importing";
+    private const string LIBVIRT_CLONING_STATE = "libvirt-cloning";
     private const string INSTALLED_STATE = "installed";
     private const string LIVE_XML = "<os-state>" + LIVE_STATE + "</os-state>";
     private const string INSTALLATION_XML = "<os-state>" + INSTALLATION_STATE + "</os-state>";
     private const string IMPORT_XML = "<os-state>" + IMPORT_STATE + "</os-state>";
     private const string LIBVIRT_SYS_IMPORT_XML = "<os-state>" + LIBVIRT_SYS_IMPORT_STATE + "</os-state>";
+    private const string LIBVIRT_CLONING_XML = "<os-state>" + LIBVIRT_CLONING_STATE + "</os-state>";
     private const string INSTALLED_XML = "<os-state>" + INSTALLED_STATE + "</os-state>";
 
     private const string OS_ID_XML = "<os-id>%s</os-id>";
@@ -63,14 +66,15 @@ private class Boxes.VMConfigurator {
         timer = new DomainTimerPit ();
         timer.set_tick_policy (DomainTimerTickPolicy.DELAY);
         clock.add_timer (timer);
+        timer = new DomainTimerHpet ();
+        timer.set_present (false);
+        clock.add_timer (timer);
         domain.set_clock (clock);
 
         set_target_media_config (domain, target_path, install_media);
         install_media.setup_domain_config (domain);
 
-        var graphics = new DomainGraphicsSpice ();
-        graphics.set_autoport (true);
-        graphics.set_image_compression (DomainGraphicsSpiceImageCompression.OFF);
+        var graphics = create_graphics_device ();
         domain.add_device (graphics);
 
         // SPICE agent channel. This is needed for features like copy&paste between host and guest etc to work.
@@ -81,16 +85,14 @@ private class Boxes.VMConfigurator {
         channel.set_source (vmc);
         domain.add_device (channel);
 
-        // Only add usb support if we'er 100% sure it works, as it breaks migration (i.e. save) on older qemu
-        if (Config.HAVE_USBREDIR)
-            add_usb_support (domain);
-
-        if (Config.HAVE_SMARTCARD)
-            add_smartcard_support (domain);
+        add_usb_support (domain);
+        add_smartcard_support (domain);
 
         set_video_config (domain, install_media);
         set_sound_config (domain, install_media);
         set_tablet_config (domain, install_media);
+        set_mouse_config (domain, install_media);
+        set_keyboard_config (domain, install_media);
 
         domain.set_lifecycle (DomainLifecycleEvent.ON_POWEROFF, DomainLifecycleAction.DESTROY);
         domain.set_lifecycle (DomainLifecycleEvent.ON_REBOOT, DomainLifecycleAction.DESTROY);
@@ -105,7 +107,10 @@ private class Boxes.VMConfigurator {
         console.set_source (new DomainChardevSourcePty ());
         domain.add_device (console);
 
-        add_network_interface (domain, is_libvirt_bridge_net_available (), install_media.supports_virtio_net);
+        var iface = create_network_interface (domain,
+                                              is_libvirt_bridge_net_available (),
+                                              install_media.supports_virtio_net);
+        domain.add_device (iface);
 
         return domain;
     }
@@ -136,6 +141,10 @@ private class Boxes.VMConfigurator {
         return get_os_state (domain) == LIBVIRT_SYS_IMPORT_STATE;
     }
 
+    public static bool is_libvirt_cloning_config (Domain domain) {
+        return get_os_state (domain) == LIBVIRT_CLONING_STATE;
+    }
+
     public static bool is_boxes_installed (Domain domain) {
         return get_os_state (domain) == INSTALLED_STATE;
     }
@@ -155,7 +164,6 @@ private class Boxes.VMConfigurator {
 
     public static StoragePool get_pool_config () throws GLib.Error {
         var pool_path = get_user_pkgdata ("images");
-        ensure_directory (pool_path);
 
         var pool = new StoragePool ();
         pool.set_pool_type (StoragePoolType.DIR);
@@ -228,10 +236,14 @@ private class Boxes.VMConfigurator {
 
     public static async void update_existing_domain (Domain          domain,
                                                      GVir.Connection connection) {
+        if (!boxes_created_domain (domain))
+            return;
+
         try {
-            var mode = domain.get_cpu ().get_mode ();
-            if ((mode == DomainCpuMode.HOST_PASSTHROUGH ||
-                 mode == DomainCpuMode.HOST_MODEL) &&
+            var cpu = domain.get_cpu ();
+            if (cpu != null &&
+                (cpu.get_mode () == DomainCpuMode.HOST_PASSTHROUGH ||
+                 cpu.get_mode() == DomainCpuMode.HOST_MODEL) &&
                 is_boxes_installed (domain)) {
                 var capabilities = yield connection.get_capabilities_async (null);
                 set_cpu_config (domain, capabilities);
@@ -240,45 +252,55 @@ private class Boxes.VMConfigurator {
             warning ("Failed to update CPU config for '%s': %s", domain.name, e.message);
         }
 
-        if (!is_libvirt_bridge_net_available ())
-            return;
-
-        // First remove user and 'network' (used by system libvirt machines) interface device
+        // First remove existing network interface device
         GLib.List<GVirConfig.DomainDevice> devices = null;
         DomainInterface iface = null;
+        DomainGraphicsSpice graphics = null;
         foreach (var device in domain.get_devices ()) {
-            if (device is DomainInterfaceUser || device is DomainInterfaceNetwork)
+            if (device is DomainInterface)
                 iface = device as DomainInterface;
+            else if (device is DomainGraphicsSpice)
+                graphics = device as DomainGraphicsSpice;
             else
                 devices.prepend (device);
         }
-        devices.reverse ();
-        domain.set_devices (devices);
 
         // If user interface device was found and removed, let's add bridge device now.
         if (iface != null) {
+            var bridge = is_libvirt_bridge_net_available ();
             var virtio = iface.get_model () == "virtio";
-            add_network_interface (domain, true, virtio);
+
+            devices.prepend (create_network_interface (domain, bridge, virtio));
         }
+
+        if (graphics != null)
+            devices.prepend (create_graphics_device ());
+
+        devices.reverse ();
+        domain.set_devices (devices);
     }
 
-    private static void set_target_media_config (Domain domain, string target_path, InstallerMedia install_media) {
+    public static void set_target_media_config (Domain         domain,
+                                                string         target_path,
+                                                InstallerMedia install_media,
+                                                uint8          dev_index = 0) {
         var disk = new DomainDisk ();
         disk.set_type (DomainDiskType.FILE);
         disk.set_guest_device_type (DomainDiskGuestDeviceType.DISK);
         disk.set_driver_name ("qemu");
         disk.set_driver_format (DomainDiskFormat.QCOW2);
         disk.set_source (target_path);
-        disk.set_driver_cache (DomainDiskCacheType.NONE);
+        disk.set_driver_cache (DomainDiskCacheType.WRITEBACK);
 
+        var dev_letter_str = ((char) (dev_index + 97)).to_string ();
         if (install_media.supports_virtio_disk) {
             debug ("Using virtio controller for the main disk");
             disk.set_target_bus (DomainDiskBus.VIRTIO);
-            disk.set_target_dev ("vda");
+            disk.set_target_dev ("vd" + dev_letter_str);
         } else {
             debug ("Using IDE controller for the main disk");
             disk.set_target_bus (DomainDiskBus.IDE);
-            disk.set_target_dev ("hda");
+            disk.set_target_dev ("hd" + dev_letter_str);
         }
 
         domain.add_device (disk);
@@ -314,11 +336,7 @@ private class Boxes.VMConfigurator {
 
     private static void set_video_config (Domain domain, InstallerMedia install_media) {
         var video = new DomainVideo ();
-        var device = find_device_by_prop (install_media.supported_devices, DEVICE_PROP_CLASS, "video");
-        var model = (device != null)? get_enum_value (device.get_name (), typeof (DomainVideoModel)) :
-                                      DomainVideoModel.QXL;
-        return_if_fail (model != -1);
-        video.set_model ((DomainVideoModel) model);
+        video.set_model (DomainVideoModel.QXL);
 
         domain.add_device (video);
     }
@@ -335,8 +353,21 @@ private class Boxes.VMConfigurator {
     }
 
     private static void set_tablet_config (Domain domain, InstallerMedia install_media) {
+        set_input_config (domain, DomainInputDeviceType.TABLET);
+    }
+
+    private static void set_mouse_config (Domain domain, InstallerMedia install_media) {
+        set_input_config (domain, DomainInputDeviceType.MOUSE);
+    }
+
+    private static void set_keyboard_config (Domain domain, InstallerMedia install_media) {
+        set_input_config (domain, DomainInputDeviceType.KEYBOARD);
+    }
+
+    private static void set_input_config (Domain domain, DomainInputDeviceType device_type) {
         var input = new DomainInput ();
-        input.set_device_type (DomainInputDeviceType.TABLET);
+        input.set_device_type (device_type);
+        input.set_bus (DomainInputBus.USB);
 
         domain.add_device (input);
     }
@@ -356,11 +387,17 @@ private class Boxes.VMConfigurator {
     }
 
     private static string? get_custom_xml_node (Domain domain, string node_name) {
-        var xml = domain.get_custom_xml (BOXES_NS_URI);
+        var ns_uri = BOXES_NS_URI;
+        var xml = domain.get_custom_xml (ns_uri);
+        if (xml == null) {
+            ns_uri = BOXES_OLD_NS_URI;
+            xml = domain.get_custom_xml (ns_uri);
+        }
+
         if (xml != null) {
             var reader = new Xml.TextReader.for_memory ((char []) xml.data,
                                                         xml.length,
-                                                        BOXES_NS_URI,
+                                                        ns_uri,
                                                         null,
                                                         Xml.ParserOption.COMPACT);
             reader.next (); // Go to first node
@@ -385,6 +422,14 @@ private class Boxes.VMConfigurator {
         return null;
     }
 
+    private static bool boxes_created_domain (Domain domain) {
+        var xml = domain.get_custom_xml (BOXES_NS_URI);
+        if (xml == null)
+            xml = domain.get_custom_xml (BOXES_OLD_NS_URI);
+
+        return (xml != null);
+    }
+
     private static void update_custom_xml (Domain domain,
                                            InstallerMedia? install_media,
                                            uint num_reboots = 0,
@@ -394,7 +439,9 @@ private class Boxes.VMConfigurator {
 
         if (installed)
             custom_xml = INSTALLED_XML;
-        else if (install_media is LibvirtSystemMedia)
+        else if (install_media is LibvirtClonedMedia)
+            custom_xml = LIBVIRT_CLONING_XML;
+        else if (install_media is LibvirtMedia)
             custom_xml = LIBVIRT_SYS_IMPORT_XML;
         else if (install_media is InstalledMedia)
             custom_xml = IMPORT_XML;
@@ -446,23 +493,31 @@ private class Boxes.VMConfigurator {
         domain.add_device (controller);
     }
 
-    public static void add_network_interface (Domain domain, bool bridge, bool virtio) {
+    public static DomainInterface create_network_interface (Domain domain, bool bridge, bool virtio) {
         DomainInterface iface;
 
         if (bridge) {
-            debug ("Adding bridge network to %s", domain.get_name ());
+            debug ("Creating bridge network device for %s", domain.get_name ());
             var bridge_iface = new DomainInterfaceBridge ();
             bridge_iface.set_source ("virbr0");
             iface = bridge_iface;
         } else {
-            debug ("Adding user network to %s", domain.get_name ());
+            debug ("Creating user network device for %s", domain.get_name ());
             iface = new DomainInterfaceUser ();
         }
 
         if (virtio)
             iface.set_model ("virtio");
 
-        domain.add_device (iface);
+        return iface;
+    }
+
+    public static DomainGraphicsSpice create_graphics_device () {
+        var graphics = new DomainGraphicsSpice ();
+        graphics.set_autoport (false);
+        graphics.set_image_compression (DomainGraphicsSpiceImageCompression.OFF);
+
+        return graphics;
     }
 
     private static DomainControllerUsb create_usb_controller (DomainControllerUsbModel model,
@@ -476,18 +531,6 @@ private class Boxes.VMConfigurator {
             controller.set_master (master, start_port);
 
         return controller;
-    }
-
-    // Remove all existing usb controllers. This is used when upgrading from the old usb1 controllers to usb2
-    public static void remove_usb_controllers (Domain domain) throws Boxes.Error {
-        GLib.List<GVirConfig.DomainDevice> devices = null;
-        foreach (var device in domain.get_devices ()) {
-            if (!(device is DomainControllerUsb)) {
-                devices.prepend (device);
-            }
-        }
-        devices.reverse ();
-        domain.set_devices (devices);
     }
 
     private static CapabilitiesGuest get_best_guest_caps (Capabilities caps, InstallerMedia install_media)

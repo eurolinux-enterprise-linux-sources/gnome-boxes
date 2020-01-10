@@ -20,14 +20,17 @@
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
   <title>Pesquisando por uma máquina</title>
 
-  <p>If there is more than one box, you can locate or filter boxes by name in
-  the <link xref="interface#collection">collection view</link> or
-  <link xref="interface#selection">selection mode</link>. Click the search
-  icon, or just start typing to initiate a search.</p>
+  <p>Se há mais de uma máquina, você pode localizar ou filtrar máquinas pelo nome na  <link xref="interface#collection">visão de coleção</link> ou <link xref="interface#selection">modo de seleção</link>. Clique no ícone de pesquisa ou apenas comece a digitar para iniciar a pesquisa.</p>
 
   <p>Pressione <key>Esc</key> para descartar a pesquisa.</p>
 

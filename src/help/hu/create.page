@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="create" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-17" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-06" status="review"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Gép felvételének megkezdéséhez kattintson az <gui style="button">Új</gui> gombra.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Gép létrehozása</title>
+
+  <p>A <app>Gépek</app> indításakor a gyűjtemény nézet jelenik meg, amelyben a már létező gépek tekinthetők meg. Ha még nem hozott létre gépet, akkor a <gui>Nincsenek gépek</gui> üzenet üdvözli.</p>
+
+  <steps>
+    <item><p>Az új gépet létrehozó varázsló indításához kattintson a bal felső sarokban az <gui style="button">Új</gui> gombra.</p></item>
+    <item><p>Egy bevezető üzenet jelenik meg. Kattintson a <gui style="button">Folytatás</gui> gombra.</p></item>
+    <item><p>A varázsló <gui>Forrás kiválasztása</gui> képernyőjén válasszon egy forrást a létrehozandó gép típusának meghatározásához. Helyi virtuális gép létrehozható:</p>
+
+      <list>
+        <item><p>A <app>Gépek</app> által megtalált ISO fájlból.</p></item>
+        <item><p>CD/DVD/USB meghajtóban lévő telepítési adathordozóból.</p></item>
+        <item><p>Helyi ISO fájlból (ha az automatikus felismerés sikertelen).</p></item>
+        <item><p>Távoli gép (fizikai vagy virtuális) URL-jéből egy <link xref="connect">távoli kapcsolaton</link> keresztül.</p></item>
+      </list>
+
+      <note style="important">
+        <p>Ha a telepítési adathordozó támogatja a <gui>gyors telepítést</gui>, a telepítés minden további beavatkozás nélkül folytatódik.</p>
+      </note>
+    </item>
+
+    <item><p>Amikor befejezte a kiválasztást, illetve megadta a szükséges információkat, kattintson a <gui style="button">Folytatás</gui> gombra. Megnyílik az <gui>Áttekintés</gui> oldal.</p></item>
+    <item><p>A memória vagy tárhely méretének a megváltoztatásához, vagy a gép átnevezéséhez kattintson a <gui style="button">Testreszabás</gui> gombra.</p></item>
+    <item><p>Kattintson a <gui style="button">Felvétel</gui> gombra.</p></item>
+  </steps>
+
+  <p>A gyűjtemény nézet visszatér, és a gép telepítése elindul.</p>
+
+</page>

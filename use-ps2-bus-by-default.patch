@@ -1,0 +1,32 @@
+---
+ src/vm-configurator.vala | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/src/vm-configurator.vala b/src/vm-configurator.vala
+index 49333988..5a4c7f12 100644
+--- a/src/vm-configurator.vala
++++ b/src/vm-configurator.vala
+@@ -353,7 +353,7 @@ private static void set_sound_config (Domain domain, InstallerMedia install_medi
+     }
+
+     private static void set_tablet_config (Domain domain, InstallerMedia install_media) {
+-        set_input_config (domain, DomainInputDeviceType.TABLET);
++        set_input_config (domain, DomainInputDeviceType.TABLET, DomainInputBus.USB);
+     }
+
+     private static void set_mouse_config (Domain domain, InstallerMedia install_media) {
+@@ -364,10 +364,12 @@ private static void set_keyboard_config (Domain domain, InstallerMedia install_m
+         set_input_config (domain, DomainInputDeviceType.KEYBOARD);
+     }
+
+-    private static void set_input_config (Domain domain, DomainInputDeviceType device_type) {
++    private static void set_input_config (Domain domain,
++                                          DomainInputDeviceType device_type,
++                                          DomainInputBus input_bus = DomainInputBus.PS2) {
+         var input = new DomainInput ();
+         input.set_device_type (device_type);
+-        input.set_bus (DomainInputBus.USB);
++        input.set_bus (input_bus);
+
+         domain.add_device (input);
+     }

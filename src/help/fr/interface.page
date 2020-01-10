@@ -83,7 +83,8 @@
     <item><p>les paramètres <gui>Système</gui> : la mémoire, le maximum d'espace disque autorisé et le <gui>Journal de dépannage</gui>,</p></item>
     <item><p>les paramètres d'<gui>Affichage</gui> : le protocole d'affichage, le partage du presse-papiers, le redimensionnement de l'affichage,</p></item>
     <item><p>les paramètres des <gui>Périphériques</gui> : l'accès du système à l'USB ou au CD/DVD,</p></item>
-    <item><p>les paramètres des <gui>Instantanés</gui> : la <link xref="snapshot-create">création</link> et la gestion des instantanés de la machine.</p></item>
+    <item><p><gui>Snapshots</gui>: <link xref="snapshot-create">creating</link>
+    and managing snapshots of the box.</p></item>
   </list>
 
   <p>La fenêtre des propriétés est aussi accessible par le bouton <gui style="button">Personnaliser</gui> de l'assistant d'installation, ou encore par le bouton situé dans la barre d'en-têtes d'une session ouverte.</p>

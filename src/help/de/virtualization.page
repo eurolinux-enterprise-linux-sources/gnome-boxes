@@ -23,20 +23,20 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Prozessor-Hardwarevirtualisierung verwenden</title>
 
   <p>Führen Sie folgendes in einem Terminal-Fenster aus, um herauszufinden, ob Ihr Rechner Hardware-Virtualisierungserweiterungen unterstützt und diese im System-BIOS aktiviert sind:</p>
-  <p><cmd>gnome-shell --checks</cmd></p>
+  <p><cmd>gnome-boxes --checks</cmd></p>
   <p>Schalten Sie, falls nötig, die Erweiterungen im <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">BIOS Ihres Rechners</link> ein.</p>
 
 </page>

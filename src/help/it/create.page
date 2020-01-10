@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="create" xml:lang="it">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-17" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-06" status="review"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Fare clic su <gui style="button">Nuovo</gui> per avviare la creazione di una box.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Creare una box</title>
+
+  <p>Quando si lancia <app>Boxes</app>, si apre la vista della raccolta, che mostra le box esistenti. Se non è stata creata alcuna box, appare il messaggio <gui>Non è stata trovata alcuna box.</gui></p>
+
+  <steps>
+    <item><p>Fare clic su <gui style="button">Nuovo</gui> nell'angolo superiore sinistro per lanciare la procedura guidata di creazione di una box.</p></item>
+    <item><p>Appare un messaggio introduttivo. Fare clic su <gui style="button">Continua</gui>.</p></item>
+    <item><p>Alla schermata <gui>Selezione sorgente</gui> della procedura guidata, scegliere un sorgente per determinare il tipo di box che si vuole creare. È possibile creare una macchina virtuale locale da:</p>
+
+      <list>
+        <item><p>Un'immagine ISO trovata da <app>Boxes</app>.</p></item>
+        <item><p>Un supporto di installazione su un drive CD/DVD/USB.</p></item>
+        <item><p>Un file ISO locale (se non trovato automaticamente prima).</p></item>
+        <item><p>Un URL a una macchina remota (fisica o virtuale) tramite una <link xref="connect">connessione remota</link>.</p></item>
+      </list>
+
+      <note style="important">
+        <p>Se il supporto di installazione consente l'<gui>Installazione rapida</gui>, questa procederà senza richiedere altre azioni.</p>
+      </note>
+    </item>
+
+    <item><p>Dopo aver fatto la scelta o aver fornito le informazioni necessarie, fare clic sul pulsante <gui style="button">Continua</gui>, che porta alla pagina di <gui>Riepilogo</gui>.</p></item>
+    <item><p>Fare clic su <gui style="button">Personalizza</gui> per regolare la dimensione della memoria o del disco o per rinominare la box.</p></item>
+    <item><p>Fare clic su <gui style="button">Crea</gui>.</p></item>
+  </steps>
+
+  <p>Viene visualizzata la vista della raccolta e inizia l'installazione della box.</p>
+
+</page>

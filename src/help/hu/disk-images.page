@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="disk-images" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#faq"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Hol tárolja a Gépek a lemezképeket?</title>
+
+  <p>Alapesetben a <app>Gépek</app> a <file>~/.local/share/gnome-boxes/images/</file> mappában tárolja a lemezképeket. Ha más, a libvirt kezelésére alkalmas szoftvereket is használ, mint például a <app>virt-managert</app>, akkor a <app>Gépek</app> az adott alkalmazás lemezképmappáját is beolvassa.</p>
+
+</page>

@@ -10,6 +10,9 @@ private class Boxes.DisplayPage: Gtk.Box {
     public DisplayToolbar toolbar;
 
     [GtkChild]
+    public Gtk.Label size_label;
+
+    [GtkChild]
     private EventBox event_box;
     [GtkChild]
     private DisplayToolbar overlay_toolbar;
@@ -20,6 +23,7 @@ private class Boxes.DisplayPage: Gtk.Box {
     private ulong cursor_id;
 
     private uint overlay_toolbar_invisible_timeout;
+    private uint size_label_timeout;
 
     private AppWindow window;
 
@@ -29,13 +33,22 @@ private class Boxes.DisplayPage: Gtk.Box {
             return display != null ? display.can_grab_mouse : false;
         }
     }
-    private bool grabbed {
+    private bool mouse_grabbed {
         get {
             return display != null ? display.mouse_grabbed : false;
         }
     }
-    private ulong display_can_grab_id;
-    private ulong display_grabbed_id;
+    private bool keyboard_grabbed {
+        get {
+            return display != null ? display.keyboard_grabbed : false;
+        }
+    }
+    private ulong can_grab_mouse_id;
+    private ulong mouse_grabbed_id;
+    private ulong keyboard_grabbed_id;
+
+    private int width = -1;
+    private int height = -1;
 
     public void setup_ui (AppWindow window) {
         this.window = window;
@@ -87,16 +100,17 @@ private class Boxes.DisplayPage: Gtk.Box {
         toolbar_show_id = 0;
     }
 
-    public void update_title () {
+    public void update_subtitle () {
         var machine = window.current_item as Boxes.Machine;
         return_if_fail (machine != null);
 
-        var title = machine.name;
         string? hint = null;
-        if (grabbed)
-            hint = _("(press [left] Ctrl+Alt keys to ungrab)");
-
-        toolbar.set_title (title);
+        if (can_grab_mouse) {
+            if (mouse_grabbed)
+                hint = _("Press (left) Ctrl+Alt to ungrab");
+        } else if (keyboard_grabbed) {
+            hint = _("Press & release (left) Ctrl+Alt to ungrab keyboard.");
+        }
         toolbar.set_subtitle (hint);
     }
 
@@ -114,17 +128,23 @@ private class Boxes.DisplayPage: Gtk.Box {
         remove_display ();
 
         this.display = display;
-        display_grabbed_id = display.notify["mouse-grabbed"].connect(() => {
+        mouse_grabbed_id = display.notify["mouse-grabbed"].connect(() => {
             // In some cases this is sent inside size_allocate (see bug #692465)
             // which causes the label change queue_resize to be ignored
-            // So we delay the update_title call to an idle to work around this.
+            // So we delay the update_subtitle call to an idle to work around this.
             Idle.add_full (Priority.HIGH, () => {
-                update_title ();
+                update_subtitle ();
+                return false;
+            });
+        });
+        keyboard_grabbed_id = display.notify["keyboard-grabbed"].connect(() => {
+            Idle.add_full (Priority.HIGH, () => {
+                update_subtitle ();
                 return false;
             });
         });
         update_toolbar_visible ();
-        display_can_grab_id = display.notify["can-grab-mouse"].connect(() => {
+        can_grab_mouse_id = display.notify["can-grab-mouse"].connect(() => {
             update_toolbar_visible ();
         });
 
@@ -136,7 +156,7 @@ private class Boxes.DisplayPage: Gtk.Box {
 
             return false;
         });
-        update_title ();
+        update_subtitle ();
         widget.set_events (widget.get_events () & ~Gdk.EventMask.POINTER_MOTION_MASK);
         event_box.add (widget);
         event_box.show_all ();
@@ -154,15 +174,21 @@ private class Boxes.DisplayPage: Gtk.Box {
     }
 
     public Widget? remove_display () {
-        if (display_grabbed_id != 0) {
-            display.disconnect (display_grabbed_id);
-            display_grabbed_id = 0;
+        if (mouse_grabbed_id != 0) {
+            display.disconnect (mouse_grabbed_id);
+            mouse_grabbed_id = 0;
         }
 
-        if (display_can_grab_id != 0) {
-            display.disconnect (display_can_grab_id);
-            display_can_grab_id = 0;
+        if (can_grab_mouse_id != 0) {
+            display.disconnect (can_grab_mouse_id);
+            can_grab_mouse_id = 0;
         }
+
+        if (keyboard_grabbed_id != 0) {
+            display.disconnect (keyboard_grabbed_id);
+            keyboard_grabbed_id = 0;
+        }
+        display = null;
 
         var widget = event_box.get_child ();
 
@@ -216,5 +242,40 @@ private class Boxes.DisplayPage: Gtk.Box {
             event_box.get_child ().event (event);
 
         return false;
+    }
+
+    [GtkCallback]
+    private void on_size_allocate (Gtk.Allocation allocation) {
+        if (width == allocation.width && height == allocation.height)
+            return;
+
+        width = allocation.width;
+        height = allocation.height;
+
+        // Translators: Showing size of widget as WIDTHxHEIGHT here.
+        size_label.label = _("%dx%d").printf (allocation.width, allocation.height);
+
+        Idle.add (() => {
+            // Reason to do this in Idle is that Gtk+ doesn't like us showing
+            // widgets from this signal handler.
+            show_size_allocation ();
+
+            return false;
+        });
+    }
+
+    private void show_size_allocation () {
+        size_label.visible = true;
+
+        if (size_label_timeout != 0) {
+            Source.remove (size_label_timeout);
+            size_label_timeout = 0;
+        }
+        size_label_timeout = Timeout.add_seconds (3, () => {
+            size_label.visible = false;
+            size_label_timeout = 0;
+
+            return false;
+        });
     }
 }

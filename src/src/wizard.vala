@@ -1,7 +1,6 @@
 // This file is part of GNOME Boxes. License: LGPLv2+
 
 private enum Boxes.WizardPage {
-    INTRODUCTION,
     SOURCE,
     PREPARATION,
     SETUP,
@@ -14,7 +13,7 @@ private enum Boxes.WizardPage {
 private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
     private const double DOWNLOAD_PROGRESS_SCALE = 0.95;
     private const double PREPARE_PROGRESS_SCALE = 0.05;
-    private const string[] page_names = { "introduction", "source", "preparation", "setup", "review" };
+    private const string[] page_names = { "source", "preparation", "setup", "review" };
 
     public UIState previous_ui_state { get; protected set; }
     public UIState ui_state { get; protected set; }
@@ -46,6 +45,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
     private Gtk.Image installer_image;
 
     private AppWindow window;
+    private unowned WizardWindow wizard_window;
 
     private MediaManager media_manager;
 
@@ -60,22 +60,17 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
     private WizardPage _page;
     public WizardPage page {
         get { return _page; }
-        private set {
-            back_button.sensitive = (value != WizardPage.INTRODUCTION);
-
+        set {
             var forwards = value > page;
 
             switch (value) {
-            case WizardPage.INTRODUCTION:
+            case WizardPage.SOURCE:
+                // reset page to notify deeply widgets states
                 create_button.visible = false;
                 continue_button.visible = true;
                 next_button = continue_button;
                 next_button.sensitive = true;
                 next_button.grab_focus ();
-                break;
-
-            case WizardPage.SOURCE:
-                // reset page to notify deeply widgets states
                 wizard_source.page = wizard_source.page;
                 cleanup ();
                 break;
@@ -113,10 +108,12 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
 
                 case WizardPage.LAST:
                     create.begin ((obj, result) => {
-                       if (create.end (result))
+                       if (create.end (result)) {
                           window.set_state (UIState.COLLECTION);
-                       else
+                          wizard_source.page = SourcePage.MAIN;
+                       } else {
                           window.notificationbar.display_error (_("Box creation failed"));
+                       }
                     });
                     return;
                 }
@@ -135,7 +132,8 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                 return;
 
             _page = value;
-            window.sidebar.wizard_sidebar.set_page (value);
+            back_button.sensitive = (value != WizardPage.SOURCE);
+            wizard_window.topbar.set_title_for_page (value);
             visible_child_name = page_names[value];
 
             if (value == WizardPage.SOURCE)
@@ -167,24 +165,18 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             break;
 
         case Boxes.SourcePage.URL:
-            next_button.sensitive = wizard_source.uri.length != 0;
+            next_button.sensitive = false;
+            if (wizard_source.uri.length == 0)
+                return;
 
-            var text = _("Please enter desktop or collection URI");
-            var icon = "preferences-desktop-remote-desktop";
             try {
                 prepare_for_location (wizard_source.uri, true);
 
-                if (source != null && App.app.has_broker_for_source_type (source.source_type)) {
-                    text = _("Will add boxes for all systems available from this account.");
-                    icon = "network-workgroup";
-                } else
-                    text = _("Will add a single box.");
-
+                next_button.sensitive = true;
             } catch (GLib.Error error) {
                 // ignore any parsing error
             }
 
-            wizard_source.update_url_page (_("Desktop Access"), text, icon);
             break;
 
         default:
@@ -215,6 +207,18 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         vm_creator = null;
         source = null;
         wizard_source.cleanup ();
+    }
+
+    public async bool review () {
+        // only one outstanding review () permitted
+        return_val_if_fail (review_cancellable == null, false);
+
+        review_cancellable = new Cancellable ();
+        var result = yield do_review_cancellable ();
+        review_cancellable = null;
+
+        skip_review_for_live = false;
+        return result;
     }
 
     private async bool create () {
@@ -270,6 +274,29 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         if (path != null && (file.has_uri_scheme ("file") || file.has_uri_scheme ("smb"))) {
             if (!probing)
                 prepare_for_installer (path, progress);
+            else {
+                var supported = false;
+                var extensions = InstalledMedia.supported_extensions;
+                extensions += "iso";
+                foreach (var extension in extensions) {
+                    var path_casefolded = path.casefold ();
+                    var extension_casefolded = extension.casefold ();
+
+                    if (path_casefolded.has_suffix (extension_casefolded)) {
+                        supported = true;
+
+                        break;
+                    }
+                }
+                if (!supported)
+                    throw new Boxes.Error.INVALID (_("Unsupported file"));
+
+                var info = file.query_info (FileAttribute.STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+                var file_type = info.get_file_type ();
+
+                if (file_type != FileType.REGULAR && file_type != FileType.SYMBOLIC_LINK)
+                    throw new Boxes.Error.INVALID (_("Invalid file"));
+            }
 
             return;
         }
@@ -280,22 +307,23 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
     private void prepare_for_uri (string uri_as_text) throws Boxes.Error {
         var uri = Xml.URI.parse (uri_as_text);
         if (uri == null || uri.scheme == null)
-            throw new Boxes.Error.INVALID (_("Invalid URI"));
+            throw new Boxes.Error.INVALID (_("Invalid URL"));
 
         if (wizard_source.download_required) {
             var file = File.new_for_uri (uri_as_text);
             var basename = file.get_basename ();
 
             if (basename == null || basename == "" || basename == "/")
-                throw new Boxes.Error.INVALID (_("Invalid URI"));
+                throw new Boxes.Error.INVALID (_("Invalid URL"));
 
             return;
         }
 
         source = new CollectionSource (uri.server ?? uri_as_text, uri.scheme, uri_as_text);
 
-        if (uri.scheme == "spice") {
+        if (uri.scheme.has_prefix ("spice")) {
             spice_validate_uri (uri_as_text);
+            source.source_type = "spice";
         } else if (uri.scheme == "vnc") {
             // accept any vnc:// uri
         } else if (uri.scheme.has_prefix ("qemu")) {
@@ -402,7 +430,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         if (source != null || wizard_source.libvirt_sys_import)
             return true;
 
-        return_if_fail (vm_creator != null);
+        return_val_if_fail (vm_creator != null, false);
 
         vm_creator.install_media.bind_property ("ready-to-create",
                                                 continue_button, "sensitive",
@@ -416,20 +444,8 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         return true;
     }
 
-    private async bool review () {
-        // only one outstanding review () permitted
-        return_if_fail (review_cancellable == null);
-
-        review_cancellable = new Cancellable ();
-        var result = yield do_review_cancellable ();
-        review_cancellable = null;
-
-        skip_review_for_live = false;
-        return result;
-    }
-
     private async bool do_review_cancellable () {
-        return_if_fail (review_cancellable != null);
+        return_val_if_fail (review_cancellable != null, false);
 
         nokvm_infobar.hide ();
         summary.clear ();
@@ -469,7 +485,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             if (uri != null && uri.server != null)
                 summary.add_property (_("Host"), uri.server.down ());
             else
-                summary.add_property (_("URI"), source.uri.down ());
+                summary.add_property (_("URL"), source.uri.down ());
 
             switch (uri.scheme) {
             case "spice":
@@ -502,7 +518,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
 
             try {
                 var config = null as GVirConfig.Domain;
-                yield run_in_thread (() => {
+                yield App.app.async_launcher.launch (() => {
                     config = libvirt_machine.domain.get_config (GVir.DomainXMLFlags.INACTIVE);
                 });
 
@@ -516,7 +532,9 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
                 try {
                     var volume_info = libvirt_machine.storage_volume.get_info ();
                     var capacity = format_size (volume_info.capacity);
-                    summary.add_property (_("Disk"),  _("%s maximum".printf (capacity)));
+                    summary.add_property (_("Disk"),
+                                          // Translators: This is disk size. E.g "1 GB maximum".
+                                          _("%s maximum").printf (capacity));
                 } catch (GLib.Error error) {
                     warning ("Failed to get information on volume '%s': %s",
                              libvirt_machine.storage_volume.get_name (),
@@ -529,10 +547,9 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             review_label.set_text (wizard_source.libvirt_sys_importer.wizard_review_label);
         }
 
-        if (machine != null)
+        if (libvirt_machine != null)
             summary.append_customize_button (() => {
-                // Selecting an item in UIState.WIZARD implies changing state to UIState.PROPERTIES
-                window.select_item (machine);
+                wizard_window.show_customization_page (libvirt_machine);
             });
 
         return true;
@@ -556,7 +573,7 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
             // Skip SETUP page if installer media doesn't need it
             if (page == Boxes.WizardPage.SETUP &&
                 !vm_creator.install_media.need_user_input_for_vm_creation)
-                    skip_to = forwards ? page + 1 : page - 1;
+                skip_to = forwards ? page + 1 : page - 1;
 
             // Skip review for live media if told to do so
             if (page == Boxes.WizardPage.REVIEW && forwards
@@ -603,26 +620,24 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         prepare (progress);
     }
 
-    public void setup_ui (AppWindow window) {
+    public void setup_ui (AppWindow window, WizardWindow wizard_window) {
         this.window = window;
+        this.wizard_window = wizard_window;
 
-        cancel_button = window.topbar.wizard_toolbar.cancel_btn;
-        cancel_button.clicked.connect (() => {
-            cleanup ();
-            wizard_source.page = SourcePage.MAIN;
-            window.set_state (UIState.COLLECTION);
-        });
-        back_button = window.topbar.wizard_toolbar.back_btn;
+        cancel_button = wizard_window.topbar.cancel_btn;
+        cancel_button.clicked.connect (cancel);
+        back_button = wizard_window.topbar.back_btn;
         back_button.clicked.connect (() => {
             prepare_cancellable.cancel ();
 
             page = page - 1;
         });
-        continue_button = window.topbar.wizard_toolbar.continue_btn;
+        continue_button = wizard_window.topbar.continue_btn;
         continue_button.clicked.connect (() => {
             page = page + 1;
         });
-        create_button = window.topbar.wizard_toolbar.create_btn;
+        next_button = continue_button;
+        create_button = wizard_window.topbar.create_btn;
         create_button.clicked.connect (() => {
             page = WizardPage.LAST;
         });
@@ -640,17 +655,19 @@ private class Boxes.Wizard: Gtk.Stack, Boxes.UI {
         page = WizardPage.PREPARATION;
     }
 
+    public void cancel () {
+        cleanup ();
+        wizard_source.page = SourcePage.MAIN;
+        window.set_state (UIState.COLLECTION);
+    }
+
     private void ui_state_changed () {
         if (ui_state != UIState.WIZARD)
             return;
 
-        if (previous_ui_state == UIState.PROPERTIES)
-            review.begin ();
-        else {
-            wizard_source.uri = "";
-            wizard_source.libvirt_sys_import = false;
-            page = WizardPage.INTRODUCTION;
-        }
+        wizard_source.uri = "";
+        wizard_source.libvirt_sys_import = false;
+        page = WizardPage.SOURCE;
     }
 
     private void destroy_machine () {
@@ -679,7 +696,7 @@ private class Boxes.WizardSummary: Gtk.Grid {
             return;
 
         var label_name = new Gtk.Label (name);
-        label_name.get_style_context ().add_class ("boxes-wizard-summary-prop-name-label");
+        label_name.get_style_context ().add_class ("dim-label");
         label_name.halign = Gtk.Align.END;
         attach (label_name, 0, current_row, 1, 1);
 

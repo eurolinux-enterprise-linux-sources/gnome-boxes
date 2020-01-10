@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:its="http://www.w3.org/2005/11/its" type="topic" style="task" id="shortcuts" xml:lang="it">
+
+  <info>
+    <link type="guide" xref="index#use"/>
+    <revision pkgversion="3.14" date="2014-09-06" status="review"/>
+
+    <credit type="author copyright">
+      <name>Lasse Schuirmann</name>
+      <email its:translate="no">lasse.schuirmann@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Usare <app>Boxes</app> tramite scorciatoie da tastiera.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Scorciatoie da tastiera</title>
+
+  <p>Si possono usare varie scorciatoie per lavorare con Boxes. Oltre agli acceleratori, sono disponibili le seguenti scorciatoie:</p>
+
+  <table rules="rows" frame="top bottom">
+    <thead>
+      <tr>
+        <td>
+          <p>Azione</p>
+        </td>
+        <td>
+          <p>Scorciatoia</p>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p>Creazione di una nuova macchina virtuale</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>N</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Attiva/Disattiva la ricerca</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>F</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Indietro</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Left</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Avanti</p>
+        </td>
+        <td>
+          <p><keyseq><key>Alt</key><key>Right</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Annulla</p>
+        </td>
+        <td>
+          <p><keyseq><key>Escape</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Rilascia la cattura del mouse e della tastiera</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Alt</key></keyseq></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Chiudi Boxes</p>
+        </td>
+        <td>
+          <p><keyseq><key>Ctrl</key><key>Q</key></keyseq></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</page>

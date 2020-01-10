@@ -12,7 +12,13 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Check the resources available to <app>Boxes</app>.</desc>
+    <desc>Ελέγξτε τους πόρους που είναι διαθέσιμοι στα <app>Πλαίσια</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -21,18 +27,16 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Using processor hardware virtualization</title>
+  <title>Χρησιμοποιώντας εικονικοποίηση του επεξεργαστή</title>
 
-  <p>To determine whether your computer supports processor virtualization
-  hardware extensions, and that they have been enabled in the system BIOS, run
-  the following in a terminal window:</p>
-  <p><cmd>gnome-shell --checks</cmd></p>
-  <p>If necessary, switch on the extensions <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">in the BIOS setup</link></p>
+  <p>Για να δείτε αν ο υπολογιστής σας υποστηρίζει τα πρόσθετα εικονικοποίησης του επεξεργαστή, και πως έχουν ενεργοποιηθεί στο BIOS, εκτελέστε την ακόλουθη εντολή σε ένα τερματικό:</p>
+  <p><cmd>gnome-boxes --checks</cmd></p>
+  <p>Αν είναι αναγκαίο, ενεργοποιήστε τα πρόσθετα <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">στο BIOS</link></p>
 
 </page>

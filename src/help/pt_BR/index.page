@@ -30,6 +30,12 @@
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
   <title><media type="image" mime="image/png" its:translate="no" height="36" src="figures/boxes_icon.png"/> Boxes</title>
@@ -51,11 +57,11 @@
   </section>
 
   <section id="properties" style="2column">
-    <title>Properties</title>
+    <title>Propriedades</title>
   </section>
 
   <section id="snapshots" style="2column">
-    <title>Snapshots</title>
+    <title>Capturas</title>
   </section>
 
   <section id="faq" style="2column">
@@ -63,7 +69,7 @@
   </section>
 
   <section id="advanced" style="2column">
-    <title>Advanced topics</title>
+    <title>Tópicos avançados</title>
   </section>
 
 </page>

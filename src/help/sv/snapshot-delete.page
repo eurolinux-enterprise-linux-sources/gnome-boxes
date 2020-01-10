@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-delete" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Ta bort en ögonblicksavbild som du inte längre behöver.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Ta bort en ögonblicksavbild</title>
+
+  <p>En ögonblicksavbild som inte längre behövs kan tas bort från listan.</p>
+
+  <steps>
+    <item><p>Öppna <link xref="interface#properties">egenskapsvyn</link> för boxen. Om boxen är öppen, klicka på knappen <gui style="button">Egenskaper</gui> i rubrikfältet. Egenskapsvyn kan också nås från <link xref="interface#selection">valläget</link>.</p></item>
+    <item><p>Klicka på <gui>Ögonblicksavbilder</gui> i sidopanelen.</p></item>
+    <item><p>Välj ögonblicksavbilden som ska tas bort från listan.</p></item>
+    <item><p>Klicka på menyknappen till höger och välj <gui>Ta bort</gui>.</p></item>
+    <item><p>Bekräfta att ögonblicksavbilden ska tas bort permanent.</p></item>
+  </steps>
+
+</page>

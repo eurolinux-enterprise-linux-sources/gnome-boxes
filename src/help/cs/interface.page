@@ -21,19 +21,13 @@
   <section id="collection">
   <title>Zobrazení skupin</title>
 
-  <p>When you first launch <app>Boxes</app>, the greeting tells you to click the
-  <gui style="button">New</gui> button to create your first box. On subsequent
-  visits, <app>Boxes</app> opens in the <em>collection view</em>, displaying
-  thumbnails of your boxes in a grid. Favourites or frequently-used boxes
-  appear at the top of the list. Collection view allows you to:</p>
+  <p>Když spustíte <app>Boxy</app> poprvé, poradí vám v uvítání, abyste klikli na tlačítko <gui style="button">Nový</gui> a tím vytvořili svůj první box. Při dalších spuštěních se <app>Boxy</app> otevřou v <em>zobrazení skupin</em>, ve kterých uvidíte náhledy svých boxů seřazené v mřížce. Oblíbené a nejčastěji používané boxy se nachází v horní části seznamu.</p>
 
   <list>
-    <item><p>Click <gui style="button">New</gui> to
-    <link xref="create">create</link> a box.</p></item>
-    <item><p>Click a box to launch a virtual machine session.</p></item>
-    <item><p><link xref="search">Search</link> for a box.</p></item>
-    <item><p>Click the checkmark button or select a box to enter selection
-    mode.</p></item>
+    <item><p>Kliknutím na <gui style="button">Nový</gui> <link xref="create">vytvořit</link> nový box</p></item>
+    <item><p>Kliknutím na box spustit sezení virtuálního stroje</p></item>
+    <item><p><link xref="search">Vyhledat</link> box</p></item>
+    <item><p>Kliknutím na tlačítko se zaškrtávátkem nebo výběrem boxu vstoupit do režimu výběru</p></item>
   </list>
 
   </section>
@@ -48,17 +42,14 @@
   <section id="selection">
   <title>Režim výběru</title>
 
-  <p>In collection view, clicking the checkmark button or right-clicking a
-  thumbnail puts you in <em>selection mode</em>, where various operations can be
-  performed on boxes, individually or in groups. You can:</p>
+  <p>Když jste v zobrazení skupin a kliknete na zaškrtávací políčko nebo kliknete pravým tlačítkem na náhled, dostanete se do <em>režimu výběru</em>, ve kterém se dají s boxy, ať už jednotlivě nebo hromadně, provádět různé věci. Můžete:</p>
 
   <list>
-    <item><p><link xref="delete">Delete</link> a box or boxes.</p></item>
-    <item><p>Mark a box or boxes as favorites.</p></item>
-    <item><p>Pause a box.</p></item>
-    <item><p>Open a box in a new window.</p></item>
-    <item><p>Click the <gui style="button">Properties</gui> button to enter the
-    properties view of a box.</p></item>
+    <item><p><link xref="delete">Odstranit</link> box či více boxů</p></item>
+    <item><p>Označit box či více boxů jako oblíbené</p></item>
+    <item><p>Pozastavit běh boxu</p></item>
+    <item><p>Otevřít box v novém okně</p></item>
+    <item><p>Kliknutím na tlačítko <gui style="button">Vlastnosti</gui> přepnout do zobrazení vlastností boxu</p></item>
   </list>
 
   </section>
@@ -66,36 +57,24 @@
   <section id="properties">
   <title>Zobrazení vlastností</title>
 
-  <p>Clicking the <gui style="button">Properties</gui> button in selection mode
-  opens the <em>properties view</em>, where some of the details of a box can be
-  configured. The main window displays the name of the box, the virtualizer
-  being used, and the URI that can be used to access the box from outside of
-  <app>Boxes</app>. In addition, the sidebar displays:</p>
+  <p>Kliknutím na tlačítko <gui style="button">Vlastnosti</gui> v režimu výběru se otevře <em>zobrazení vlastností</em>, ve kterém můžete nastavit některé podrobnosti boxu. Hlavní okno zobrazuje název boxu, použitý virtualizátor a adresu URI, kterou je možné použít pro přístup k boxu mimo aplikaci <app>Boxy</app>. Navíc najdete v postranním panelu:</p>
 
   <list>
-    <item><p>A screenshot of the box.</p></item>
-    <item><p>Running graphs of CPU, disk I/O and network activity.</p></item>
-    <item><p>The <gui style="button">Force Shutdown</gui> button, which enables
-    you to <link xref="shutdown">force a box to shut down</link>.</p></item>
+    <item><p>Snímek obrazovky s boxem</p></item>
+    <item><p>Grafy s průběhem vytížení CPU, diskových V/V operací a síťové aktivity</p></item>
+    <item><p>Tlačítko <gui style="button">Vynutit vypnutí</gui>, které vám umožňuje <link xref="shutdown">násilně provést vypnutí boxu</link></p></item>
   </list>
 
-  <p>The properties view main window allows you to display or change settings
-  depending on which of the following categories is selected in the sidebar:</p>
+  <p>V hlavní okně zobrazujícím vlastnosti se můžete podívat na nastavení, a případně je změnit, rozdělená do kategorií, které si vybíráte v postranním panelu:</p>
 
   <list>
-    <item><p><gui>System</gui> settings: memory, maximum allowed disk space,
-    and the <gui>Trouble Log</gui>.</p></item>
-    <item><p><gui>Display</gui> settings: display protocol, clipboard sharing,
-    resizing of the display.</p></item>
-    <item><p><gui>Device</gui> settings: access to system USB or CD/DVD
-    devices.</p></item>
-    <item><p><gui>Snapshots</gui>: <link xref="snapshot-create">creating</link>
-    and managing snaphots of the box.</p></item>
+    <item><p><gui>Systém</gui>: nastavení operační paměti, maximální přidělené velikosti diskového prostoru a <gui>záznam problémů</gui></p></item>
+    <item><p><gui>Zobrazení</gui>: nastavení protokolu zobrazení, sdílení schránky, změny velikosti zobrazení</p></item>
+    <item><p><gui>Zařízení</gui>: nastavení přístpu k zařízením USB a CD/DVD vašeho systému</p></item>
+    <item><p><gui>Snímky</gui>: <link xref="snapshot-create">vytváření</link> a správa snímků boxu</p></item>
   </list>
 
-  <p>The properties view can also be accessed using the wizard's
-  <gui style="button">Customize</gui> button during box setup, and by clicking
-  the tool button in the header bar of a running session.</p>
+  <p>K zobrazení vlastností se dostanete také při použití tlačítka <gui style="button">Přizpůsobit</gui> v průvodci vytvořením boxu a následným kliknutím na nástrojové tlačítko na hlavičkové liště za běhu sezení boxu.</p>
 
   </section>
 

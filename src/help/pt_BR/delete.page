@@ -12,26 +12,30 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Remove a box that you no longer need.</desc>
+    <desc>Remova uma máquina que você não precise mais.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Rafael Ferreira</mal:name>
       <mal:email>rafael.f.f1@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Enrico Nicoletto</mal:name>
+      <mal:email>liverig@gmail.com</mal:email>
+      <mal:years>2014, 2016.</mal:years>
+    </mal:credit>
   </info>
 
-  <title>Delete a box</title>
+  <title>Excluindo uma máquina</title>
 
-  <p>When a box is no longer needed, it can be deleted from <app>Boxes</app>.</p>
+  <p>Quando uma máquina não é mais necessária, ela pode ser removida do <app>Boxes</app>.</p>
 
   <steps>
-    <item><p>Select one or more boxes. In the collection view, right click a
-    box to be deleted.</p></item>
-    <item><p><link xref="interface#selection">Selection mode</link>
-    opens. Click additional boxes to select them for deletion.</p></item>
-    <item><p>Click the <gui style="button">Delete</gui> button.</p></item>
-    <item><p>Click the <key>X</key> to confirm.</p></item>
+    <item><p>Selecione uma ou mais máquinas. Na visão da coleção, dê um clique com o botão direito na máquina para excluí-la.</p></item>
+    <item><p>É aberto o <link xref="interface#selection">Modo de seleção</link>. Clique nas máquinas adicionais para selecioná-las para remoção.</p></item>
+    <item><p>Clique no botão de <gui style="button">Excluir</gui>.</p></item>
+    <item><p>Clique no <key>X</key> para confirmar.</p></item>
   </steps>
 
 </page>

@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-boxes gnome-3-12\n"
-"POT-Creation-Date: 2014-09-30 14:43+0000\n"
+"POT-Creation-Date: 2015-02-19 07:14+0000\n"
 "PO-Revision-Date: 2014-09-24 10:00+0200\n"
 "Last-Translator: Alain Lojewski <allomervan@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>>\n"
@@ -332,8 +332,13 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/continuous.page:24
+#, fuzzy
+#| msgid ""
+#| "Save the latest image using the link provided in the <link href=\"https://"
+#| "wiki.gnome.org/Projects/GnomeContinuous#Installation\">Installation</"
+#| "link> section of the wiki page."
 msgid ""
-"Save the latest image using the link provided in the <link href=\"https://"
+"The latest images are found at the link provided in the <link href=\"https://"
 "wiki.gnome.org/Projects/GnomeContinuous#Installation\">Installation</link> "
 "section of the wiki page."
 msgstr ""
@@ -364,16 +369,29 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/continuous.page:37
 msgid ""
-"Click <gui style=\"button\">Select a file</gui> and navigate to the "
-"Continuous qcow2 image. Select the file and click <gui style=\"button"
-"\">Open</gui>."
+"Click <gui style=\"button\">Enter URL</gui> and type the URL including the "
+"full filename of the gzipped runtime or devel-debug qcow2 image. Boxes will "
+"download and install the image."
+msgstr ""
+
+#. (itstool) path: item/p
+#: C/continuous.page:40
+#, fuzzy
+#| msgid ""
+#| "Click <gui style=\"button\">Select a file</gui> and navigate to the "
+#| "Continuous qcow2 image. Select the file and click <gui style=\"button"
+#| "\">Open</gui>."
+msgid ""
+"If you have already saved an image to disk, click <gui style=\"button"
+"\">Select a file</gui> and navigate to the Continuous qcow2 image. Select "
+"the file and click <gui style=\"button\">Open</gui>."
 msgstr ""
 "Cliquez sur <gui style=\"button\">Sélectionner un fichier</gui> et allez à "
 "l'image qcow2. Sélectionnez le fichier et cliquez sur <gui style=\"button"
 "\">Ouvrir</gui>."
 
 #. (itstool) path: item/p
-#: C/continuous.page:40
+#: C/continuous.page:44
 msgid ""
 "The <gui>Review</gui> page opens. Click <gui style=\"button\">Customize</"
 "gui> to adjust memory or disk size, or to rename the box."
@@ -383,7 +401,7 @@ msgstr ""
 "pour renommer la machine."
 
 #. (itstool) path: item/p
-#: C/continuous.page:43
+#: C/continuous.page:47
 msgid ""
 "Click <gui style=\"button\">Create</gui>. The collection view returns, and "
 "the installation of the box begins."
@@ -392,7 +410,7 @@ msgstr ""
 "réapparaît, et l'installation de la machine commence."
 
 #. (itstool) path: page/p
-#: C/continuous.page:47
+#: C/continuous.page:51
 msgid ""
 "The information necessary to upgrade a Continuous vm can be found on the "
 "<link href=\"https://wiki.gnome.org/Projects/GnomeContinuous\">wiki page</"
@@ -1477,8 +1495,8 @@ msgstr ""
 
 #. (itstool) path: page/p
 #: C/virtualization.page:24
-msgid "<cmd>gnome-shell --checks</cmd>"
-msgstr "<cmd>gnome-shell --checks</cmd>"
+msgid "<cmd>gnome-boxes --checks</cmd>"
+msgstr "<cmd>gnome-boxes --checks</cmd>"
 
 #. (itstool) path: page/p
 #: C/virtualization.page:25

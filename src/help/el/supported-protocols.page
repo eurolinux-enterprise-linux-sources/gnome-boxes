@@ -22,19 +22,25 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
       <mal:email>tomtryf@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Ποια τεχνολογία χρησιμοποιούν τα Πλαίσια;</title>
+  <title>Ποιά τεχνολογία χρησιμοποιούν τα Πλαίσια;</title>
 
 
   <p>Τα Πλασία χρησιμοποιούν το <app>qemu-kvm</app>, το <app>libvirt-glib</app> και το <app>spice-gtk</app> επιτρέποντας στον χρήστη να διαχειριστεί εικονικές μηχανές και να συνδεθεί εύκολα σε απομακρυμένες.</p>

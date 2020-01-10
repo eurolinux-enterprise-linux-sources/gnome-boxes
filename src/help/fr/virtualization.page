@@ -30,7 +30,7 @@
   <title>Utilisation de la virtualisation matérielle du processeur</title>
 
   <p>Pour savoir si votre ordinateur prend en charge les extensions matérielles de virtualisation du processeur, et si elles sont activées dans le BIOS, exécutez la commande suivante dans un terminal :</p>
-  <p><cmd>gnome-shell --checks</cmd></p>
+  <p><cmd>gnome-boxes --checks</cmd></p>
   <p>Si nécessaire, activez les extensions <link href="http://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html.">dans les paramétrages du BIOS</link></p>
 
 </page>

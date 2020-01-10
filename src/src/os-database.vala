@@ -11,7 +11,7 @@ public errordomain Boxes.OSDatabaseError {
 
 private class Boxes.OSDatabase : GLib.Object {
     private const int DEFAULT_VCPUS = 1;
-    private const int64 DEFAULT_RAM = 1 * (int64) GIBIBYTES;
+    private const int64 DEFAULT_RAM = 2 * (int64) GIBIBYTES;
 
     // We use the dynamically growing storage format (qcow2) so actual amount of disk space used is completely
     // dependent on the OS/guest.
@@ -37,12 +37,12 @@ private class Boxes.OSDatabase : GLib.Object {
         db_loading = true;
         var loader = new Loader ();
         try {
-            yield run_in_thread (() => { loader.process_default_path (); });
+            yield App.app.async_launcher.launch (() => { loader.process_default_path (); });
         } catch (GLib.Error e) {
             warning ("Error loading default libosinfo database: %s", e.message);
         }
         try {
-            yield run_in_thread (() => { loader.process_path (get_logos_db ()); }); // Load our custom database
+            yield App.app.async_launcher.launch (() => { loader.process_path (get_logos_db ()); }); // Load our custom database
         } catch (GLib.Error e) {
             warning ("Error loading GNOME Boxes libosinfo database: %s", e.message);
         }
@@ -129,6 +129,29 @@ private class Boxes.OSDatabase : GLib.Object {
         });
 
         return after_list;
+    }
+
+    public async Gtk.ListStore get_all_media_urls_as_store () throws OSDatabaseError {
+        if (!yield ensure_db_loaded ())
+            throw new OSDatabaseError.DB_LOADING_FAILED ("Failed to load OS database");
+
+        var store = new Gtk.ListStore (1, typeof (string));
+        foreach (var entity in db.get_os_list ().get_elements ()) {
+            var os = entity as Os;
+
+            foreach (var media_entity in os.get_media_list ().get_elements ()) {
+                var media = media_entity as Media;
+
+                if (media.url != null && (media.installer || media.live)) {
+                    Gtk.TreeIter iter;
+
+                    store.append (out iter);
+                    store.set (iter, 0, media.url);
+                }
+            }
+        }
+
+        return store;
     }
 
     public Media get_media_by_id (Os os, string id) throws OSDatabaseError {

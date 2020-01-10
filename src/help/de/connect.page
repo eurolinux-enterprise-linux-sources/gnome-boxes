@@ -24,19 +24,19 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Mit einem anderen Rechner verbinden</title>
 
-  <p><app>Boxen</app> kann zum Betrachten und Zugriff auf entfernte physikalische und virtuelle Maschinen verwendet werden.</p>
+  <p><app>Boxen</app> kann zum Betrachten und Zugriff auf entfernte physische und virtuelle Maschinen verwendet werden.</p>
 
   <note style="important">
     <p>Die entfernte Maschine sollte bereits eingerichtet sein.</p>
@@ -49,14 +49,14 @@
 
     <item><p>Geben Sie eine Adresse bestehend aus dem Protokoll, der IP-Adresse und der Portnummer des entfernten Geräts oder Dienstes ein. Zum Beispiel:</p>
       <code>spice://192.168.122.1?port=5906;</code>
-      <p>Das Protokoll ist:</p>
+      <p>Das Protokoll wird sein:</p>
       <list>
         <item><p>»spice://«, um mit einem lokalen oder entfernten <app>Xspice</app>-Server zu verbinden.</p></item>
         <item><p>»qemu://«, um mit einer »libvirt«-Instanz zu verbinden, die Ihnen Zugriff auf alle virtuellen Maschinen bietet, die sie verwahrt.</p></item>
         <item><p>»vnc://«, um zu einem entfernten <app>vino</app>- oder <app>VNC</app>-Server zu verbinden.</p></item>
       </list>
       <note style="info">
-        <p>Adresse und Portnummer sollten in der Konfiguration des Gerätes oder Dienstes der entfernten Maschine ersichtlich sein. Zum Beispiel zeigt die <gui style="menu">Eigenschaften</gui>-Ansicht in <app>Boxen</app> die Adresse, die Sie zum Verbinden zu dieser Box verwenden können.</p>
+        <p>Die Adresse und Portnummer sollten in der Konfiguration des Gerätes oder Dienstes der entfernten Maschine ersichtlich sein. Zum Beispiel zeigt die <gui style="menu">Eigenschaften</gui>-Ansicht in <app>Boxen</app> die Adresse, die Sie zum Verbinden zu dieser Box verwenden können.</p>
       </note>
     </item>
     <item><p>Klicken Sie auf <gui style="button">Weiter</gui> in der oberen rechten Ecke.</p></item>

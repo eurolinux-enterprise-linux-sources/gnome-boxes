@@ -4,16 +4,16 @@ using Vnc;
 
 private class Boxes.VncDisplay: Boxes.Display {
     public override string protocol { get { return "VNC"; } }
-    public override string uri { owned get { return @"vnc://$host:$port"; } }
+    public override string? uri { owned get { return @"vnc://$host:$port"; } }
     private Vnc.Display display;
     private string host;
     private int port;
     private Gtk.Window window;
-    private BoxConfig.SyncProperty[] sync_properties;
+    private BoxConfig.SavedProperty[] saved_properties;
 
     construct {
-        sync_properties = {
-            BoxConfig.SyncProperty () { name = "read-only", default_value = false }
+        saved_properties = {
+            BoxConfig.SavedProperty () { name = "read-only", default_value = false }
         };
         need_password = false;
 
@@ -69,10 +69,6 @@ private class Boxes.VncDisplay: Boxes.Display {
 
             display.close ();
         });
-
-        this.notify["config"].connect (() => {
-            config.sync_properties (display, sync_properties);
-        });
     }
 
     public VncDisplay (BoxConfig config, string host, int port) {
@@ -80,6 +76,8 @@ private class Boxes.VncDisplay: Boxes.Display {
 
         this.host = host;
         this.port = port;
+
+        config.save_properties (display, saved_properties);
     }
 
     public VncDisplay.with_uri (BoxConfig config, string _uri) throws Boxes.Error {
@@ -88,13 +86,15 @@ private class Boxes.VncDisplay: Boxes.Display {
         var uri = Xml.URI.parse (_uri);
 
         if (uri.scheme != "vnc")
-            throw new Boxes.Error.INVALID ("the URI is not vnc://");
+            throw new Boxes.Error.INVALID ("the URL is not vnc://");
 
         if (uri.server == null)
-            throw new Boxes.Error.INVALID ("the URI is missing a server");
+            throw new Boxes.Error.INVALID ("the URL is missing a server");
 
         this.host = uri.server;
         this.port = uri.port <= 0 ? 5900 : uri.port;
+
+        config.save_properties (display, saved_properties);
     }
 
     public override Gtk.Widget get_display (int n) {
@@ -106,15 +106,11 @@ private class Boxes.VncDisplay: Boxes.Display {
     public override void set_enable_audio (bool enable) {
     }
 
-    public override void set_enable_inputs (Gtk.Widget widget, bool enable) {
-        (widget as Vnc.Display).read_only = !enable;
-    }
-
     public override Gdk.Pixbuf? get_pixbuf (int n) throws Boxes.Error {
         return display.get_pixbuf ();
     }
 
-    public override void connect_it () throws GLib.Error {
+    public override void connect_it (owned Display.OpenFDFunc? open_fd = null) throws GLib.Error {
         // We only initiate connection once
         if (connected)
             return;
@@ -125,7 +121,11 @@ private class Boxes.VncDisplay: Boxes.Display {
         display.set_credential (DisplayCredential.PASSWORD, password);
         display.set_credential (DisplayCredential.CLIENTNAME, "boxes");
 
-        display.open_host (host, port.to_string ());
+        if (open_fd != null) {
+            var fd = open_fd ();
+            display.open_fd_with_hostname (fd, host);
+        } else
+            display.open_host (host, port.to_string ());
     }
 
     public override void disconnect_it () {
@@ -133,11 +133,11 @@ private class Boxes.VncDisplay: Boxes.Display {
             display.close ();
     }
 
-    public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page, ref PropertyCreationFlag flags) {
+    public override List<Boxes.Property> get_properties (Boxes.PropertiesPage page) {
         var list = new List<Boxes.Property> ();
 
         switch (page) {
-        case PropertiesPage.DISPLAY:
+        case PropertiesPage.GENERAL:
             var toggle = new Gtk.Switch ();
             toggle.halign = Gtk.Align.START;
             display.bind_property ("read-only", toggle, "active",
@@ -147,5 +147,9 @@ private class Boxes.VncDisplay: Boxes.Display {
         }
 
         return list;
+    }
+
+    public override void send_keys (uint[] keyvals) {
+        display.send_keys (keyvals);
     }
 }

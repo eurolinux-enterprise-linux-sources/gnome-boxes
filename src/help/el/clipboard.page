@@ -12,7 +12,13 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Use the clipboard with <app>Boxes</app>.</desc>
+    <desc>Χρησιμοποιήστε το πρόχειρο με τα <app>Πλασία</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -21,25 +27,32 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Share the clipboard</title>
+  <title>Κοινή χρήση του προχείρου</title>
 
-  <p>The clipboard of the host machine can be shared with the guest in
-  <app>Boxes</app>.</p>
+  <p>Το πρόχειρο του κεντρικού μηχανήματος μπορεί να διαμοιραστεί με τον επισκέπτη στα <app>Πλαίσια</app>.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Display</gui> in the sidebar.</p></item>
-    <item><p>Switch <gui>Share clipboard</gui> to <gui>ON</gui>.</p></item>
+    <item><p>Ανοίξτε την <link xref="interface#properties">προβολή ιδιοτήτων</link> του πλαισίου. Αν το πλαίσιο είναι ανοιχτό, κάντε κλικ στο κουμπί click the <gui style="button">Ιδιότητες</gui> στη γραμμή κεφαλίδας. Η προβολή ιδιοτήτων μπορεί επίσης να προσπελαστεί από τη <link xref="interface#selection">λειτουργία επιλογής</link>.</p></item>
+    <item><p>Κάντε κλικ στην <gui>Οθόνη</gui> στην πλευρική στήλη.</p></item>
+    <item><p>Αλλάξτε το <gui>Κοινή χρήση του πρόχειρου</gui> σε <gui>ΕΝΕΡΓΟ</gui>.</p></item>
   </steps>
+
+  <note style="important">
+    <p>While express installation typically takes care of making shared
+    clipboard available to you, express installation is not available for all
+    operating systems. In such cases or if you choose manual installation,
+    for shared clipboard to work the SPICE vdagent needs to be installed
+    in the guest. In most Linux-based operating systems the package is
+    called <em>spice-vdagent</em>. If the guest is running a different
+    operating system, check out the
+    <link href="http://www.spice-space.org/download.html">SPICE download page</link>.
+    </p>
+  </note>
 
 </page>

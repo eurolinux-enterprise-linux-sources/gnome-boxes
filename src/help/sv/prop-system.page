@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="prop-system" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#properties" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Ange RAM- och maximal diskallokering.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Justera systemkraven för en box</title>
+
+  <p>I <app>Boxes</app> har varje virtuell maskin sina egna inställningar för RAM och maximalt utrymme för diskallokering.</p>
+
+  <steps>
+    <item><p>Öppna <link xref="interface#properties">egenskapsvyn</link> för boxen. Om boxen är öppen, klicka på knappen <gui style="button">Egenskaper</gui> i rubrikfältet. Egenskapsvyn kan också nås från <link xref="interface#selection">valläget</link>.</p></item>
+    <item><p>Klicka på <gui>System</gui> i sidopanelen.</p></item>
+    <item><p>Justera skjutreglagen för <gui>Minne</gui> och <gui>Maximal diskstorlek</gui> för att återspegla de önskade värdena.</p></item>
+  </steps>
+
+</page>

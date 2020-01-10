@@ -16,9 +16,9 @@
     <desc>프로그램을 둘러봅니다.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Seong-ho Cho</mal:name>
+      <mal:name>조성호</mal:name>
       <mal:email>shcho@gnome.org</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014, 2016.</mal:years>
     </mal:credit>
   </info>
 
@@ -53,8 +53,8 @@
   <list>
     <item><p>하나 이상의 박스를 <link xref="delete">삭제합니다</link>.</p></item>
     <item><p>하나 이상의 박스를 즐겨찾기 항목으로 표시합니다.</p></item>
-    <item><p>Pause a box.</p></item>
-    <item><p>Open a box in a new window.</p></item>
+    <item><p>박스를 멈춥니다.</p></item>
+    <item><p>새 창에서 박스를 여십시오.</p></item>
     <item><p><gui style="button">속성</gui> 단추를 눌러 박스의 속성 보기로 들어가십시오.</p></item>
   </list>
 
@@ -77,7 +77,7 @@
     <item><p><gui>시스템</gui> 설정: 메모리, 최대 허용 디스크 공간, <gui>문제 기록</gui>.</p></item>
     <item><p><gui>디스플레이</gui> 설정: 디스플레이 프로토콜, 클립보드 공유, 디스플레이 크기 조절.</p></item>
     <item><p><gui>장치</gui> 설정: 시스템 USB 또는 CD/DVD 장치 접근.</p></item>
-    <item><p><gui>스냅샷</gui>: 박스 스냅샷을 <link xref="snapshot-create">만들고</link> 관리.</p></item>
+    <item><p><gui>스냅샷</gui>: 박스 스냅샷을 <link xref="snapshot-create">만들고</link> 관리합니다.</p></item>
   </list>
 
   <p>속성 보기는 박스 설정 과정중 마법사의 <gui style="button">사용자 정의</gui> 단추를 사용하여 접근할 수 있으며, 실행중인 세션의 헤더 표시줄에서 도구 단추를 눌러서도 접근할 수 있습니다.</p>

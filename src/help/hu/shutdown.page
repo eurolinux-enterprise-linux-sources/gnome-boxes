@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="shutdown" xml:lang="hu">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Lefagyott gépek leállítása.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anca Tibor Attila</mal:name>
+      <mal:email>anca dot tibor at posteo dot de</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Gép leállításának kikényszerítése</title>
+
+  <p>Ha egy gép nem válaszol, kikényszerítheti a leállítását. Ez lehetővé teszi a virtuális gép újraindítását abban a reményben, hogy visszatér a működő állapotába.</p>
+
+  <steps>
+    <item><p>Nyissa meg a gép <link xref="interface#properties">tulajdonságok nézetét</link>. Ha a gép nyitva van, kattintson a fejlécsávban lévő <gui style="button">Tulajdonságok</gui> gombra. A tulajdonságok nézet elérhető a <link xref="interface#selection">kiválasztási módból</link> is.</p></item>
+    <item><p>Kattintson a bal alsó sarokban az <gui style="button">Erőltetett leállítás</gui> gombra.</p></item>
+    <item><p>Kattintson a <gui style="button">Leállítás</gui> gombra a megerősítéshez.</p></item>
+  </steps>
+
+</page>

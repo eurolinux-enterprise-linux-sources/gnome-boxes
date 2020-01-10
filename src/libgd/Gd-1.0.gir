@@ -107,7 +107,10 @@ and/or use gtk-doc annotations.  -->
                      destroy="3">
             <type name="Gtk.TreeCellDataFunc" c:type="GtkTreeCellDataFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="destroy" transfer-ownership="none" scope="async">
@@ -879,6 +882,23 @@ times out or is closed.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="create_symbolic_icon_for_scale"
+              c:identifier="gd_create_symbolic_icon_for_scale">
+      <return-value transfer-ownership="full">
+        <type name="Gio.Icon" c:type="GIcon*"/>
+      </return-value>
+      <parameters>
+        <parameter name="name" transfer-ownership="none">
+          <type name="utf8" c:type="const gchar*"/>
+        </parameter>
+        <parameter name="base_size" transfer-ownership="none">
+          <type name="gint" c:type="gint"/>
+        </parameter>
+        <parameter name="scale" transfer-ownership="none">
+          <type name="gint" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="embed_image_in_frame"
               c:identifier="gd_embed_image_in_frame">
       <return-value transfer-ownership="full">
@@ -887,6 +907,26 @@ times out or is closed.</doc>
       <parameters>
         <parameter name="source_image" transfer-ownership="none">
           <type name="GdkPixbuf.Pixbuf" c:type="GdkPixbuf*"/>
+        </parameter>
+        <parameter name="frame_image_url" transfer-ownership="none">
+          <type name="utf8" c:type="const gchar*"/>
+        </parameter>
+        <parameter name="slice_width" transfer-ownership="none">
+          <type name="Gtk.Border" c:type="GtkBorder*"/>
+        </parameter>
+        <parameter name="border_width" transfer-ownership="none">
+          <type name="Gtk.Border" c:type="GtkBorder*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="embed_surface_in_frame"
+              c:identifier="gd_embed_surface_in_frame">
+      <return-value transfer-ownership="full">
+        <type name="cairo.Surface" c:type="cairo_surface_t*"/>
+      </return-value>
+      <parameters>
+        <parameter name="source_image" transfer-ownership="none">
+          <type name="cairo.Surface" c:type="cairo_surface_t*"/>
         </parameter>
         <parameter name="frame_image_url" transfer-ownership="none">
           <type name="utf8" c:type="const gchar*"/>

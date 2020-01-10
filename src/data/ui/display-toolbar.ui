@@ -23,6 +23,12 @@
             <property name="icon-name">go-previous-symbolic</property>
           </object>
         </child>
+
+        <child internal-child="accessible">
+          <object class="AtkObject" id="a11y-button1">
+            <property name="accessible-name" translatable="yes">Back</property>
+          </object>
+        </child>
       </object>
 
       <packing>
@@ -34,10 +40,63 @@
       <object class="GtkBox" id="hbox">
         <property name="visible">True</property>
         <property name="orientation">horizontal</property>
-        <property name="spacing">0</property>
-        <style>
-          <class name="linked"/>
-        </style>
+        <property name="spacing">4</property>
+
+        <child>
+          <object class="GtkMenuButton" id="menu_button">
+            <property name="visible">True</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+
+            <child>
+              <object class="GtkImage" id="props_image">
+                <property name="visible">True</property>
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-button2">
+                <property name="accessible-name" translatable="yes">Actions</property>
+              </object>
+            </child>
+          </object>
+
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkMenuButton" id="keys_menu_button">
+            <property name="visible">True</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+
+            <child>
+              <object class="GtkImage" id="keyboard_image">
+                <property name="visible">True</property>
+                <property name="icon-name">input-keyboard-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-button3">
+                <property name="accessible-name" translatable="yes">Keyboard shortcuts</property>
+              </object>
+            </child>
+          </object>
+
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
 
         <child>
           <object class="GtkButton" id="fullscreen">
@@ -56,28 +115,10 @@
                 <property name="icon-size">1</property>
               </object>
             </child>
-          </object>
 
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
-        </child>
-
-        <child>
-          <object class="GtkButton" id="props">
-            <property name="visible">True</property>
-            <property name="valign">center</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="on_props_clicked"/>
-            <style>
-              <class name="image-button"/>
-            </style>
-
-            <child>
-              <object class="GtkImage" id="props_image">
-                <property name="visible">True</property>
-                <property name="icon-name">preferences-system-symbolic</property>
-                <property name="icon-size">1</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-button4">
+                <property name="accessible-name" translatable="yes">Fullscreen</property>
               </object>
             </child>
           </object>

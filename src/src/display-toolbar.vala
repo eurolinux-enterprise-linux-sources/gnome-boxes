@@ -13,7 +13,9 @@ private class Boxes.DisplayToolbar: Gtk.HeaderBar {
     [GtkChild]
     private Gtk.Button fullscreen;
     [GtkChild]
-    private Gtk.Button props;
+    private Gtk.MenuButton menu_button;
+    [GtkChild]
+    private Gtk.MenuButton keys_menu_button;
 
     private AppWindow window;
 
@@ -28,33 +30,45 @@ private class Boxes.DisplayToolbar: Gtk.HeaderBar {
                     Gdk.EventMask.BUTTON_RELEASE_MASK);
 
         if (overlay) {
-            get_style_context ().add_class ("toolbar");
-            get_style_context ().add_class ("osd");
+            get_style_context ().add_class (Gtk.STYLE_CLASS_TOOLBAR);
+            get_style_context ().add_class (Gtk.STYLE_CLASS_OSD);
         } else {
             show_close_button = true;
         }
 
         if (!overlay) {
-            back.get_style_context ().add_class ("raised");
-            fullscreen.get_style_context ().add_class ("raised");
-            props.get_style_context ().add_class ("raised");
+            back.get_style_context ().add_class (Gtk.STYLE_CLASS_RAISED);
+            fullscreen.get_style_context ().add_class (Gtk.STYLE_CLASS_RAISED);
+            menu_button.get_style_context ().add_class (Gtk.STYLE_CLASS_RAISED);
+            keys_menu_button.get_style_context ().add_class (Gtk.STYLE_CLASS_RAISED);
         }
 
         App.app.notify["fullscreened"].connect_after ( () => {
-            if (window.fullscreened)
+            var a11y = fullscreen.get_accessible ();
+
+            if (window.fullscreened) {
                 fullscreen_image.icon_name = "view-restore-symbolic";
-            else
+                a11y.accessible_name = _("Exit fullscreen");
+            } else {
                 fullscreen_image.icon_name = "view-fullscreen-symbolic";
+                a11y.accessible_name = _("Fullscreen");
+            }
         });
     }
 
     public void setup_ui (AppWindow window) {
         this.window = window;
 
+        menu_button.popover = new ActionsPopover (window);
         App.app.notify["main-window"].connect (() => {
             back.visible = (window == App.app.main_window);
         });
-}
+        window.notify["ui-state"].connect (() => {
+            if (window.ui_state == UIState.DISPLAY)
+                (menu_button.popover as ActionsPopover).update_for_item (window.current_item);
+        });
+        keys_menu_button.popover = new KeysInputPopover (window);
+    }
 
     private bool button_down;
     private int button_down_x;
@@ -125,10 +139,5 @@ private class Boxes.DisplayToolbar: Gtk.HeaderBar {
     [GtkCallback]
     private void on_fullscreen_clicked () {
         window.fullscreened = !window.fullscreened;
-    }
-
-    [GtkCallback]
-    private void on_props_clicked () {
-        window.set_state (UIState.PROPERTIES);
     }
 }

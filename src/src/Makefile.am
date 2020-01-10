@@ -32,6 +32,7 @@ AM_VALAFLAGS =						\
 	--pkg gtk-vnc-2.0				\
 	--pkg gudev-1.0					\
 	--pkg libarchive				\
+	--pkg libsecret-1				\
 	--pkg libsoup-2.4				\
 	--pkg libosinfo-1.0				\
 	--pkg libvirt-gconfig-1.0			\
@@ -39,6 +40,7 @@ AM_VALAFLAGS =						\
 	--pkg libxml-2.0				\
 	--pkg posix					\
 	--pkg linux					\
+	--pkg libusb-1.0				\
 	--pkg spice-client-gtk-3.0			\
 	--pkg tracker-sparql-$(TRACKER_VERSION)		\
 	--pkg gmodule-2.0				\
@@ -48,6 +50,7 @@ AM_VALAFLAGS =						\
 
 noinst_LIBRARIES = libcommon.a
 libcommon_a_VALASOURCES =			\
+	async-launcher.vala			\
 	box-config.vala                         \
 	collection-source.vala			\
 	util.vala				\
@@ -96,39 +99,47 @@ gnome_boxes_SOURCES =				\
 	$(BUILT_SOURCES)			\
 	app.vala				\
 	app-window.vala				\
+	actions-popover.vala			\
 	archive-reader.vala			\
 	archive-writer.vala			\
 	auth-notification.vala			\
-	collection-view.vala			\
 	collection.vala				\
+	collection-filter-switcher.vala		\
 	collection-toolbar.vala			\
 	display-page.vala			\
 	display-toolbar.vala			\
 	display.vala				\
 	editable-entry.vala			\
 	i-properties-provider.vala		\
+	i-collection-view.vala			\
+	icon-view.vala				\
 	installer-media.vala 			\
 	installed-media.vala 			\
-	libvirt-system-media.vala 		\
+	keys-input-popover.vala			\
+	libvirt-cloned-media.vala 		\
+	libvirt-media.vala 			\
 	iso-extractor.vala			\
 	libvirt-broker.vala			\
 	libvirt-machine.vala			\
 	libvirt-machine-properties.vala		\
+	list-view.vala				\
+	list-view-row.vala			\
 	machine.vala				\
+	machine-thumbnailer.vala		\
 	main.vala				\
 	media-manager.vala 			\
-	mini-graph.vala				\
+	resource-graph.vala			\
 	notification.vala			\
 	notificationbar.vala			\
 	os-database.vala 			\
 	properties.vala				\
-	properties-sidebar.vala			\
+	properties-window.vala			\
+	properties-page-widget.vala		\
 	properties-toolbar.vala			\
 	remote-machine.vala			\
 	searchbar.vala				\
 	selectionbar.vala			\
 	selection-toolbar.vala			\
-	sidebar.vala				\
 	spice-display.vala			\
 	topbar.vala				\
 	ui.vala					\
@@ -140,15 +151,17 @@ gnome_boxes_SOURCES =				\
 	vm-creator.vala 			\
 	vm-importer.vala 			\
 	libvirt-system-importer.vala 		\
-	libvirt-system-vm-importer.vala 	\
+	libvirt-vm-cloner.vala 			\
+	libvirt-vm-importer.vala 		\
 	vnc-display.vala			\
-	wizard-sidebar.vala			\
+	wizard-window.vala			\
 	wizard-source.vala			\
 	wizard-toolbar.vala			\
 	wizard.vala				\
 	downloader.vala				\
 	empty-boxes.vala			\
 	tracker-iso-query.vala			\
+	troubleshoot-log.vala			\
 	snapshot-list-row.vala 			\
 	snapshots-property.vala 		\
 	$(NULL)

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="system-requirements" xml:lang="it">
+
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
+    <credit type="author copyright editor">
+      <name>Zeeshan Ali (Khattak)</name>
+      <email>zeeshanak@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Hardware richiesto per eseguire una macchina virtuale in <app>Boxes</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Introduzione alle macchine virtuali</title>
+
+  <p>Il computer in cui si creano e si eseguono macchine virtuali dentro <app>Boxes</app> deve avere certi requisiti per garantire la migliore prestazione. Questi requisiti sono specificati dai vendor di sistemi operativi. <app>Boxes</app> alloca automaticamente le risorse delle macchine virtuali in base alle raccomandazioni del vendor. Se queste informazioni non sono disponibili, <app>Boxes</app> alloca le seguenti risorse:</p>
+
+  <list>
+    <item>
+      <p>20 GB di spazio disco massimo.</p>
+      <note style="advanced">
+      <p>Ciò non significa che <app>Boxes</app> allocherà 20 GB di spazio nel momento in cui crea la macchina virtuale. Lo spazio disco realmente usato da <app>Boxes</app> sarà minore (o, nel caso peggiore, uguale) dello spazio disco usato dalla macchina virtuale stessa.</p>
+      </note>
+    </item>
+    <item>
+      <p>500 MB di RAM.</p>
+    </item>
+  </list>
+
+  <note style="advanced">
+    <p><app>Boxes</app> ha prestazioni migliori se il processore del computer supporta le <link xref="virtualization">estensioni di virtualizzazione</link> dell'hardware e queste sono abilitate nel BIOS di sistema.</p>
+  </note>
+
+</page>

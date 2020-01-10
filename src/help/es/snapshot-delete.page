@@ -10,30 +10,31 @@
       <years>2014</years>
     </credit>
 
-    <desc>Remove a snapshot that you no longer need.</desc>
+    <desc>Eliminar una instantánea que ya no necesita.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
-  <title>Delete a snapshot</title>
+  <title>Eliminar una instantánea</title>
 
-  <p>A snapshot that is no longer needed can be removed from the list.</p>
+  <p>Una instantánea que ya no se necesita puede eliminarse de esta lista.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
-    <item><p>Click <gui>Snapshots</gui> in the sidebar.</p></item>
-    <item><p>Select the snapshot to be deleted from the list.</p></item>
-    <item><p>Click the menu button on the right and select
-    <gui>Delete</gui>.</p></item>
-    <item><p>Confirm to permanently delete the snapshot.</p></item>
+    <item><p>Abra la <link xref="interface#properties">vista de propiedades</link> para la caja. Si la caja está abierta, pulse el botón <gui style="button">Propiedades</gui> en la barra de cabecera. También se puede acceder a la vista de propiedades desde el <link xref="interface#selection">modo de selección</link>.</p></item>
+    <item><p>Pulse <gui style="menuitem">Instantáneas</gui> en la barra lateral.</p></item>
+    <item><p>Seleccione en la lista la instantánea que quiere eliminar.</p></item>
+    <item><p>Pulse el botón de menú de la derecha y seleccione <gui>Eliminar</gui>.</p></item>
+    <item><p>La instantánea se borrará de forma permanente.</p></item>
   </steps>
 
 </page>

@@ -3,12 +3,14 @@ using Gtk;
 
 private class Boxes.Notificationbar: Gtk.Grid {
     public const int DEFAULT_TIMEOUT = 6;
+    private const int MAX_NOTIFICATIONS = 5;
 
     GLib.List<Widget> active_notifications;
 
     public Searchbar searchbar;
 
     construct {
+        orientation = Gtk.Orientation.VERTICAL;
         valign = Gtk.Align.START;
         halign = Gtk.Align.CENTER;
         get_style_context ().add_class ("transparent-bg");
@@ -27,34 +29,34 @@ private class Boxes.Notificationbar: Gtk.Grid {
         });
     }
 
-    public Gd.Notification display_for_action (string                         message,
-                                               string                         action_label,
-                                               owned Notification.OKFunc      action_func,
-                                               owned Notification.CancelFunc? ignore_func = null,
-                                               int                            timeout = DEFAULT_TIMEOUT) {
+    public Gd.Notification display_for_action (string                          message,
+                                               string                          action_label,
+                                               owned Notification.OKFunc       action_func,
+                                               owned Notification.DismissFunc? ignore_func = null,
+                                               int                             timeout = DEFAULT_TIMEOUT) {
         return display (message, MessageType.INFO, action_label, (owned) action_func, (owned) ignore_func, timeout);
     }
 
     public Gd.Notification display_for_optional_auth (string                           broker_name,
                                                       owned AuthNotification.AuthFunc? auth_func,
-                                                      owned Notification.CancelFunc?   cancel_func) {
+                                                      owned Notification.DismissFunc?  dismiss_func) {
         Notification.OKFunc next_auth_step = () => {
             var auth_string = "<span font-weight=\"bold\">" + _("Sign In to %s").printf(broker_name) + "</span>";
-            display_for_auth (auth_string, (owned) auth_func, (owned) cancel_func);
+            display_for_auth (auth_string, (owned) auth_func, (owned) dismiss_func);
         };
         return display_for_action (_("Not connected to %s").printf (broker_name),
                                    _("Sign In"),
                                    (owned) next_auth_step,
-                                   (owned) cancel_func, -1);
+                                   (owned) dismiss_func, -1);
     }
 
     public Gd.Notification display_for_auth (string                           auth_string,
                                              owned AuthNotification.AuthFunc? auth_func,
-                                             owned Notification.CancelFunc?   cancel_func,
+                                             owned Notification.DismissFunc?  dismiss_func,
                                              bool                             need_username = true) {
         var notification = new Boxes.AuthNotification (auth_string,
                                                        (owned) auth_func,
-                                                       (owned) cancel_func,
+                                                       (owned) dismiss_func,
                                                        need_username,
                                                        searchbar);
 
@@ -73,7 +75,7 @@ private class Boxes.Notificationbar: Gtk.Grid {
         return display (message, MessageType.ERROR, null, null, null, timeout);
     }
 
-    public void cancel () {
+    public void dismiss_all () {
         // We destroy all active notifications, which will cause them to be dismissed
         while (active_notifications != null) {
             active_notifications.data.destroy ();
@@ -81,21 +83,30 @@ private class Boxes.Notificationbar: Gtk.Grid {
     }
 
     private void add_notification (Widget w) {
-        attach (w, 0, 0, 1, 1);
+        add (w);
     }
 
-    private Gd.Notification display (string                         message,
-                                     MessageType                    message_type,
-                                     string?                        ok_label,
-                                     owned Notification.OKFunc?     ok_func,
-                                     owned Notification.CancelFunc? cancel_func,
-                                     int                            timeout) {
+    private Gd.Notification display (string                          message,
+                                     MessageType                     message_type,
+                                     string?                         ok_label,
+                                     owned Notification.OKFunc?      ok_func,
+                                     owned Notification.DismissFunc? dismiss_func,
+                                     int                             timeout) {
         var notification = new Boxes.Notification (message,
                                                    message_type,
                                                    ok_label,
                                                    (owned) ok_func,
-                                                   (owned) cancel_func,
+                                                   (owned) dismiss_func,
                                                    timeout);
+
+        var excess_notifications = (int) active_notifications.length () - MAX_NOTIFICATIONS + 1;
+
+        for (var i = excess_notifications; i > 0; i--) {
+            var last_notification = active_notifications.nth_data (active_notifications.length () - i)
+                                    as Gd.Notification;
+
+            last_notification.dismiss ();
+        }
 
         active_notifications.prepend (notification);
 

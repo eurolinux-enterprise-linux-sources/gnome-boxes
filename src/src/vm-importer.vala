@@ -16,10 +16,9 @@ private class Boxes.VMImporter : Boxes.VMCreator {
         base.for_install_completion (machine);
     }
 
-    public override void launch_vm (LibvirtMachine machine) throws GLib.Error {
+    public override void launch_vm (LibvirtMachine machine, int64 access_last_time = -1) throws GLib.Error {
         machine.vm_creator = this;
-        machine.config.access_last_time = get_real_time ();
-        update_machine_info (machine);
+        machine.config.access_last_time = (access_last_time > 0)? access_last_time : get_real_time ();
 
         import_vm.begin (machine);
     }
@@ -27,13 +26,12 @@ private class Boxes.VMImporter : Boxes.VMCreator {
     protected override async void continue_installation (LibvirtMachine machine) {
         install_media = yield MediaManager.get_instance ().create_installer_media_from_config (machine.domain_config);
         machine.vm_creator = this;
-        update_machine_info (machine);
 
         yield import_vm (machine);
     }
 
-    protected override void update_machine_info (LibvirtMachine machine) {
-        machine.info = _("Importing…");
+    protected virtual async void post_import_setup (LibvirtMachine machine) {
+        set_post_install_config (machine);
     }
 
     private async void import_vm (LibvirtMachine machine) {
@@ -43,8 +41,7 @@ private class Boxes.VMImporter : Boxes.VMCreator {
             yield source_media.copy (destination_path);
 
             // Without refreshing the pool, libvirt will not know of changes to volume we just made
-            var pool = yield get_storage_pool ();
-            yield pool.refresh_async (null);
+            yield Boxes.ensure_storage_pool (connection);
         } catch (GLib.Error error) {
             warning ("Failed to import box '%s' from file '%s': %s",
                      machine.name,
@@ -57,7 +54,7 @@ private class Boxes.VMImporter : Boxes.VMCreator {
             return;
         }
 
-        set_post_install_config (machine);
+        yield post_import_setup (machine);
         if (start_after_import) {
             try {
                 machine.domain.start (0);
@@ -65,7 +62,6 @@ private class Boxes.VMImporter : Boxes.VMCreator {
                 warning ("Failed to start domain '%s': %s", machine.domain.get_name (), error.message);
             }
         }
-        machine.info = null;
         machine.vm_creator = null;
     }
 }

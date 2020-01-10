@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="search" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#start"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Få snabbt tillgång till en box givet dess namn.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Sök efter en box</title>
+
+  <p>Om det finns mer än en box, kan du hitta eller filtrera boxar efter namn i <link xref="interface#collection">samlingsvyn</link> eller <link xref="interface#selection">valläget</link>. Klicka på sökikonen eller börja skriv för att inleda en sökning.</p>
+
+  <p>Tryck på <key>Esc</key> för att avfärda sökningen.</p>
+
+</page>

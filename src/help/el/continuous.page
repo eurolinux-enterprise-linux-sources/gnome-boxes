@@ -10,7 +10,13 @@
       <years>2014</years>
     </credit>
 
-    <desc>Create a box using a Continuous disk image.</desc>
+    <desc>Δημιουργήστε ένα πλαίσιο χρησιμοποιώντας μια εικόνα δίσκου από το Continuous.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Ελληνική μεταφραστική ομάδα GNOME</mal:name>
+      <mal:email>team@gnome.gr</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Θάνος Τρυφωνίδης</mal:name>
@@ -19,46 +25,30 @@
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Maria Mavridou</mal:name>
+      <mal:name>Μαρία Μαυρίδου</mal:name>
       <mal:email>mavridou@gmail.com</mal:email>
       <mal:years>2014</mal:years>
     </mal:credit>
   </info>
 
-  <title>Using Boxes with Continuous</title>
+  <title>Χρησιμοποιώντας τα Πλαίσια με το Continuous</title>
 
-  <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link>
-  is GNOME's continuous build system. Boxes is able to create a box from a
-  Continuous <em>qcow2</em> image.</p>
+  <p>Το <link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link> είναι ένα σύστημα συνεχούς δόμησης του GNOME. Η εφαρμογή Πλαίσια είναι είναι ικανή να δημιουργήσει ένα πλαίσιο από μια εικόνα <em>qcow2</em> του Continuous.</p>
 
   <steps>
-    <item><p>The latest images are found at the link provided in the
-    <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Installation</link>
-    section of the wiki page.</p>
+    <item><p>Οι πρόσφατες εικόνες βρίσκονται στον σύνδεσμο που παρέχεται στην ενότητα <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">εγκατάσταση</link> στη σελίδα του wiki.</p>
       <note style="info">
-        <p>Images are available in <em>runtime</em> and <em>devel-debug</em>
-        flavors. The <em>devel-debug</em> image results in a virtual machine
-        containing developer tools and headers.</p>
+        <p>Υπάρχουν δύο εκδοχές εικόνων, η <em>runtime</em> και η <em>ανάπτυξης-αποσφαλμάτωσης</em>. Η εικόνα <em>ανάπτυξης-αποσφαλμάτωσης</em> δημιουργεί μια εικονική μηχανή όπου περιέχει αρχεία ανάπτυξης και εργαλεία για προγραμματιστές.</p>
       </note>
     </item>
-    <item><p>In <app>Boxes</app>, click <gui style="button">New</gui> to launch
-    the box creation wizard.</p></item>
+    <item><p>Στα <app>Πλαίσια</app>, κάντε κλικ στο <gui style="button">Νέο</gui> για να εκκινήσετε τον οδηγό δημιουργίας ενός πλαισίου.</p></item>
     <item><p>Εμφανίζεται ένα εισαγωγικό μήνυμα. Κάντε κλικ στο κουμπί <gui style="button">Συνέχεια</gui>.</p></item>
-    <item><p>Click <gui style="button">Enter URL</gui> and type the URL
-    including the full filename of the gzipped runtime or devel-debug qcow2
-    image. Boxes will download and install the image.</p>
-    <p>If you have already saved an image to disk, click
-    <gui style="button">Select a file</gui> and navigate to the
-    Continuous qcow2 image. Select the file and click
-    <gui style="button">Open</gui>.</p></item>
-    <item><p>The <gui>Review</gui> page opens. Click
-    <gui style="button">Customize</gui> to adjust memory or disk size, or to
-    rename the box.</p></item>
-    <item><p>Click <gui style="button">Create</gui>. The collection view
-    returns, and the installation of the box begins.</p></item>
+    <item><p>Κάντε κλικ στην επιλογή <gui style="button">Εισάγετε τη διεύθυνση</gui> και πληκτρολογήστε τη διεύθυνση που περιέχει την εικόνα qcow2. Τα «Πλαίσια« θα κατεβάσουν και τα εγκαταστήσουν την εικόνα.</p>
+    <p>Αν έχετε ήδη μια αποθηκευμένη εικόνα στον δίσκο, κάντε κλικ στο μενού <gui style="button">Επιλογή αρχείου</gui> και περιηγηθείτε στις εικόνες qcow2 του Continuous. Επιλέξτε το αρχείο και κάντε κλικ στο <gui style="button">Άνοιγμα</gui>.</p></item>
+    <item><p>Ανοίγει η σελίδα <gui style="button">Επισκόπηση</gui>. Κάντε κλικ στο <gui style="button">Προσαρμογή</gui> για να καθορίσετε την μνήμη ή το μέγεθος του δίσκου, ή για να μετονομάσετε το πλαίσιο.</p></item>
+    <item><p>Κάντε κλικ στη <gui style="button">Δημιουργία</gui>. Ξαναεμφανίζεται η προβολή συλλογής και ξεκινά η εγκατάσταση του πλαισίου.</p></item>
   </steps>
 
-  <p>The information necessary to upgrade a Continuous vm  can be found on the
-  <link href="https://wiki.gnome.org/Projects/GnomeContinuous">wiki page</link>.</p>
+  <p>Πληροφορίες για το πως να αναβαθμίσετε μια εικονική μηχανή του Continuous βρίσκονται στη <link href="https://wiki.gnome.org/Projects/GnomeContinuous">σελίδα του wiki</link>.</p>
 
 </page>

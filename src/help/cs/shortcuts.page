@@ -13,28 +13,28 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Operate <app>Boxes</app> using keyboard shortcuts.</desc>
+    <desc>Jak pracovat s <app>Boxy</app> pomocí klávesových zkratek.</desc>
   </info>
 
-  <title>Keyboard shortcuts</title>
+  <title>Klávesové zkratky</title>
 
-  <p>Various shortcuts can be used to operate Boxes. Besides <!-- TODO link to mnemonics explanation --> mnemonics, the following shortcuts are available:</p>
+  <p>Pří práci s Boxy můžete používat různé klávesové zkratky. Mimo horkých kláves jsou k dispozici následující:</p>
 
   <table rules="rows" frame="top bottom">
     <thead>
       <tr>
         <td>
-          <p>Action</p>
+          <p>Činnost</p>
         </td>
         <td>
-          <p>Shortcut</p>
+          <p>Klávesová zkratka</p>
         </td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>
-          <p>Create new virtual machine</p>
+          <p>vytvořit nový virtuální stroj</p>
         </td>
         <td>
           <p><keyseq><key>Ctrl</key><key>N</key></keyseq></p>
@@ -42,7 +42,7 @@
       </tr>
       <tr>
         <td>
-          <p>Toggle search</p>
+          <p>přepnout hledání</p>
         </td>
         <td>
           <p><keyseq><key>Ctrl</key><key>F</key></keyseq></p>
@@ -50,7 +50,7 @@
       </tr>
       <tr>
         <td>
-          <p>Go back</p>
+          <p>jít zpět</p>
         </td>
         <td>
           <p><keyseq><key>Alt</key><key>Left</key></keyseq></p>
@@ -58,7 +58,7 @@
       </tr>
       <tr>
         <td>
-          <p>Go forward</p>
+          <p>jít vpřed</p>
         </td>
         <td>
           <p><keyseq><key>Alt</key><key>Right</key></keyseq></p>
@@ -66,7 +66,7 @@
       </tr>
       <tr>
         <td>
-          <p>Cancel</p>
+          <p>zrušit</p>
         </td>
         <td>
           <p><keyseq><key>Escape</key></keyseq></p>
@@ -74,7 +74,7 @@
       </tr>
       <tr>
         <td>
-          <p>Release mouse and keyboard grab</p>
+          <p>Uvolnit zachytávání myši a klávesnice</p>
         </td>
         <td>
           <p><keyseq><key>Ctrl</key><key>Alt</key></keyseq></p>
@@ -82,7 +82,7 @@
       </tr>
       <tr>
         <td>
-          <p>Quit Boxes</p>
+          <p>ukončit Boxy</p>
         </td>
         <td>
           <p><keyseq><key>Ctrl</key><key>Q</key></keyseq></p>

@@ -23,7 +23,7 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Naučte se, jak nasavit místní virtuální stroj a jak se připojit k vzdálenému virtuálnímu stroji. <app>Boxy</app> můžete použít i k připojení ke vzdálené pracovní ploše.</desc>
+    <desc>Naučte se, jak nastavit místní virtuální stroj a jak se připojit k vzdálenému virtuálnímu stroji. <app>Boxy</app> můžete použít i k připojení ke vzdálené pracovní ploše.</desc>
   </info>
 
   <title><media type="image" mime="image/png" its:translate="no" height="36" src="figures/boxes_icon.png"/> Boxy</title>
@@ -45,11 +45,11 @@
   </section>
 
   <section id="properties" style="2column">
-    <title>Properties</title>
+    <title>Vlastnosti</title>
   </section>
 
   <section id="snapshots" style="2column">
-    <title>Snapshots</title>
+    <title>Snímky</title>
   </section>
 
   <section id="faq" style="2column">
@@ -57,7 +57,7 @@
   </section>
 
   <section id="advanced" style="2column">
-    <title>Advanced topics</title>
+    <title>Pokročilá témata</title>
   </section>
 
 </page>

@@ -15,9 +15,6 @@
 /* Build with oVirt support? */
 #undef HAVE_OVIRT
 
-/* Qemu supports smartcard */
-#undef HAVE_SMARTCARD
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -39,9 +36,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Qemu supports usbredir */
-#undef HAVE_USBREDIR
-
 /* Description */
 #undef LIBGD_GTK_HACKS
 
@@ -60,8 +54,7 @@
 /* Description */
 #undef LIBGD__VIEW_COMMON
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Name of package */

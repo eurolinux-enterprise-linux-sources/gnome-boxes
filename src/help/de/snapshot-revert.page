@@ -21,24 +21,24 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
-  <title>Auf einen Status einer Box zurückfallen</title>
+  <title>Auf einen Status einer Box zurückkehren</title>
 
-  <p><em>Zurückfallen</em> auf einen Schnappschuss stellt den Zustand der virtuellen Maschine zum Zeitpunkt der Speicherung des Schnappschusses wieder her.</p>
+  <p><em>Zurückkehren</em> auf einen Schnappschuss stellt den Zustand der virtuellen Maschine zum Zeitpunkt der Speicherung des Schnappschusses wieder her.</p>
 
   <steps>
     <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
     <item><p>Klicken Sie auf <gui>Schnappschüsse</gui> in der Seitenleiste.</p></item>
-    <item><p>Wählen Sie den Schnappschuss aus der Liste, auf den Sie zurückfallen wollen.</p></item>
+    <item><p>Wählen Sie den Schnappschuss aus der Liste, zu dem Sie zurückkehren wollen.</p></item>
     <item><p>Klicken Sie auf den Menüknopf rechts und wählen Sie <gui>In diesen Zustand zurückkehren</gui>.</p></item>
   </steps>
 

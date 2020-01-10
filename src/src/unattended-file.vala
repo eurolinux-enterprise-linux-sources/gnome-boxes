@@ -19,7 +19,7 @@ private interface Boxes.UnattendedFile : GLib.Object {
         debug ("Copying unattended file '%s' into disk drive/image '%s'", dest_name, disk_file);
 
         if (is_libarchive_compatible (disk_file)) {
-            yield run_in_thread(() => {
+            yield App.app.async_launcher.launch(() => {
                 copy_with_libarchive (disk_file, source_file.get_path (), dest_name);
             });
         } else
@@ -66,8 +66,13 @@ private interface Boxes.UnattendedFile : GLib.Object {
     private static bool is_libarchive_compatible (string filename) {
         // FIXME: We need better way to determine libarchive compatibility cause mcopy is used
         //        if this function returns false and mcopy can only handle MS-DOS images while
-        //        libarchive can handle other types of disk images
-        return GLib.ContentType.guess (filename, null, null) != "application/x-raw-disk-image";
+        //        libarchive can handle other types of disk images.
+        //
+        //        Just in case you get the idea to compare the content_type to
+        //        "application/x-raw-disk-image", that's what we were doing but then it failed
+        //        on systems with slighly older shared-mime-info where the content_type is
+        //        detected as 'application-octetstream'.
+        return !filename.has_suffix (".img") && !filename.has_suffix (".IMG");
     }
 }
 
@@ -91,6 +96,7 @@ private class Boxes.UnattendedRawFile : GLib.Object, Boxes.UnattendedFile {
 private class Boxes.UnattendedScriptFile : GLib.Object, Boxes.UnattendedFile {
     public string dest_name { get; set; }
     public string src_path { get; set; }
+    public InstallScriptInjectionMethod injection_method { get; set; }
 
     protected string disk_file {
         owned get {
@@ -110,7 +116,6 @@ private class Boxes.UnattendedScriptFile : GLib.Object, Boxes.UnattendedFile {
     protected InstallScript script { get; set; }
 
     private File unattended_tmp;
-    private InstallScriptInjectionMethod injection_method;
 
     public UnattendedScriptFile (UnattendedInstaller installer,
                                  InstallScript       script,
@@ -146,7 +151,10 @@ private class Boxes.UnattendedScriptFile : GLib.Object, Boxes.UnattendedFile {
         installer.configure_install_script (script);
         var output_dir = File.new_for_path (get_user_pkgcache ());
 
-        unattended_tmp = yield script.generate_output_async (installer.os, installer.config, output_dir, cancellable);
+        unattended_tmp = yield script.generate_output_for_media_async (installer.os_media,
+                                                                       installer.config,
+                                                                       output_dir,
+                                                                       cancellable);
 
         return unattended_tmp;
     }

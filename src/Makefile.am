@@ -18,6 +18,7 @@ DISTCLEANFILES =				\
 
 EXTRA_DIST =					\
 	CodingStyle.txt				\
+	README.logos				\
 	THANKS					\
 	HACKING					\
 	build-aux/git-version-gen		\
@@ -83,6 +84,7 @@ INSTALLED_TESTS=				\
 	spice.feature				\
 	system-broker.feature			\
 	vnc.feature				\
+	express-install.feature			\
 	$(NULL)
 INSTALLED_TESTS_TYPE=session-exclusive
 -include $(top_srcdir)/git.mk

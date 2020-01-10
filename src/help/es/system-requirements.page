@@ -27,12 +27,18 @@
       <years>2013</years>
     </credit>
 
-    <desc>Hardware required to run a <app>Boxes</app> virtual machine.</desc>
+    <desc>Requerimientos hardware para ejecutar una máquina virtual usando <app>Cajas</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
@@ -42,12 +48,9 @@
 
   <list>
     <item>
-      <p>20 GB máximo de espacio de almacenamiento.</p>
+      <p>20 GB de espacio máximo de almacenamiento.</p>
       <note style="advanced">
-      <p>This does not mean that <app>Boxes</app> will allocate 20 GB of space
-         when creating the virtual machine. The actual disk space used by
-         <app>Boxes</app> will be less than (or in worst case, equal to) the disk
-         space used by the virtual machine itself.</p>
+      <p>Esto no significa que <app>Cajas</app> reserve 20 GB de espacio al crear la máquina virtual. El espacio en disco usado en realidad por <app>Cajas</app> será inferior (o, en el peor de los casos, igual) al espacio en disco usado por la máquina virtual en sí.</p>
       </note>
     </item>
     <item>
@@ -56,9 +59,7 @@
   </list>
 
   <note style="advanced">
-    <p><app>Boxes</app> performs best if your computer processor supports
-    hardware <link xref="virtualization">virtualization extensions</link> and
-    these are enabled in the system BIOS.</p>
+    <p><app>Cajas</app> funciona mejor si el procesador de su equipo soporta las <link xref="virtualization">extensiones de virtualización hardware</link> y éstas están activadas en la BIOS del sistema.</p>
   </note>
 
 </page>

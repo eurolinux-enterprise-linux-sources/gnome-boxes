@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="snapshot-rename" xml:lang="it">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-14" status="review"/>
+    <link type="guide" xref="index#snapshots"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhill@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <desc>Dare allo snapshot un nome significativo.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Rinominare uno snapshot</title>
+
+  <p>Allo snapshot viene assegnato un nome generico basato su data e ora, come:</p>
+
+    <p><file>09/14/2014, 11:54:36 AM</file></p>
+
+  <p>Conviene cambiarlo in un nome più eloquente, come:</p>
+
+    <p><file>Fedora_22_con_jhbuild</file> o <file>Windows 7 e GTK+ 3.6.4</file>.</p>
+
+  <steps>
+    <item><p>Aprire la <link xref="interface#properties">vista delle proprietà</link> per la box. Se la box è aperta, fare clic sul pulsante <gui style="button">Proprietà</gui> della barra superiore. La vista delle proprietà è accessibile anche dalla <link xref="interface#selection">modalità di selezione</link>.</p></item>
+    <item><p>Fare clic su <gui>Snapshot</gui> nella barra laterale.</p></item>
+    <item><p>Selezionare dall'elenco lo snapshot da rinominare.</p></item>
+    <item><p>Fare clic sul pulsante menù a destra e selezionare <gui>Rinomina</gui>.</p></item>
+    <item><p>Scrivere il nome desiderato e premere <key>Invio</key>.</p></item>
+  </steps>
+
+</page>

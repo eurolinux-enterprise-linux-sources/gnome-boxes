@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="why-do-i-need-virtual-machine" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-25" status="candidate"/>
+    <link type="guide" xref="index#faq"/>
+    <link type="seealso" xref="what-is-a-virtual-machine"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Varför behöver jag en virtuell maskin?</title>
+
+  <p>En virtuell maskin kan vara användbar när du behöver köra program som bara kommer att köra under andra operativsystem, till exempel under Microsoft Windows™. En virtuell maskin kan också användas under programutveckling för att testa i en nyinstallerad miljö.</p>
+
+</page>

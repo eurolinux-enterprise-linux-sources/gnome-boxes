@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="supported-protocols" xml:lang="it">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-25" status="candidate"/>
+    <revision pkgversion="3.14.0" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#faq"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2012</years>
+    </credit>
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Quale tecnologia è impiegata da Boxes?</title>
+
+
+  <p>Boxes usa <app>qemu-kvm</app>, <app>libvirt-glib</app> e <app>spice-gtk</app> per permettere agli utenti di gestire facilmente le macchine virtuali e connettersi a macchine remote.</p>
+
+<section>
+
+<title>QEMU con KVM</title>
+
+  <p><app>QEMU</app> è un emulatore e un virtualizzatore. Come emulatore, può eseguire sistemi operativi e programmi fatti per una certa macchina (per esempio una scheda ARM) su una macchina diversa (per esempio il proprio PC). Come virtualizzatore, QEMU raggiunge una performance quasi nativa eseguendo il codice del guest direttamente nella CPU dell'host tramite KVM.</p>
+
+  <p><app>KVM</app> (Kernel-based Virtual Machine) è un modulo del kernel Linux che permette a un programma in spazio utente di usare le funzionalità di virtualizzazione hardware di vari processori.</p>
+
+</section>
+<section>
+
+<title>libvirt</title>
+
+  <p><app>libvirt</app> è un insieme di strumenti che permettono di manipolare (creare, eliminare e modificare) e monitorare le macchine virtuali su host remoti, in modo sicuro.</p>
+
+  <p><app>libvirt-glib</app> permette di accedere a libvirt attraverso un'API di alto livello orientata agli oggetti e adatta alle applicazioni basate su glib.</p>
+
+</section>
+<section>
+
+<title>SPICE</title>
+
+  <p><app>SPICE</app>, Simple Protocol for Independent Computing Environments, è un sistema per accedere e controllare i computer desktop remoti collegati in rete.</p>
+
+  <p>Il server SPICE è una libreria che gira dentro il binario di QEMU. Le sue principali funzioni sono l'autenticazione delle connessioni del client, l'inoltro dell'output video del sistema operativo guest al client e l'inoltro dell'input utente (mouse e tastiera) dal client al guest.</p>
+
+  <p><app>spice-gtk</app> è il client SPICE che fornisce una vista nel sistema operativo guest.</p>
+
+</section>
+<section>
+
+<title>VNC</title>
+
+  <p><app>VNC</app>, Virtual Network Computing, usato solo per display remoti, è un protocollo conosciuto ma limitato e lento.</p>
+
+</section>
+</page>

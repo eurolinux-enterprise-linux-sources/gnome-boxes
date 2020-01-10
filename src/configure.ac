@@ -4,7 +4,9 @@ AC_INIT([gnome-boxes],
         [m4_esyscmd(build-aux/git-version-gen .tarball-version)],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-boxes],
         [gnome-boxes],
-        [http://live.gnome.org/Boxes])
+        [https://wiki.gnome.org/Apps/Boxes])
+        # Each time the above URL changes, you gotta modify
+        # vm-configurator:update_existing_domain() to keep handling old URLs
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -52,14 +54,15 @@ GLIB_MIN_VERSION=2.38.0
 AC_SUBST(GLIB_MIN_VERSION)
 GOBJECT_INTROSPECTION_MIN_VERSION=0.9.6
 GOVIRT_MIN_VERSION=0.2.0
-GTK_MIN_VERSION=3.13.2
+GTK_MIN_VERSION=3.19.4
 GTK_VNC_MIN_VERSION=0.4.4
-LIBVIRT_GLIB_MIN_VERSION=0.1.9
-LIBVIRT_GCONFIG_MIN_VERSION=0.1.9
+LIBVIRT_GLIB_MIN_VERSION=0.2.3
+LIBVIRT_GCONFIG_MIN_VERSION=0.2.0
 LIBXML2_MIN_VERSION=2.7.8
-SPICE_GTK_MIN_VERSION=0.15
+LIBUSB_MIN_VERSION=1.0.9
+SPICE_GTK_MIN_VERSION=0.27
 GUDEV_MIN_VERSION=165
-OSINFO_MIN_VERSION=0.2.11
+OSINFO_MIN_VERSION=0.2.12
 TRACKER_SPARQL=0.13.1
 UUID_REQUIRED=1.41.3
 LIBSOUP_REQUIRED=2.38
@@ -70,9 +73,11 @@ PKG_CHECK_MODULES(BOXES, [
   gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
   gtk+-3.0 >= $GTK_MIN_VERSION
   gtk-vnc-2.0 >= $GTK_VNC_MIN_VERSION
+  libsecret-1
   libvirt-gobject-1.0 >= $LIBVIRT_GLIB_MIN_VERSION
   libvirt-gconfig-1.0 >= $LIBVIRT_GCONFIG_MIN_VERSION
   libxml-2.0 >= $LIBXML2_MIN_VERSION
+  libusb-1.0 >= $LIBUSB_MIN_VERSION
   spice-client-gtk-3.0 >= $SPICE_GTK_MIN_VERSION
   gudev-1.0 >= $GUDEV_MIN_VERSION
   libosinfo-1.0 >= $OSINFO_MIN_VERSION
@@ -130,7 +135,7 @@ else
 fi
 AM_CONDITIONAL([HAVE_OVIRT], [test "x$have_govirt" = "xyes"])
 
-VALA_CHECK([0.24.0.65], [
+VALA_CHECK([0.28.0.16], [
   gdk-pixbuf-2.0
   glib-2.0
   gtk+-3.0
@@ -144,6 +149,7 @@ VALA_CHECK([0.24.0.65], [
   libxml-2.0
   posix
   rest-0.7
+  libusb-1.0
   spice-client-gtk-3.0
 ])
 
@@ -156,22 +162,6 @@ LIBGD_INIT([
   static
   vapi
 ])
-
-AC_MSG_CHECKING([whether USB redirection was enabled with --enable-usbredir])
-AC_ARG_ENABLE(usbredir,
-	AS_HELP_STRING([--enable-usbredir],[Enable usb redirection (requires qemu 1.3)]),,
-        enable_usbredir=yes)
-AS_IF([test "x$enable_usbredir" = "xyes"],
-      [AC_DEFINE([HAVE_USBREDIR], [1], [Qemu supports usbredir]) AC_MSG_RESULT([yes])],
-      [AC_DEFINE([HAVE_USBREDIR], [0], [Qemu supports usbredir]) AC_MSG_RESULT([no])])
-
-AC_MSG_CHECKING([whether smartcard support was enabled with --enable-smartcard])
-AC_ARG_ENABLE(smartcard,
-	AS_HELP_STRING([--enable-smartcard],[Enable smartcard support]),,
-        enable_smartcard=no)
-AS_IF([test "x$enable_smartcard" = "xyes"],
-      [AC_DEFINE([HAVE_SMARTCARD], [1], [Qemu supports smartcard]) AC_MSG_RESULT([yes])],
-      [AC_DEFINE([HAVE_SMARTCARD], [0], [Qemu supports smartcard]) AC_MSG_RESULT([no])])
 
 dnl Strict compiler
 AC_ARG_ENABLE([strict-cc],
@@ -218,8 +208,6 @@ AC_MSG_NOTICE([
         prefix:                   ${prefix}
         c compiler:               ${CC} ${CFLAGS}
         build from vala sources:  $enable_vala
-        USB redirection support:  $enable_usbredir
-        Smartcard support:        $enable_smartcard
         oVirt support:            $have_govirt
         Installed tests:          $enable_installed_tests
 ])

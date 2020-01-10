@@ -6,8 +6,10 @@ private class Boxes.Property: GLib.Object {
     public Gtk.Widget widget { get; construct set; }
     public Gtk.Widget? extra_widget { get; construct set; }
     public bool reboot_required { get; set; }
+    public Gtk.Align description_alignment { get; set; default = Gtk.Align.END; }
 
     public signal void refresh_properties ();
+    public signal void flushed ();
 
     public uint defer_interval { get; set; default = 1; } // In seconds
 
@@ -39,7 +41,7 @@ private class Boxes.Property: GLib.Object {
                 return;
 
             deferred_change_id = Timeout.add_seconds (defer_interval, () => {
-                flush ();
+                flush_changes ();
 
                 return false;
             });
@@ -51,6 +53,12 @@ private class Boxes.Property: GLib.Object {
     }
 
     public void flush () {
+        flush_changes ();
+
+        flushed ();
+    }
+
+    private void flush_changes () {
         if (deferred_change == null)
             return;
 
@@ -66,6 +74,22 @@ private class Boxes.SizeProperty : Boxes.Property {
     private Gtk.Scale scale;
     private FormatSizeFlags format_flags;
 
+    private static void set_size_value_label_msg (Gtk.Label       label,
+                                                  uint64          size,
+                                                  uint64          allocation,
+                                                  FormatSizeFlags format_flags) {
+        var capacity = format_size (size, format_flags);
+
+        if (allocation == 0) {
+            label.set_text (capacity);
+        } else {
+            var allocation_str = format_size (allocation, format_flags);
+
+            // Translators: This is memory or disk size. E.g. "2 GB (1 GB used)".
+            label.set_markup (_("%s <span color=\"grey\">(%s used)</span>").printf (capacity, allocation_str));
+        }
+    }
+
     public uint64 recommended  {
         set {
             // FIXME: Better way to ensure recommended mark is not too close to min and max marks?
@@ -73,7 +97,8 @@ private class Boxes.SizeProperty : Boxes.Property {
                 value > (scale.adjustment.upper - Osinfo.GIBIBYTES))
                 return;
 
-            var size = "%s (recommended)".printf (format_size (value, format_flags));
+            // Translators: This is memory or disk size. E.g. "1 GB (recommended)".
+            var size = "<small>" + _("%s (recommended)").printf (format_size (value, format_flags)) + "</small>";
             scale.add_mark (value, Gtk.PositionType.BOTTOM, size);
         }
     }
@@ -82,16 +107,29 @@ private class Boxes.SizeProperty : Boxes.Property {
                          uint64          size,
                          uint64          min,
                          uint64          max,
+                         uint64          allocation,
                          uint64          step,
                          FormatSizeFlags format_flags) {
-        var label = new Gtk.Label (format_size ((uint64) size, format_flags));
-        label.halign = Gtk.Align.CENTER;
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        var name_label = new Gtk.Label.with_mnemonic (name);
+        name_label.halign = Gtk.Align.START;
+        name_label.get_style_context ().add_class ("dim-label");
+        box.add (name_label);
+        var value_label = new Gtk.Label ("");
+        set_size_value_label_msg (value_label, size, allocation, format_flags);
+        value_label.halign = Gtk.Align.START;
+        box.add (value_label);
 
         var scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, min, max, step);
+        name_label.mnemonic_widget = scale;
 
-        scale.add_mark (min, Gtk.PositionType.BOTTOM, format_size (min, format_flags));
-        scale.add_mark (max, Gtk.PositionType.BOTTOM,
-                        "%s (maximum)".printf (format_size (max, format_flags)));
+        var size_str = format_size (min, format_flags);
+        size_str = "<small>" + size_str + "</small>";
+        scale.add_mark (min, Gtk.PositionType.BOTTOM, size_str);
+
+        // Translators: This is memory or disk size. E.g. "1 GB (maximum)".
+        size_str =  "<small>" + _("%s (maximum)").printf (format_size (max, format_flags)) + "</small>";
+        scale.add_mark (max, Gtk.PositionType.BOTTOM, size_str);
 
         scale.set_show_fill_level (true);
         scale.set_restrict_to_fill_level (false);
@@ -101,14 +139,14 @@ private class Boxes.SizeProperty : Boxes.Property {
         scale.hexpand = true;
         scale.margin_bottom = 20;
 
-        base (name, label, scale);
+        base (null, box, scale);
 
         this.scale = scale;
         this.format_flags = format_flags;
 
         scale.value_changed.connect (() => {
             uint64 v = (uint64) scale.get_value ();
-            label.set_text (format_size (v, format_flags));
+            set_size_value_label_msg (value_label, v, allocation, format_flags);
             scale.set_fill_level (v);
 
             changed ((uint64) scale.get_value ());
@@ -117,44 +155,45 @@ private class Boxes.SizeProperty : Boxes.Property {
 }
 
 private class Boxes.StringProperty : Boxes.Property {
-    public signal bool changed (string value);
-
-    public bool editable {
-        get { return entry.editable; }
-        set { entry.editable = value; }
+    public string text {
+        get { return (widget as Gtk.Label).label; }
     }
+
+    public StringProperty (string name, string value) {
+        var label = new Gtk.Label (value);
+        label.halign = Gtk.Align.START;
+        label.selectable = true;
+
+        base (name, label, null);
+    }
+}
+
+private class Boxes.EditableStringProperty : Boxes.Property {
+    public signal void changed (string value);
 
     public string text {
         get { return entry.text; }
         set { entry.text = value; }
     }
 
-    private Boxes.EditableEntry entry;
+    private Gtk.Entry entry;
 
-    public StringProperty (string name, string value) {
-        var entry = new Boxes.EditableEntry ();
+    public EditableStringProperty (string name, string value) {
+        var entry = new Gtk.Entry ();
 
         base (name, entry, null);
         this.entry = entry;
 
         entry.text = value;
-        entry.selectable = true;
 
-        entry.editing_done.connect (() => {
-            if (!changed (entry.text))
-                entry.start_editing ();
+        entry.notify["text"].connect (() => {
+            changed (entry.text);
         });
     }
 }
 
-[Flags]
-public enum PropertyCreationFlag {
-    NONE,
-    NO_USB,
-}
-
 private interface Boxes.IPropertiesProvider: GLib.Object {
-    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page, ref PropertyCreationFlag flags);
+    public abstract List<Boxes.Property> get_properties (Boxes.PropertiesPage page);
 
     protected Boxes.Property add_property (ref List<Boxes.Property> list,
                                            string? name,
@@ -174,14 +213,24 @@ private interface Boxes.IPropertiesProvider: GLib.Object {
         return property;
     }
 
+    protected Boxes.EditableStringProperty add_editable_string_property (ref List<Boxes.Property> list,
+                                                                         string                   name,
+                                                                         string                   value) {
+        var property = new EditableStringProperty (name, value);
+        list.append (property);
+
+        return property;
+    }
+
     protected Boxes.SizeProperty add_size_property (ref List<Boxes.Property> list,
                                                     string                   name,
                                                     uint64                   size,
                                                     uint64                   min,
                                                     uint64                   max,
+                                                    uint64                   allocation,
                                                     uint64                   step,
                                                     FormatSizeFlags          format_flags = FormatSizeFlags.DEFAULT) {
-        var property = new SizeProperty (name, size, min, max, step, format_flags);
+        var property = new SizeProperty (name, size, min, max, allocation, step, format_flags);
         list.append (property);
 
         return property;

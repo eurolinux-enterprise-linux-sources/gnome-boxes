@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="clipboard" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2014</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Använd urklipp med <app>Boxes</app>.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Dela urklipp</title>
+
+  <p>Urklipp på värdmaskinen kan delas med gästen i <app>Boxes</app>.</p>
+
+  <steps>
+    <item><p>Öppna <link xref="interface#properties">egenskapsvyn</link> för boxen. Om boxen är öppen, klicka på knappen <gui style="button">Egenskaper</gui> i rubrikfältet. Egenskapsvyn kan också nås från <link xref="interface#selection">valläget</link>.</p></item>
+    <item><p>Klicka på <gui>Visa</gui> i sidopanelen.</p></item>
+    <item><p>Slå om <gui>Dela urklipp</gui> till <gui>PÅ</gui>.</p></item>
+  </steps>
+
+  <note style="important">
+    <p>Medan expressinstallation typiskt tar hand om att göra delat urklipp tillgängligt för dig är expressinstallation inte tillgängligt för alla operativsystem. I de fallen eller om du väljer manuell installation måste SPICE-vdagent installeras i gästen för att delat urklipp ska fungera. I de flesta Linux-baserade operativsystem heter paketet <em>spice-vdagent</em>. Om gästen kör ett annat operativsystem, kolla på <link href="http://www.spice-space.org/download.html">hämtningssidan för SPICE</link>.</p>
+  </note>
+
+</page>

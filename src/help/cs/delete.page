@@ -12,20 +12,18 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Remove a box that you no longer need.</desc>
+    <desc>Jak odstranit box, který již nepotřebujete.</desc>
   </info>
 
-  <title>Delete a box</title>
+  <title>Odstranění boxu</title>
 
-  <p>When a box is no longer needed, it can be deleted from <app>Boxes</app>.</p>
+  <p>Když některý box již nadále nepotřebujete, můžete jej z <app>Boxů</app> vymazat.</p>
 
   <steps>
-    <item><p>Select one or more boxes. In the collection view, right click a
-    box to be deleted.</p></item>
-    <item><p><link xref="interface#selection">Selection mode</link>
-    opens. Click additional boxes to select them for deletion.</p></item>
-    <item><p>Click the <gui style="button">Delete</gui> button.</p></item>
-    <item><p>Click the <key>X</key> to confirm.</p></item>
+    <item><p>Vyberte jeden či více boxů. V zobrazení skupin klikněte pravým tlačítkem na box, který se má smazat.</p></item>
+    <item><p>Otevře se <link xref="interface#selection">režim výběru</link>. Klikněte na další boxy, které se mají vybrat ke smazání.</p></item>
+    <item><p>Klikněte na <gui style="button">Odstranit</gui>.</p></item>
+    <item><p>Kliknutím na <key>X</key> odstranění zakončete.</p></item>
   </steps>
 
 </page>

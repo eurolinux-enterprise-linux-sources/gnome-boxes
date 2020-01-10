@@ -10,7 +10,7 @@
       <years>2014</years>
     </credit>
 
-    <desc>Entfernen Sie den Schnappschuss, den sie nicht mehr benötigen.</desc>
+    <desc>Entfernen Sie den Schnappschuss, den Sie nicht mehr benötigen.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Christian Kirbach</mal:name>
@@ -21,25 +21,25 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Einen Schnappschuss löschen</title>
 
-  <p>Ein nicht länger benötigter Schnappschuss kann aus der Liste entfernt werden.</p>
+  <p>Ein nicht mehr benötigter Schnappschuss kann aus der Liste entfernt werden.</p>
 
   <steps>
     <item><p>Öffnen Sie die <link xref="interface#properties">Eigenschaftenansicht</link> der Box. Klicken Sie anschließend auf den Knopf <gui style="button">Eigenschaften</gui> in der Kopfzeile. Die Eigenschaftenansicht können Sie auch im <link xref="interface#selection">Auswahlmodus</link> öffnen.</p></item>
     <item><p>Klicken Sie auf <gui>Schnappschüsse</gui> in der Seitenleiste.</p></item>
     <item><p>Wählen Sie den zu löschenden Schnappschuss in der Liste.</p></item>
-    <item><p>Klicken Sie mit der rechten Maustaste auf den Knopf und wählen Sie <gui>Löschen</gui>.</p></item>
+    <item><p>Klicken Sie auf die Menütaste rechts und wählen Sie <gui>Löschen</gui>.</p></item>
     <item><p>Bestätigen Sie, dass der Schnappschuss dauerhaft gelöscht werden soll.</p></item>
   </steps>
 

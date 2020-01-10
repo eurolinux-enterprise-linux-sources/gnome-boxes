@@ -22,9 +22,15 @@
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
@@ -48,7 +54,7 @@
 
   <p><app>libvirt</app> es un kit de herramientas para manipular (crear, eliminar y modificar) y monitorizar máquinas virtuales en equipos remotos de manera segura.</p>
 
-  <p><app>libvirt-glib</app> abstrae libvirt para proporcionar una API de alto nivel orientada a objetos adecuada para aplicaciones basadas el glib.</p>
+  <p><app>libvirt-glib</app> abstrae libvirt para proporcionar una API de alto nivel orientada a objetos adecuada para aplicaciones basadas en glib.</p>
 
 </section>
 <section>
@@ -57,9 +63,9 @@
 
   <p><app>SPICE</app>, «Simple Protocol for Independent Computing Environments», es un sistema para acceder y controlar escritorios remotos a través de la red.</p>
 
-  <p>El servidor SPICE es una biblioteca que se ejecuta dentro del binario de QUEMU. Es la principal responsable de la autenticación de conexiones de clientes, delegando la salida gráfica al cliente en el SO anfitrión y la entrada de usuario (ratón y teclado) del cliente al anfitrión.</p>
+  <p>El servidor SPICE es una biblioteca que se ejecuta dentro del binario de QEMU. Es la principal responsable de la autenticación de conexiones de clientes, transmitiendo la salida gráfica del SO invitado al cliente y la entrada de usuario (ratón y teclado) del cliente al invitado.</p>
 
-  <p><app>spice-gtk</app> es es cliente SPICE que proporciona una vista dentro del SO anfitrión.</p>
+  <p><app>spice-gtk</app> es el cliente SPICE que proporciona una vista dentro del SO invitado.</p>
 
 </section>
 <section>

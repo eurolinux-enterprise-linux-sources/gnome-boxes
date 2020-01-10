@@ -10,43 +10,27 @@
       <years>2014</years>
     </credit>
 
-    <desc>Create a box using a Continuous disk image.</desc>
+    <desc>Jav vytvořit box pomocí obrazu disku Continuous.</desc>
   </info>
 
-  <title>Using Boxes with Continuous</title>
+  <title>Používání Boxů s Continuous</title>
 
-  <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link>
-  is GNOME's continuous build system. Boxes is able to create a box from a
-  Continuous <em>qcow2</em> image.</p>
+  <p><link href="https://wiki.gnome.org/Projects/GnomeContinuous">Continuous</link> je průběžné sestavení systému GNOME. <app>Boxy</app> dokáží vytvořit box z obrazu <em>qcow2</em> s Continuous.</p>
 
   <steps>
-    <item><p>The latest images are found at the link provided in the
-    <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Installation</link>
-    section of the wiki page.</p>
+    <item><p>Nejnovější obraz naleznete pod odkazem nabízeným v části <link href="https://wiki.gnome.org/Projects/GnomeContinuous#Installation">Instalace</link> na stránce wiki.</p>
       <note style="info">
-        <p>Images are available in <em>runtime</em> and <em>devel-debug</em>
-        flavors. The <em>devel-debug</em> image results in a virtual machine
-        containing developer tools and headers.</p>
+        <p>Obrazy jsou k dispozici ve variantách <em>runtime</em> a <em>devel-debug</em>. Výsledkem obrazu <em>devel-debug</em> je virtuální stroj obsahující vývojářské nástroje a hlavičkové soubory.</p>
       </note>
     </item>
-    <item><p>In <app>Boxes</app>, click <gui style="button">New</gui> to launch
-    the box creation wizard.</p></item>
+    <item><p>V <app>Boxy</app> klikněte na <gui style="button">Nový</gui> a spustí se průvodce vytvořením boxu.</p></item>
     <item><p>Jako první je zobrazena úvodní informace. Klikněte na <gui style="button">Pokračovat</gui>.</p></item>
-    <item><p>Click <gui style="button">Enter URL</gui> and type the URL
-    including the full filename of the gzipped runtime or devel-debug qcow2
-    image. Boxes will download and install the image.</p>
-    <p>If you have already saved an image to disk, click
-    <gui style="button">Select a file</gui> and navigate to the
-    Continuous qcow2 image. Select the file and click
-    <gui style="button">Open</gui>.</p></item>
-    <item><p>The <gui>Review</gui> page opens. Click
-    <gui style="button">Customize</gui> to adjust memory or disk size, or to
-    rename the box.</p></item>
-    <item><p>Click <gui style="button">Create</gui>. The collection view
-    returns, and the installation of the box begins.</p></item>
+    <item><p>Klikněte na <gui style="button">Zadat adresu URL</gui> a vepište adresu URL včetně celého názvu souboru s obrazem qcow2 obsahujícím runtime nebo devel-debug komprimovaný pomocí gzip. Boxy obraz stáhnou a nainstalují.</p>
+    <p>V případě, že máte obraz již uložený na svém disku, klikněte na <gui style="button">Vybrat soubor</gui> a vyhledejte obraz qcow2 s Continuous. Vyberte soubor a klikněte na <gui style="button">Otevřít</gui>.</p></item>
+    <item><p>Otevře se stránka <gui>Shrnutí</gui>. Kliknutím na <gui style="button">Přizpůsobit</gui> můžete upravit velikost paměti a disku nebo box přejmenovat.</p></item>
+    <item><p>Klikněte na <gui style="button">Vytvořit</gui>. Vrátíte se do zobrazení skupin a instalace započne.</p></item>
   </steps>
 
-  <p>The information necessary to upgrade a Continuous vm  can be found on the
-  <link href="https://wiki.gnome.org/Projects/GnomeContinuous">wiki page</link>.</p>
+  <p>Informace potřebné k povýšení virtuálního stroje Continuous najdete na <link href="https://wiki.gnome.org/Projects/GnomeContinuous">stránce wiki</link>.</p>
 
 </page>

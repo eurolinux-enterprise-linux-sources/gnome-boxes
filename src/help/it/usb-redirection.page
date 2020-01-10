@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="usb-redirection" xml:lang="it">
+  <info>
+
+    <revision pkgversion="3.8.0" version="0.1" date="2013-03-24" status="candidate"/>
+
+    <link type="guide" xref="index#use"/>
+
+    <credit type="author copyright">
+      <name>Baptiste Mille-Mathias</name>
+      <email>baptistem@gnome.org</email>
+      <years>2012</years>
+    </credit>
+    <credit type="editor">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Permettere alla box di accedere a un dispositivo USB.</desc>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Federico Bruni</mal:name>
+      <mal:email>fede@inventati.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Redirezione USB</title>
+
+  <p><sys>USB</sys> è un protocollo hardware universale usato per collegare qualsiasi tipo di dispositivo al computer. La <sys>redirezione USB</sys> fa sì che i dispositivi collegati nel computer locale siano disponibili alle macchine a cui si è connessi in <app>Boxes</app>. Per esempio, una periferica USB o una webcam appariranno come direttamente connessi al computer remoto o virtuale.</p>
+
+  <steps>
+    <title>Per abilitare i dispositivi USB dell'host in una box:</title>
+    <item><p>Fare clic destro sulla box nella vista della raccolta oppure, se la box è già aperta, fare clic sul pulsante delle proprietà nella barra degli strumenti.</p></item>
+    <item><p>Fare clic su <gui style="menuitem">Dispositivi</gui> nella barra laterale.</p></item>
+    <item><p>Assicurarsi che <gui>Redirige nuovi dispositivi USB</gui> sia su <gui style="switch">ON</gui>. I <gui>dispositivi USB</gui> connessi alla macchina host sono mostrati in un elenco.</p></item>
+    <item><p>Impostare il selettore vicino a ciascun dispositivo desiderato su <gui style="switch">ON</gui>.</p></item>
+  </steps>
+
+</page>

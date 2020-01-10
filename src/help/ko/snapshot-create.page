@@ -13,9 +13,9 @@
     <desc>다음에 사용할 박스의 상태를 저장합니다.</desc>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Seong-ho Cho</mal:name>
+      <mal:name>조성호</mal:name>
       <mal:email>shcho@gnome.org</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014, 2016.</mal:years>
     </mal:credit>
   </info>
 
@@ -24,11 +24,7 @@
   <p>원하는 설정으로 완벽하게 가상머신이 동작한다면, 프로그램 업그레이드 또는 바뀐 설정으로 이 상태가 깨지기 전에 설정 사항을 저장하고 싶으실지도 모릅니다. 박스의 스냅샷 취득을 통해 현재 상태를 보존하여 여러분이 원하는 시점으로 언제든 돌아갈 수 있습니다.</p>
 
   <steps>
-    <item><p>Open the <link xref="interface#properties">properties view</link>
-    for the box. If the box is open, click the
-    <gui style="button">Properties</gui> button in the header bar. The
-    properties view can also be accessed from
-    <link xref="interface#selection">selection mode</link>.</p></item>
+    <item><p>박스의 <link xref="interface#properties">속성 보기</link>를 여십시오. 박스를 열었으면 헤더 표시줄에서 <gui style="button">속성</gui>을 누르십시오. 속성 보기는 <link xref="interface#selection">선택 모드</link>에서도 들어갈 수 있습니다.</p></item>
     <item><p>가장자리 표시줄에 있는 <gui>스냅샷</gui>을 누르십시오.</p></item>
     <item><p><gui>스냅샷</gui> 목록 하단에 있는 <key>+</key>키를 누르십시오.</p></item>
   </steps>

@@ -17,28 +17,34 @@
       <years>2013</years>
     </credit>
 
-    <desc>Permitir que la caja acceda a un dispositivo USB.</desc>
+    <desc>Permitir a la caja el acceso a los dispositivos USB.</desc>
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
   <title>Redirección USB</title>
 
-  <p><sys>USB</sys> es un protocolo de bus hardware universal usado para conectar cualquier tipo de dispositivo a su equipo. La <sys>redirección USB</sys> hace que su los dispositivos conectados a su equipo local estén disponibles en las maquinas a las que se conecta con <app>Cajas</app>. Por ejemplo, un pendrive USB o una cámara web aparecerá conectados directamente al equipo remoto o virtual.</p>
+  <p><sys>USB</sys> es un protocolo de bus hardware universal usado para conectar cualquier tipo de dispositivo a su equipo. La <sys>redirección USB</sys> hace que los dispositivos conectados a su equipo local estén disponibles en las máquinas a las que se conecta con <app>Cajas</app>. Por ejemplo, un pendrive USB o una cámara web aparecerán conectados directamente al equipo remoto o virtual.</p>
 
   <steps>
     <title>Para activar los dispositivos USB del anfitrión en una caja:</title>
     <item><p>Pulse con el botón derecho sobre la caja en la vista de colecciones o, si la caja ya está abierta, pulse en el botón de propiedades en la barra de herramientas.</p></item>
     <item><p>Pulse <gui style="menuitem">Dispositivos</gui> en la barra lateral.</p></item>
     <item><p>Asegúrese de que la opción <gui>Redireccionar dispositivos USB nuevos</gui> está <gui style="switch">Activada</gui>. Los <gui>dispositivos USB</gui> conectados al equipo anfitrión se mostrarán en una lista.</p></item>
-    <item><p><gui style="switch">Active</gui> el interruptor que hay junto a cada dispositivo que quiera.</p></item>
+    <item><p><gui style="switch">Active</gui> el interruptor que hay junto a cada dispositivo.</p></item>
   </steps>
 
 </page>

@@ -14,12 +14,26 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">0</property>
-        <property name="margin-top">15</property>
-        <property name="margin-bottom">15</property>
+        <property name="margin-top">30</property>
+        <property name="margin-bottom">30</property>
         <style>
-          <class name="boxes-source-nb"/>
           <class name="boxes-menu"/>
         </style>
+
+        <child>
+          <object class="GtkLabel" id="instruction_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Insert operating system installation media or select a source below</property>
+            <property name="wrap">True</property>
+            <property name="halign">start</property>
+            <property name="margin-bottom">20</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+
         <child>
           <object class="BoxesWizardScrolled" id="media_scrolled"/>
         </child>
@@ -44,7 +58,8 @@
                   <object class="GtkLabel" id="enter_url_label">
                     <property name="visible">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Enter URL</property>
+                    <property name="use-underline">True</property>
+                    <property name="label" translatable="yes">_Enter URL</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -86,7 +101,8 @@
                   <object class="GtkLabel" id="select_file_label">
                     <property name="visible">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Select a file</property>
+                    <property name="use-underline">True</property>
+                    <property name="label" translatable="yes">_Select a file</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -128,6 +144,7 @@
                   <object class="GtkLabel" id="libvirt_sys_import_label">
                     <property name="visible">True</property>
                     <property name="halign">start</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -148,6 +165,24 @@
             </child>
           </object>
         </child>
+
+        <child>
+          <object class="GtkLabel" id="trademark_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Any trademarks shown above are used merely for identification of software products you have already obtained and are the property of their respective owners.</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">50</property>
+            <property name="margin-top">20</property>
+            <style>
+              <class name="boxes-logo-notice-label"/>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
       </object>
 
       <packing>
@@ -164,7 +199,6 @@
         <property name="margin-top">15</property>
         <property name="margin-bottom">15</property>
         <style>
-          <class name="boxes-source-nb"/>
           <class name="boxes-menu"/>
         </style>
         <child>
@@ -198,9 +232,6 @@
                     <property name="visible">True</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Enter URL</property>
-                    <style>
-                      <class name="boxes-source-label"/>
-                    </style>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -215,55 +246,57 @@
         <child>
           <object class="GtkBox" id="url_entry_vbox">
             <property name="visible">True</property>
-            <property name="spacing">20</property>
             <property name="orientation">vertical</property>
             <style>
               <class name="boxes-menu-row"/>
             </style>
 
             <child>
-              <object class="GtkEntry" id="url_entry">
+              <object class="GtkLabel" id="url_description_label">
                 <property name="visible">True</property>
-                <property name="margin-top">10</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <signal name="activate" handler="on_url_entry_activated"/>
+                <property name="margin-top">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">64</property>
+                <property name="halign">start</property>
+                <property name="xalign">0.0</property>
+                <property name="label" translatable="yes">Enter an address for the box you want to add. Addresses can be of installation images, SPICE and VNC servers, or oVirt or Libvirt brokers.</property>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+              </packing>
             </child>
 
             <child>
-              <object class="GtkBox" id="url_entry_hbox">
+              <object class="GtkLabel" id="url_examples_label">
                 <property name="visible">True</property>
-                <property name="margin-bottom">10</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <property name="spacing">0</property>
-                <property name="orientation">horizontal</property>
-                <child>
-                  <object class="GtkImage" id="url_image">
-                    <property name="visible">True</property>
-                    <property name="icon-name">network-workgroup</property>
-                    <property name="icon-size">0</property>
-                    <property name="pixel-size">96</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                  </packing>
-                </child>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">18</property>
+                <property name="use-markup">True</property>
+                <property name="wrap">True</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Examples: http://download.com/image.iso, spice://somehost:5051, ovirt://host/path</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+              </packing>
+            </child>
 
-                <child>
-                  <object class="GtkLabel" id="url_description_label">
-                    <property name="visible">True</property>
-                    <property name="use-markup">True</property>
-                    <property name="wrap">True</property>
-                    <property name="halign">start</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                  </packing>
-                </child>
+            <child>
+              <object class="GtkEntry" id="url_entry">
+                <property name="visible">True</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+                <property name="margin-bottom">24</property>
+                <signal name="activate" handler="on_url_entry_activated"/>
               </object>
             </child>
           </object>

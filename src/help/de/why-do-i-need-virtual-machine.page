@@ -30,18 +30,18 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
   <title>Warum brauche ich eine virtuelle Maschine?</title>
 
-  <p>Eine virtuelle Maschine ist nützlich, wenn Sie Anwendungen ausführen müssen, die nur unter einem anderen Betriebssystem wie z.B. auf Microsoft Windows™ laufen. Eine virtuelle Maschine kann auch währen der Softwareentwicklung zum Testen in einer unberührten Umgebung eingesetzt werden.</p>
+  <p>Eine virtuelle Maschine ist nützlich, wenn Sie Anwendungen ausführen müssen, die nur unter einem anderen Betriebssystem wie z.B. auf Microsoft Windows™ laufen. Eine virtuelle Maschine kann auch während der Softwareentwicklung zum Testen in einer unberührten Umgebung eingesetzt werden.</p>
 
 </page>

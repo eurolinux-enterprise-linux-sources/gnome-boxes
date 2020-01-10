@@ -30,13 +30,13 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Benjamin Steinwender</mal:name>
       <mal:email>b@stbe.at</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014-2015</mal:years>
     </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
-      <mal:name>Bernd Homuth</mal:name>
-      <mal:email>dev@hmt.im</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
     </mal:credit>
   </info>
 
@@ -60,7 +60,7 @@
 
   <p><app>libvirt</app> ist ein Werkzeugsatz zum sicheren Manipulieren (Erstellen, Löschen und Bearbeiten) und Überwachen virtueller Maschinen auf entfernten Rechnern.</p>
 
-  <p><app>libvirt-glib</app> bietet libvirt über eine objektorientierte Programmierschnittstelle für glib-basierte Anwendungen an.</p>
+  <p><app>libvirt-glib</app> bietet libvirt in einer höheren objektorientierten Programmierschnittstelle an, passend für die Verwendung in glib-basierten Anwendungen.</p>
 
 </section>
 <section>

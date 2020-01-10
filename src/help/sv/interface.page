@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="interface" xml:lang="sv">
+  <info>
+    <revision pkgversion="3.8.0" date="2013-03-23" status="candidate"/>
+    <revision pkgversion="3.14" date="2014-09-13" status="review"/>
+    <link type="guide" xref="index#use" group="#first"/>
+
+    <credit type="author copyright">
+      <name>Michael Hill</name>
+      <email>mdhillca@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
+
+    <desc>Hitta runt i programmet.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Sebastian Rasmussen</mal:name>
+      <mal:email>sebras@gmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
+
+  <title>Boxes användargränssnitt</title>
+
+  <section id="collection">
+  <title>Samlingsvy</title>
+
+  <p>När du först startar <app>Boxes</app> kommer välkomstskärmen att be dig klicka på knappen <gui style="button">Ny</gui> för att skapa din första box. Vid efterföljande uppstarter kommer <app>Boxes</app> att öppnas i <em>samlingsvyn</em> och visa miniatyrbilder av dina boxar i ett rutnät. Favoriter eller ofta använda boxar kommer att visas längst upp. Samlingsvyn låter dig:</p>
+
+  <list>
+    <item><p>Click <gui style="button">New</gui> to
+    <link xref="create">create</link> a box.</p></item>
+    <item><p>Klicka på en box för att starta en session för en virtuell maskin.</p></item>
+    <item><p><link xref="search">Söka</link> efter en box.</p></item>
+    <item><p>Klicka på kryssknappen eller välja en box för att gå in i valläge.</p></item>
+  </list>
+
+  </section>
+
+  <section id="wizard">
+  <title>Guiden</title>
+
+  <p>Att klicka på <gui style="button">Ny</gui> innebär att <em>guiden</em> startas, som kommer att guida dig genom stegen för att skapa en box.</p>
+
+  </section>
+
+  <section id="selection">
+  <title>Valläge</title>
+
+  <p>I samlingsvyn, om du klickar på kryssknappen eller högerklickar på en miniatyrbild kommer du att hamna i <em>valläget</em> där diverse åtgärder kan utföras på boxar, individuellt eller i grupper. Du kan:</p>
+
+  <list>
+    <item><p><link xref="delete">Ta bort</link> en eller flera boxar.</p></item>
+    <item><p>Markera en eller flera boxar som favoriter.</p></item>
+    <item><p>Pausa en box.</p></item>
+    <item><p>Öppna en box i ett nytt fönster.</p></item>
+    <item><p>Klicka på knappen <gui style="button">Egenskaper</gui> för att gå in i egenskapsvyn för boxen.</p></item>
+  </list>
+
+  </section>
+
+  <section id="properties">
+  <title>Egenskapsvy</title>
+
+  <p>Att klicka på knappen <gui style="button">Egenskaper</gui> i valläget får <em>egenskapsvyn</em> att öppnas, där vissa av detaljerna om en box kan konfigureras. Huvudfönstret visar namnet på boxen, vilken virtualiserare som används och URI:n som kan användas för att nå boxen från utanför <app>Boxes</app>. Dessutom visar sidopanelen:</p>
+
+  <list>
+    <item><p>En skärmbild av boxen.</p></item>
+    <item><p>Grafer som i realtid visar CPU-, disk I/O- och nätverksaktivitet.</p></item>
+    <item><p>Knappen <gui style="button">Tvinga nedstängning</gui> möjliggör för dig att <link xref="shutdown">tvinga en box att stänga ner</link>.</p></item>
+  </list>
+
+  <p>Egenskapsvyn i huvudfönstret låter dig visa eller ändra inställningar beroende på vilken av följande kategorier som valts i sidopanelen:</p>
+
+  <list>
+    <item><p><gui>System</gui>-inställningar: minne, maximalt tillåtet diskutrymme och <gui>Felsökningsloggen</gui>.</p></item>
+    <item><p><gui>Skärm</gui>-inställningar: skärmprotokoll, delning av urklipp, omskalning av skärmen.</p></item>
+    <item><p><gui>Enhets</gui>-inställningar: åtkomst till systemets USB- eller CD/DVD-enheter.</p></item>
+    <item><p><gui>Ögonblicksavbild</gui>: <link xref="snapshot-create">skapa</link> och hantera ögonblicksavbilder för boxen.</p></item>
+  </list>
+
+  <p>Egenskapsvyn kan också kommas åt via guidens knapp <gui style="button">Anpassa</gui> under boxinställning och genom att klicka på verktygsknappen i rubrikfältet för en körande session.</p>
+
+  </section>
+
+</page>

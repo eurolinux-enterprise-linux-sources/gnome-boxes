@@ -13,12 +13,18 @@
 
     <include xmlns="http://www.w3.org/2001/XInclude" href="legal.xml"/>
 
-    <desc>Un vistazo a la aplicación.</desc>
+    <desc>Eche un vistazo a la aplicación.</desc>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
@@ -27,19 +33,13 @@
   <section id="collection">
   <title>Vista de colecciones</title>
 
-  <p>When you first launch <app>Boxes</app>, the greeting tells you to click the
-  <gui style="button">New</gui> button to create your first box. On subsequent
-  visits, <app>Boxes</app> opens in the <em>collection view</em>, displaying
-  thumbnails of your boxes in a grid. Favourites or frequently-used boxes
-  appear at the top of the list. Collection view allows you to:</p>
+  <p>Cuando <app>Cajas</app> se ejecute por primera vez, el mensaje de bienvenida le dirá que pulse el botón <gui style="button">Nuevo</gui>. Las próximas veces que se ejecute, <app>Cajas</app> abrirá la <em>vista de colecciones</em>, mostrando miniaturas de sus cajas. Sus cajas favoritas o las usadas más frecuentemente aparecerán en la parte superior de la lista. La vista de colecciones le permite:</p>
 
   <list>
-    <item><p>Click <gui style="button">New</gui> to
-    <link xref="create">create</link> a box.</p></item>
-    <item><p>Click a box to launch a virtual machine session.</p></item>
-    <item><p><link xref="search">Search</link> for a box.</p></item>
-    <item><p>Click the checkmark button or select a box to enter selection
-    mode.</p></item>
+    <item><p>Pulse <gui style="button">Nueva</gui> para <link xref="create">crear</link> una caja.</p></item>
+    <item><p>Pulse sobre una caja para ejecutar una sesión de máquina virtual.</p></item>
+    <item><p><link xref="search">Buscar</link> una caja.</p></item>
+    <item><p>Pulse el botón del «tick» o seleccione una caja para activar el modo de selección.</p></item>
   </list>
 
   </section>
@@ -54,17 +54,14 @@
   <section id="selection">
   <title>Modo de selección</title>
 
-  <p>In collection view, clicking the checkmark button or right-clicking a
-  thumbnail puts you in <em>selection mode</em>, where various operations can be
-  performed on boxes, individually or in groups. You can:</p>
+  <p>En la vista de colecciones, al pulsar el botón del «tick» o al pulsar con el botón derecho sobre una miniatura se activa el <em>modo de selección</em>, en el que se pueden realizar varias operaciones sobre las cajas, individualmente o en grupo. Puede:</p>
 
   <list>
-    <item><p><link xref="delete">Delete</link> a box or boxes.</p></item>
-    <item><p>Mark a box or boxes as favorites.</p></item>
-    <item><p>Pause a box.</p></item>
-    <item><p>Open a box in a new window.</p></item>
-    <item><p>Click the <gui style="button">Properties</gui> button to enter the
-    properties view of a box.</p></item>
+    <item><p><link xref="delete">Eliminar</link> una o varias cajas.</p></item>
+    <item><p>Marcar una o varias cajas como favoritas.</p></item>
+    <item><p>Pausar una caja.</p></item>
+    <item><p>Abrir una caja en una ventana nueva.</p></item>
+    <item><p>Pulse el botón <gui style="button">Propiedades</gui> para abrir la vista de propiedades de una caja.</p></item>
   </list>
 
   </section>
@@ -72,36 +69,24 @@
   <section id="properties">
   <title>Vista de propiedades</title>
 
-  <p>Clicking the <gui style="button">Properties</gui> button in selection mode
-  opens the <em>properties view</em>, where some of the details of a box can be
-  configured. The main window displays the name of the box, the virtualizer
-  being used, and the URI that can be used to access the box from outside of
-  <app>Boxes</app>. In addition, the sidebar displays:</p>
+  <p>Al pulsar el botón <gui style="button">Propiedades</gui> en el modo de selección se abrirá la <em>vista de propiedades</em>, donde se pueden configurar los detalles de una caja. La ventana principal muestra el nombre de la caja, el virtualizados usado y el URI que puede usarse para acceder a la caja desde fuera de <app>Cajas</app>. Además, la barra lateral muestra:</p>
 
   <list>
-    <item><p>A screenshot of the box.</p></item>
-    <item><p>Running graphs of CPU, disk I/O and network activity.</p></item>
-    <item><p>The <gui style="button">Force Shutdown</gui> button, which enables
-    you to <link xref="shutdown">force a box to shut down</link>.</p></item>
+    <item><p>Una captura de pantalla de la caja.</p></item>
+    <item><p>Gráficos de ejecución de CPU, entrada/salida de disco y actividad de red.</p></item>
+    <item><p>El botón <gui style="button">Forzar apagado</gui>, le permite <link xref="shutdown">forzar el apagado de una caja</link>.</p></item>
   </list>
 
-  <p>The properties view main window allows you to display or change settings
-  depending on which of the following categories is selected in the sidebar:</p>
+  <p>La ventana principal de la vista de propiedades le permite visualizar o cambiar la configuración dependiendo de cuál de las siguientes categorías está seleccionada en la barra lateral:</p>
 
   <list>
-    <item><p><gui>System</gui> settings: memory, maximum allowed disk space,
-    and the <gui>Trouble Log</gui>.</p></item>
-    <item><p><gui>Display</gui> settings: display protocol, clipboard sharing,
-    resizing of the display.</p></item>
-    <item><p><gui>Device</gui> settings: access to system USB or CD/DVD
-    devices.</p></item>
-    <item><p><gui>Snapshots</gui>: <link xref="snapshot-create">creating</link>
-    and managing snaphots of the box.</p></item>
+    <item><p>Configuración del <gui>Sistema</gui>: memoria, espacio máximo permitido de disco y el <gui>Registro de errores</gui>.</p></item>
+    <item><p>Configuración de <gui>Pantalla</gui>: protocolo de visualización, compartición del portapapeles y redimensionado de la pantalla.</p></item>
+    <item><p>Configuración de <gui>Dispositivos</gui>: acceso a los dispositivos USB o CD/DVD del sistema.</p></item>
+    <item><p><gui>Instantáneas</gui>: <link xref="snapshot-create">creación</link> y administración de instantáneas de la caja.</p></item>
   </list>
 
-  <p>The properties view can also be accessed using the wizard's
-  <gui style="button">Customize</gui> button during box setup, and by clicking
-  the tool button in the header bar of a running session.</p>
+  <p>También puede acceder a la vista de propiedades usando el botón <gui style="button">Personalizar</gui> del asistente durante la configuración de la caja, o bien pulsando en la barra de título mientras la sesión está activa.</p>
 
   </section>
 

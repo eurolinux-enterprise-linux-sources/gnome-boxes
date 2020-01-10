@@ -6,6 +6,11 @@ using Gdk;
 private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     public const uint TRANSITION_DURATION = 400; // milliseconds
 
+    public enum ViewType {
+        ICON = 1,
+        LIST = 2,
+    }
+
     public UIState previous_ui_state { get; protected set; }
     public UIState ui_state { get; protected set; }
 
@@ -19,6 +24,7 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
         set {
             if (_current_item != null) {
                 _current_item.disconnect (machine_state_notify_id);
+                _current_item.disconnect (machine_deleted_notify_id);
                 machine_state_notify_id = 0;
                 machine_deleted_notify_id = 0;
             }
@@ -60,30 +66,28 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
         }
     }
 
-    private void on_machine_state_notify () {
-       if (this != App.app.main_window && (current_item as Machine).state != Machine.MachineState.RUNNING)
-           on_delete_event ();
+    public Notificationbar notificationbar {
+        get {
+            switch (ui_state) {
+            case UIState.WIZARD:
+                return wizard_window.notificationbar;
+            case UIState.PROPERTIES:
+                return props_window.notificationbar;
+            default:
+                return _notificationbar;
+            }
+        }
     }
 
-    private void on_machine_deleted_notify () {
-       if (this != App.app.main_window && (current_item as Machine).deleted)
-           on_delete_event ();
-    }
+    public WizardWindow wizard_window;
+    public PropertiesWindow  props_window;
 
     [GtkChild]
     public Searchbar searchbar;
     [GtkChild]
     public Topbar topbar;
     [GtkChild]
-    public Notificationbar notificationbar;
-    [GtkChild]
     public Selectionbar selectionbar;
-    [GtkChild]
-    public Sidebar sidebar;
-    [GtkChild]
-    public Wizard wizard;
-    [GtkChild]
-    public Properties properties;
     [GtkChild]
     public DisplayPage display_page;
     [GtkChild]
@@ -91,19 +95,41 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     [GtkChild]
     public Gtk.Stack below_bin;
     [GtkChild]
-    private Gtk.Stack content_bin;
+    private IconView icon_view;
     [GtkChild]
-    private Gtk.Box below_bin_hbox;
-    [GtkChild]
-    public CollectionView view;
+    private ListView list_view;
+
+    public ViewType view_type { get; set; default = ViewType.ICON; }
+
+    public ICollectionView view {
+        get {
+            switch (view_type) {
+            default:
+            case ViewType.ICON:
+                return icon_view;
+            case ViewType.LIST:
+                return list_view;
+            }
+        }
+    }
+
+    private ICollectionView[] views;
 
     public GLib.Settings settings;
 
+    [GtkChild]
+    private Notificationbar _notificationbar;
+
     private uint configure_id;
-    public static const uint configure_id_timeout = 100;  // 100ms
+    public const uint configure_id_timeout = 100;  // 100ms
+
+    private Gtk.WindowGroup group;
 
     public AppWindow (Gtk.Application app) {
-        Object (application: app, title: _("Boxes"));
+        Object (application:  app,
+                title:        _("Boxes"),
+                // Can't be set from template: https://bugzilla.gnome.org/show_bug.cgi?id=754426#c14
+                show_menubar: false);
 
         settings = new GLib.Settings ("org.gnome.boxes");
 
@@ -136,19 +162,41 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
 
             move (x, y);
         }
+
+        views = { icon_view, list_view };
+
+        var action = new GLib.SimpleAction ("kbd-shortcuts", null);
+        action.activate.connect (() => {
+            var window = new Boxes.KbdShortcutsWindow ();
+            if (ui_state == UIState.COLLECTION)
+                window.view_name = "overview";
+            else if (ui_state == UIState.WIZARD || ui_state == UIState.PROPERTIES)
+                window.view_name = "wizard";
+            else if (ui_state == UIState.DISPLAY)
+                window.view_name = "display";
+
+            window.show ();
+        });
+        add_action (action);
     }
 
     public void setup_ui () {
         topbar.setup_ui (this);
-        wizard.setup_ui (this);
         display_page.setup_ui (this);
-        view.setup_ui (this);
+        icon_view.setup_ui (this);
+        list_view.setup_ui (this);
         selectionbar.setup_ui (this);
         searchbar.setup_ui (this);
-        sidebar.setup_ui (this);
-        properties.setup_ui (this);
         empty_boxes.setup_ui (this);
         notificationbar.searchbar = searchbar;
+
+        group = new Gtk.WindowGroup ();
+        wizard_window = new WizardWindow (this);
+        group.add_window (wizard_window);
+        props_window = new PropertiesWindow (this);
+        group.add_window (props_window);
+
+        notify["view-type"].connect (ui_state_changed);
     }
 
     private void save_window_geometry () {
@@ -167,12 +215,19 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     private void ui_state_changed () {
         // The order is important for some widgets here (e.g properties must change its state before wizard so it can
         // flush any deferred changes for wizard to pick-up when going back from properties to wizard (review).
-        foreach (var ui in new Boxes.UI[] { sidebar, topbar, view, properties, wizard, empty_boxes }) {
+        foreach (var ui in new Boxes.UI[] { topbar,
+                                            icon_view,
+                                            list_view,
+                                            props_window,
+                                            wizard_window,
+                                            empty_boxes }) {
             ui.set_state (ui_state);
         }
 
         if (ui_state != UIState.COLLECTION)
             searchbar.search_mode_enabled = false;
+
+        var machine = (current_item is Machine)? current_item as Machine : null;
 
         switch (ui_state) {
         case UIState.COLLECTION:
@@ -181,36 +236,34 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
             else
                 below_bin.visible_child = empty_boxes;
             fullscreened = false;
-            view.visible = true;
+            foreach_view ((view) => { view.visible = true; });
 
-            status_bind = null;
-            topbar.status = null;
-            if (current_item is Machine) {
-                var machine = current_item as Machine;
+            if (status_bind != null) {
+                status_bind.unbind ();  // FIXME: We shouldn't neeed to explicitly unbind (Vala bug?)
+                status_bind = null;
+            }
+            topbar.status = _("Boxes");
+            var a11y = get_accessible ();
+            a11y.accessible_name = _("Boxes");
+
+            if (machine != null) {
                 if (got_error_id != 0) {
                     machine.disconnect (got_error_id);
                     got_error_id = 0;
                 }
 
                 machine.connecting_cancellable.cancel (); // Cancel any in-progress connections
+                machine.schedule_autosave ();
             }
 
             break;
 
         case UIState.CREDS:
         case UIState.DISPLAY:
-
-            break;
-
         case UIState.WIZARD:
-            below_bin.visible_child = below_bin_hbox;
-            content_bin.visible_child = wizard;
-
-            break;
-
         case UIState.PROPERTIES:
-            below_bin.visible_child = below_bin_hbox;
-            content_bin.visible_child = properties;
+            if (current_item != null)
+                (current_item as Machine).unschedule_autosave ();
 
             break;
 
@@ -219,14 +272,28 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
             break;
         }
 
-        if (current_item != null)
+        if (machine != null && this == machine.window)
             current_item.set_state (ui_state);
     }
 
+    public void foreach_view (Func<ICollectionView> func) {
+        foreach (var view in views)
+            func (view);
+    }
+
     public void show_properties () {
+        if (current_item != null) {
+            if (ui_state == UIState.COLLECTION && selection_mode)
+                selection_mode = false;
+            set_state (UIState.PROPERTIES);
+
+            return;
+        }
+
         var selected_items = view.get_selected_items ();
 
-        selection_mode = false;
+        if (ui_state == UIState.COLLECTION && selection_mode)
+            selection_mode = false;
 
         // Show for the first selected item
         foreach (var item in selected_items) {
@@ -239,8 +306,12 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     public void connect_to (Machine machine) {
         current_item = machine;
         machine.window = this;
+        machine.unschedule_autosave ();
 
-        // Track machine status in toobar
+        var a11y = get_accessible ();
+        a11y.accessible_name = machine.name;
+
+        // Track machine status in toolbar
         status_bind = machine.bind_property ("status", topbar, "status", BindingFlags.SYNC_CREATE);
 
         got_error_id = machine.got_error.connect ( (message) => {
@@ -252,35 +323,37 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
     }
 
     public void select_item (CollectionItem item) {
-        if (ui_state == UIState.COLLECTION && !selection_mode) {
-            return_if_fail (item is Machine);
+        if (ui_state != UIState.COLLECTION || selection_mode)
+            return;
 
-            var machine = item as Machine;
+        return_if_fail (item is Machine);
 
-            if (machine.window != App.app.main_window) {
-                machine.window.present ();
+        var machine = item as Machine;
 
-                return;
-            }
+        if (machine.window != App.app.main_window) {
+            machine.window.present ();
 
-            current_item = item;
-
-            if (current_item is Machine)
-                connect_to (machine);
-            else
-                warning ("unknown item, fix your code");
-
-            item_selected (item);
-        } else if (ui_state == UIState.WIZARD) {
-            current_item = item;
-
-            set_state (UIState.PROPERTIES);
+            return;
         }
+
+        current_item = item;
+
+        if (current_item is Machine)
+            connect_to (machine);
+        else
+            warning ("unknown item, fix your code");
+
+        item_selected (item);
+    }
+
+    public void filter (string text) {
+        foreach_view ((view) => { view.filter.text = text; });
     }
 
     [GtkCallback]
     public bool on_key_pressed (Widget widget, Gdk.EventKey event) {
         var default_modifiers = Gtk.accelerator_get_default_mod_mask ();
+        var direction = get_direction ();
 
         if (event.keyval == Gdk.Key.F11) {
             fullscreened = !fullscreened;
@@ -288,6 +361,11 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
             return true;
         } else if (event.keyval == Gdk.Key.F1) {
             App.app.activate_action ("help", null);
+
+            return true;
+        } else if (event.keyval == Gdk.Key.k &&
+                   (event.state & default_modifiers) == Gdk.ModifierType.CONTROL_MASK) {
+            activate_action ("kbd-shortcuts", null);
 
             return true;
         } else if (event.keyval == Gdk.Key.q &&
@@ -305,18 +383,12 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
             topbar.click_search_button ();
 
             return true;
-        } else if (event.keyval == Gdk.Key.a &&
-                   (event.state & default_modifiers) == Gdk.ModifierType.MOD1_MASK) {
-            App.app.quit_app ();
-
-            return true;
-        } else if (event.keyval == Gdk.Key.Left && // ALT + Left -> back
+        } else if (((direction == Gtk.TextDirection.LTR && // LTR
+                     event.keyval == Gdk.Key.Left) ||      // ALT + Left -> back
+                    (direction == Gtk.TextDirection.RTL && // RTL
+                     event.keyval == Gdk.Key.Right)) &&    // ALT + Right -> back
                    (event.state & default_modifiers) == Gdk.ModifierType.MOD1_MASK) {
             topbar.click_back_button ();
-            return true;
-        } else if (event.keyval == Gdk.Key.Right && // ALT + Right -> forward
-                   (event.state & default_modifiers) == Gdk.ModifierType.MOD1_MASK) {
-            topbar.click_forward_button ();
             return true;
         } else if (event.keyval == Gdk.Key.Escape) { // ESC -> cancel
             topbar.click_cancel_button ();
@@ -357,11 +429,30 @@ private class Boxes.AppWindow: Gtk.ApplicationWindow, Boxes.UI {
 
     [GtkCallback]
     private bool on_delete_event () {
-        return_if_fail (current_item == null || current_item is Machine);
+        return_val_if_fail (current_item == null || current_item is Machine, false);
 
-        if (current_item != null)
-            (current_item as Machine).window = null;
+        if (current_item != null) {
+            var machine = current_item as Machine;
+
+            machine.window = null;
+            machine.schedule_autosave ();
+
+            machine.disconnect (machine_state_notify_id);
+            machine_state_notify_id = 0;
+            machine.disconnect (machine_deleted_notify_id);
+            machine_deleted_notify_id = 0;
+        }
 
         return App.app.remove_window (this);
+    }
+
+    private void on_machine_state_notify () {
+       if (this != App.app.main_window && (current_item as Machine).state != Machine.MachineState.RUNNING)
+           on_delete_event ();
+    }
+
+    private void on_machine_deleted_notify () {
+       if (this != App.app.main_window && (current_item as Machine).deleted)
+           on_delete_event ();
     }
 }

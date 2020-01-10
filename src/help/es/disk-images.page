@@ -15,18 +15,20 @@
     <desc/>
   
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Alex Puchades</mal:name>
+      <mal:email>alex94puchades@gmail.com</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
-      <mal:years>2014</mal:years>
+      <mal:years>2014 - 2015</mal:years>
     </mal:credit>
   </info>
 
-  <title>Where does Boxes store disk images?</title>
+  <title>¿Dónde guarda Cajas las imágenes de los discos?</title>
 
-  <p>By default, <app>Boxes</app> stores disk images in the folder
-  <file>~/.local/share/gnome-boxes/images/</file>. If you are using other
-  software that interfaces with libvirt, such as <app>virt-manager</app>, then
-  <app>Boxes</app> will also read from the folder that software uses to store
-  its images.</p>
+  <p>De forma predeterminada, <app>Cajas</app> guarda las imágenes de disco en <file>~/.local/share/gnome-boxes/images/</file>. Si está utilizando otra aplicación que interactúe con libvirt, como por ejemplo <app>virt-manager</app>, entonces <app>Cajas</app> también buscará en la carpeta usada por este programa para guardar sus imágenes.</p>
 
 </page>
