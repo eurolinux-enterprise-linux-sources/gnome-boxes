@@ -34,7 +34,7 @@ ExclusiveArch: x86_64
 
 Name:		gnome-boxes
 Version:	3.14.3.1
-Release:	10%{?dist}
+Release:	7%{?dist}
 Summary:	A simple GNOME 3 application to access remote or virtual systems
 
 Group:		Applications/Emulators
@@ -114,18 +114,6 @@ Patch5: ovirt-Wait-machine-to-start-before-connecting-to-it.patch
 # the intro label was forcing the window to be too tall
 Patch6: deep-intro.patch
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=1043950
-# gnome-boxes: local users can use SPICE connections to access other user's boxes
-Patch7: private-SPICE-connection.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1336055
-# Fix hostnames for win8.1 and beyond
-Patch8: unattended-Avoid-invalid-chars-on-hostname.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1304291
-# translation updates
-Patch9: translations.patch
-
 %description
 gnome-boxes lets you easily create, setup, access, and use:
   * remote machines
@@ -145,9 +133,6 @@ gnome-boxes lets you easily create, setup, access, and use:
 %patch4 -p1 -b .fix-import-of-system-libvirt-VMs
 %patch5 -p1 -b .ovirt-Wait-machine-to-start-before-connecting-to-it
 %patch6 -p1 -b .deep-intro
-%patch7 -p1 -b .private-SPICE-connection
-%patch8 -p1 -b .unattended-Avoid-invalid-chars-on-hostname
-%patch9 -p1 -b .translations
 
 %build
 #fedora-legal and the fedora board permit logos to be enabled
@@ -198,16 +183,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gnome-shell/search-providers/gnome-boxes-search-provider.ini
 
 %changelog
-* Fri Jul  1 2016 Matthias Clasen <mclasen@redat.com> - 3.14.3.1-10
-- Update translations
-  Resolves: #1304291
-
-* Tue May 17 2016 Zeeshan Ali <zeenix@redhat.com> - 3.14.3.1-9
-- Avoid characters in hostname, not accepted by Windows. (related: #1336055).
-
-* Tue May 10 2016 Zeeshan Ali <zeenix@redhat.com> - 3.14.3.1-8
-- Private SPICE connection. (related: #1043950).
-
 * Wed Aug 19 2015 Matthias Clasen <mclasen@redhat.com> - 3.14.3.1-7
 - Make window less tall
   Resolves: #1250270
